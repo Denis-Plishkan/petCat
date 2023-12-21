@@ -11,7 +11,7 @@ $md5: 576;
 $md6: 375;
 
 $mainOffset: 15; // отступы безопасности для контейнера
-$mainFont: 'Actor'; // !указать здесь основное семейство шрифта
+$mainFont: 'Manrope'; // !указать здесь основное семейство шрифта
 $mainWeight: 400; // !указать здесь основное начертание шрифта
 
 $headerHeight: 100;
@@ -22,15 +22,10 @@ $whiteColor: #fff;
 $whiteTwo: #FBF9FA;
 $blackColor: #000;
 $mainDarkColor: #333;
-$gray3Color: #828282;
-$gray4Color: #BDBDBD;
-$gray5Color: #E0E0E0;
-$cheryColor: #956D84; //Бавзовий вишневий колір(колір, шрифтів, кнпок, фону...z)
-$redColor: #E72222; //Колір бордеру блоку знижок на картці товару
-$yellowColor: #F8E582; //Колір зірок на картці товару
+$blackSecondColor: #292D33;
 
-$firstAccentColor: $blackColor;
-$secondAccentColor: $redColor;
+$firstAccentColor: $blackSecondColor;
+// $secondAccentColor: $redColor;
 
 $fontFamily: $mainFont, sans-serif; // Семейство шрифта по умолчанию
 $fontColor: $blackColor; // Цвет шрифта по умолчанию
