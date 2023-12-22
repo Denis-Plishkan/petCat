@@ -49,6 +49,17 @@ const devTasks = gulp.parallel(
   images
 );
 
+gulp.task('copy-adminlte-styles', function () {
+  return gulp
+    .src('node_modules/admin-lte/dist/css/**/*')
+    .pipe(gulp.dest('dist/css/adminlte'));
+});
+
+gulp.task('copy-adminlte-scripts', function () {
+  return gulp
+    .src('node_modules/admin-lte/dist/js/**/*')
+    .pipe(gulp.dest('dist/js/adminlte'));
+});
 /**
  * Основные задачи
  * */
@@ -57,7 +68,12 @@ const mainTasks = gulp.series(fonts, devTasks);
 /**
  * Построение сценариев выполнения задач
  * */
-const dev = gulp.series(reset, mainTasks, gulp.parallel(watcher, server));
+const dev = gulp.series(
+  reset,
+  mainTasks,
+  gulp.parallel(watcher, server),
+  gulp.parallel('copy-adminlte-styles', 'copy-adminlte-scripts')
+);
 const build = gulp.series(reset, mainTasks);
 const deployZIP = gulp.series(reset, mainTasks, zip);
 const deployFTP = gulp.series(reset, mainTasks, ftp);

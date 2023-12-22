@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>patCat-admin</title>
+    <link rel="stylesheet" href="dist/css/admin-lte.css" />
+    <link rel="stylesheet" href="css/style.min.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Sign up</h1>
+      <form id="signupForm">
+        <div>
+          <input
+            type="text"
+            name="firstname"
+            id="firstname"
+            placeholder="First Name"
+          />
+        </div>
+        <div>
+          <input
+            type="text"
+            name="lastname"
+            id="lastname"
+            placeholder="Last Name"
+          />
+        </div>
+        <div>
+          <input
+            type="email"
+            name="signupEmail"
+            id="signupEmail"
+            placeholder="Email"
+          />
+        </div>
+        <div>
+          <input
+            type="password"
+            name="signupPassword"
+            id="signupPassword"
+            placeholder="Password"
+          />
+        </div>
+        <button id="signupBtn" type="submit">Sign Up</button>
+      </form>
+    </div>
+
+    <div class="container">
+      <h1>Sign In</h1>
+      <form id="loginForm">
+        <div>
+          <input
+            type="email"
+            name="loginEmail"
+            id="loginEmail"
+            placeholder="Email"
+          />
+        </div>
+        <div>
+          <input
+            type="password"
+            name="loginPassword"
+            id="loginPassword"
+            placeholder="Password"
+          />
+        </div>
+        <button id="loginBtn" type="submit">Sign In</button>
+      </form>
+    </div>
+
+    <script type="module" src="js/main.min.js" type="module"></script>
+  </body>
+</html>
