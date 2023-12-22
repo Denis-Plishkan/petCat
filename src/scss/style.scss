@@ -6,17 +6,15 @@
 @import 'config/reset';
 @import 'config/base';
 
+//ЗАДНИЙ ФОН
+// @import 'components/background';
+
 
 // @import 'libs/aos';
 // @import 'libs/swiper';
 
 
-@import 'config/base';
-// @import 'components/header';
+// @import 'config/base';
+@import 'components/header';
 // @import 'components/footer';
-
-
-//main
-
-
-
+@import 'components/navbar';

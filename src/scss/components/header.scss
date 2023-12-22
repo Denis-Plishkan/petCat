@@ -1,0 +1,156 @@
+.header {
+  position: fixed;
+  width: 100%;
+  z-index: 10;
+  
+  // .header__container
+
+  &__container {
+  }
+
+  // .header__wrapper
+
+  &__wrapper {
+  }
+
+  // .header__top
+
+  &__top {
+    display: flex;
+    justify-content: space-between;
+    height: 96px;
+    align-items: center;
+    position: relative;
+
+    &::before {
+      position: absolute;
+      content: '';
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background: #CFDFE5;
+    }
+  }
+
+  // .header__top-logo
+
+  &__top-logo {
+    width: 300px;
+    height: 96px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(90deg, #e8fafa 0%, #dcf2e8 100%);
+  }
+
+  &__top-adresses {
+    display: flex;
+    gap: 38px;
+    height: 100%;
+    align-items: center;
+    position: relative;
+
+    &::after {
+      position: absolute;
+      content: '';
+      top: 0;
+      left: -45px;
+      height: 100%;
+      width: 1px;
+      background: #CFDFE5;
+    }
+
+    &::before {
+      position: absolute;
+      content: '';
+      top: 0;
+      right: -54px;
+      height: 100%;
+      width: 1px;
+      background: #CFDFE5;
+    }
+  }
+
+  // .header__top-adress
+
+  &__top-adress {
+  }
+
+  // .header__top-adress-name
+
+  &__top-adress-name {
+    color: #292d33;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 16px;
+  }
+
+  // .header__top-adress-area
+
+  &__top-adress-area {
+    color: #51555a;
+    font-family: Manrope;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 16px; 
+  }
+
+  &__top-search-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    input {
+      color: #bfbfbf;
+      font-family: Manrope;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;
+    }
+  }
+
+  &__top-left {
+    display: flex;
+    gap: 40px;
+
+    svg {
+      width: 32px;
+      height: 32px;
+    }
+  }
+
+  &__top-right {
+    display: flex;
+    justify-content: space-between;
+    width: 744px;
+    height: 100%;
+    padding: 0 44px;
+    align-items: center;
+    background: #F5FBFC;
+  }
+
+  // .header__top-tels
+
+  &__top-tels {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+
+    a {
+      color: #292d33;
+      font-family: Manrope;
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 24px;
+      letter-spacing: -1.2px;
+    }
+  }
+
+  // .header__left
+
+  &__left {
+  }
+}
+.btn {
+}

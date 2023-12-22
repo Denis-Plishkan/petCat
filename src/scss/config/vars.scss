@@ -1,7 +1,7 @@
 $maxWidth: 1920; // максимальная ширина страницы
 $minWidth: 320; // минимальная ширина телефона
-$maxWidthContainer: 1450; // ширина контейнера с учетом padding слева и справа
-$containerWidth: 1420; // ширина контейнера из макета
+$maxWidthContainer: 1650; // ширина контейнера с учетом padding слева и справа
+$containerWidth: 1620; // ширина контейнера из макета
 
 $md1: 1650;
 $md2: 1420;
@@ -22,10 +22,15 @@ $whiteColor: #fff;
 $whiteTwo: #FBF9FA;
 $blackColor: #000;
 $mainDarkColor: #333;
-$blackSecondColor: #292D33;
+$gray3Color: #828282;
+$gray4Color: #BDBDBD;
+$gray5Color: #E0E0E0;
+$cheryColor: #956D84; //Бавзовий вишневий колір(колір, шрифтів, кнпок, фону...z)
+$redColor: #E72222; //Колір бордеру блоку знижок на картці товару
+$yellowColor: #F8E582; //Колір зірок на картці товару
 
-$firstAccentColor: $blackSecondColor;
-// $secondAccentColor: $redColor;
+$firstAccentColor: $blackColor;
+$secondAccentColor: $redColor;
 
 $fontFamily: $mainFont, sans-serif; // Семейство шрифта по умолчанию
 $fontColor: $blackColor; // Цвет шрифта по умолчанию

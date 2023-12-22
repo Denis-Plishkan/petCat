@@ -58,6 +58,29 @@ body {
   width: 12px;
 }
 ::-webkit-scrollbar-thumb {
-  // background-color: $cheryColor;
+  background-color: $cheryColor;
   border-radius: 3px;
+}
+
+[class*='__second-container'] {
+  max-width: 1920px;
+  margin: 0 auto;
+}
+
+.btn {
+  color: #e31351;
+  font-family: Manrope;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 24px;
+  background: transparent;
+}
+
+.button {
+  height: 48px;
+  padding: 11px 24px;
+  font-family: Manrope;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 24px;
 }
