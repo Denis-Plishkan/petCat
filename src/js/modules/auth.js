@@ -10,7 +10,12 @@ import {
   getRedirectResult,
   FacebookAuthProvider,
 } from 'firebase/auth';
-import { getFirestore, collection, getDocs } from 'firebase/firestore/lite';
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  getDocs,
+} from 'firebase/firestore/lite';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyA98uniRsm9RWCyTgE6RdWDF6tVgPqCccw',
@@ -39,29 +44,108 @@ console.log(auth);
 //   return cityList;
 // }
 
-//Регистрация новых пользователей
-createUserWithEmailAndPassword(auth, email, password)
-  .then((userCredential) => {
+const signupForm = document.getElementById('signupForm');
+
+signupForm.addEventListener('submit', async (event) => {
+  event.preventDefault();
+
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+  const firstName = document.getElementById('firstname').value.trim();
+  const lastName = document.getElementById('lastname').value.trim();
+
+  // Проверка валидности имени и фамилии
+  const nameRegex = /^[a-zA-Z\s]*$/;
+
+  if (!nameRegex.test(firstName) || !nameRegex.test(lastName)) {
+    alert('Имя и фамилия могут содержать только буквы и пробелы.');
+    return;
+  }
+
+  if (firstName.length > 12 || lastName.length > 12) {
+    alert('Имя и фамилия не должны превышать 12 символов.');
+    return;
+  }
+
+  try {
+    const userCredential = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
     const user = userCredential.user;
-    // ...
-  })
-  .catch((error) => {
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    // ..
-  });
+
+    await addDoc(collection(db, 'users'), {
+      uid: user.uid,
+      email: user.email,
+      firstName: firstName,
+      lastName: lastName,
+    });
+
+    signupForm.querySelector('button').disabled = true;
+
+    console.log('Пользователь успешно зарегистрирован:', user);
+    window.location.href = 'index.html';
+  } catch (error) {
+    console.error('Ошибка регистрации:', error.code, error.message);
+  } finally {
+    signupForm.querySelector('button').disabled = false;
+  }
+});
+
+//////
+const loginForm = document.getElementById('loginForm');
+
+loginForm.addEventListener('submit', async (event) => {
+  event.preventDefault();
+
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+
+  try {
+    const userCredential = await signInWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+    const user = userCredential.user;
+
+    alert('Вы успешно вошли в систему!');
+
+    loginForm.querySelector('button').disabled = true;
+
+    console.log('Пользователь успешно вошел:', user);
+    window.location.href = 'index.html';
+  } catch (error) {
+    console.error('Ошибка входа:', error.code, error.message);
+  } finally {
+    loginForm.querySelector('button').disabled = false;
+  }
+});
+
+//Регистрация новых пользователей
+// createUserWithEmailAndPassword(auth, email, password)
+//   .then((userCredential) => {
+//     const user = userCredential.user;
+//     // ...
+//   })
+//   .catch((error) => {
+//     const errorCode = error.code;
+//     const errorMessage = error.message;
+//     // ..
+//   });
 
 //Войти существующих пользователей
-signInWithEmailAndPassword(auth, email, password)
-  .then((userCredential) => {
-    // Signed in
-    const user = userCredential.user;
-    // ...
-  })
-  .catch((error) => {
-    const errorCode = error.code;
-    const errorMessage = error.message;
-  });
+// signInWithEmailAndPassword(auth, email, password)
+//   .then((userCredential) => {
+//     // Signed in
+//     const user = userCredential.user;
+//     // ...
+//   })
+//   .catch((error) => {
+//     const errorCode = error.code;
+//     const errorMessage = error.message;
+//   });
 
 // //Установите наблюдателя состояния аутентификации и получите пользовательские данные
 // onAuthStateChanged(auth, (user) => {
@@ -158,25 +242,3 @@ signInWithEmailAndPassword(auth, email, password)
 //         // ...
 //       });
 //   });
-window.fbAsyncInit = function () {
-  FB.init({
-    appId: '{your-app-id}',
-    cookie: true,
-    xfbml: true,
-    version: '{api-version}',
-  });
-
-  FB.AppEvents.logPageView();
-};
-
-(function (d, s, id) {
-  var js,
-    fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) {
-    return;
-  }
-  js = d.createElement(s);
-  js.id = id;
-  js.src = 'https://connect.facebook.net/en_US/sdk.js';
-  fjs.parentNode.insertBefore(js, fjs);
-})(document, 'script', 'facebook-jssdk');
