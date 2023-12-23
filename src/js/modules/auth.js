@@ -35,6 +35,7 @@ const provider = new FacebookAuthProvider();
 
 console.log(provider);
 console.log(auth);
+
 // const analytics = getAnalytics(app);
 
 // async function getCities(db) {
@@ -49,23 +50,23 @@ const signupForm = document.getElementById('signupForm');
 signupForm.addEventListener('submit', async (event) => {
   event.preventDefault();
 
-  const email = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
+  const email = document.getElementById('signupEmail').value;
+  const password = document.getElementById('signupPassword').value;
   const firstName = document.getElementById('firstname').value.trim();
   const lastName = document.getElementById('lastname').value.trim();
 
-  // Проверка валидности имени и фамилии
-  const nameRegex = /^[a-zA-Z\s]*$/;
+  //пересмотреть
+  //   const nameRegex = /^[a-zA-Z\s]*$/;
 
-  if (!nameRegex.test(firstName) || !nameRegex.test(lastName)) {
-    alert('Имя и фамилия могут содержать только буквы и пробелы.');
-    return;
-  }
+  //   if (!nameRegex.test(firstName) || !nameRegex.test(lastName)) {
+  //     alert('Имя и фамилия могут содержать только буквы и пробелы.');
+  //     return;
+  //   }
 
-  if (firstName.length > 12 || lastName.length > 12) {
-    alert('Имя и фамилия не должны превышать 12 символов.');
-    return;
-  }
+  //   if (firstName.length > 12 || lastName.length > 12) {
+  //     alert('Имя и фамилия не должны превышать 12 символов.');
+  //     return;
+  //   }
 
   try {
     const userCredential = await createUserWithEmailAndPassword(
@@ -74,13 +75,19 @@ signupForm.addEventListener('submit', async (event) => {
       password
     );
     const user = userCredential.user;
+    console.log('Шаг 1: Пользователь успешно создан:', user);
 
-    await addDoc(collection(db, 'users'), {
+    const userDocRef = await addDoc(collection(db, 'users'), {
       uid: user.uid,
       email: user.email,
       firstName: firstName,
       lastName: lastName,
     });
+
+    console.log(
+      'Шаг 2: Данные пользователя успешно добавлены в Firestore:',
+      userDocRef.email
+    );
 
     signupForm.querySelector('button').disabled = true;
 
@@ -93,14 +100,14 @@ signupForm.addEventListener('submit', async (event) => {
   }
 });
 
-//////
-const loginForm = document.getElementById('loginForm');
+// //////
+const authForm = document.getElementById('authForm');
 
-loginForm.addEventListener('submit', async (event) => {
+authForm.addEventListener('submit', async (event) => {
   event.preventDefault();
 
-  const email = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
+  const email = document.getElementById('loginEmail').value;
+  const password = document.getElementById('loginPassword').value;
 
   try {
     const userCredential = await signInWithEmailAndPassword(
@@ -112,14 +119,14 @@ loginForm.addEventListener('submit', async (event) => {
 
     alert('Вы успешно вошли в систему!');
 
-    loginForm.querySelector('button').disabled = true;
+    authForm.querySelector('button').disabled = true;
 
     console.log('Пользователь успешно вошел:', user);
     window.location.href = 'index.html';
   } catch (error) {
     console.error('Ошибка входа:', error.code, error.message);
   } finally {
-    loginForm.querySelector('button').disabled = false;
+    authForm.querySelector('button').disabled = false;
   }
 });
 
@@ -135,17 +142,17 @@ loginForm.addEventListener('submit', async (event) => {
 //     // ..
 //   });
 
-//Войти существующих пользователей
-// signInWithEmailAndPassword(auth, email, password)
-//   .then((userCredential) => {
-//     // Signed in
-//     const user = userCredential.user;
-//     // ...
-//   })
-//   .catch((error) => {
-//     const errorCode = error.code;
-//     const errorMessage = error.message;
-//   });
+// Войти существующих пользователей
+//   signInWithEmailAndPassword(auth, email, password)
+//     .then((userCredential) => {
+//       // Signed in
+//       const user = userCredential.user;
+//       // ...
+//     })
+//     .catch((error) => {
+//       const errorCode = error.code;
+//       const errorMessage = error.message;
+//     });
 
 // //Установите наблюдателя состояния аутентификации и получите пользовательские данные
 // onAuthStateChanged(auth, (user) => {
@@ -162,49 +169,49 @@ loginForm.addEventListener('submit', async (event) => {
 
 //Facebook регистрация
 
-// signInWithPopup(auth, provider)
-//   .then((result) => {
-//     // The signed-in user info.
-//     const user = result.user;
+//   signInWithPopup(auth, provider)
+//     .then((result) => {
+//       // The signed-in user info.
+//       const user = result.user;
 
-//     // This gives you a Facebook Access Token. You can use it to access the Facebook API.
-//     const credential = FacebookAuthProvider.credentialFromResult(result);
-//     const accessToken = credential.accessToken;
+//       // This gives you a Facebook Access Token. You can use it to access the Facebook API.
+//       const credential = FacebookAuthProvider.credentialFromResult(result);
+//       const accessToken = credential.accessToken;
 
-//     // IdP data available using getAdditionalUserInfo(result)
-//     // ...
-//   })
-//   .catch((error) => {
-//     // Handle Errors here.
-//     const errorCode = error.code;
-//     const errorMessage = error.message;
-//     // The email of the user's account used.
-//     const email = error.customData.email;
-//     // The AuthCredential type that was used.
-//     const credential = FacebookAuthProvider.credentialFromError(error);
+//       // IdP data available using getAdditionalUserInfo(result)
+//       // ...
+//     })
+//     .catch((error) => {
+//       // Handle Errors here.
+//       const errorCode = error.code;
+//       const errorMessage = error.message;
+//       // The email of the user's account used.
+//       const email = error.customData.email;
+//       // The AuthCredential type that was used.
+//       const credential = FacebookAuthProvider.credentialFromError(error);
 
-//     // ...
-//   });
-// getRedirectResult(auth)
-//   .then((result) => {
-//     // This gives you a Facebook Access Token. You can use it to access the Facebook API.
-//     const credential = FacebookAuthProvider.credentialFromResult(result);
-//     const token = credential.accessToken;
+//       // ...
+//     });
+//   getRedirectResult(auth)
+//     .then((result) => {
+//       // This gives you a Facebook Access Token. You can use it to access the Facebook API.
+//       const credential = FacebookAuthProvider.credentialFromResult(result);
+//       const token = credential.accessToken;
 
-//     const user = result.user;
-//     // IdP data available using getAdditionalUserInfo(result)
-//     // ...
-//   })
-//   .catch((error) => {
-//     // Handle Errors here.
-//     const errorCode = error.code;
-//     const errorMessage = error.message;
-//     // The email of the user's account used.
-//     const email = error.customData.email;
-//     // AuthCredential type that was used.
-//     const credential = FacebookAuthProvider.credentialFromError(error);
-//     // ...
-//   });
+//       const user = result.user;
+//       // IdP data available using getAdditionalUserInfo(result)
+//       // ...
+//     })
+//     .catch((error) => {
+//       // Handle Errors here.
+//       const errorCode = error.code;
+//       const errorMessage = error.message;
+//       // The email of the user's account used.
+//       const email = error.customData.email;
+//       // AuthCredential type that was used.
+//       const credential = FacebookAuthProvider.credentialFromError(error);
+//       // ...
+//     });
 
 //----- facebook login code start
 
