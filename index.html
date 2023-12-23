@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <link rel="shortcut icon" href="./images/cat.png" type="image/x-icon">
-  <link rel="stylesheet" href="css/main.min.css?_v=20231222194153">
+  <link rel="stylesheet" href="css/main.min.css?_v=20231223182416">
   <title>vetCat</title>
 </head>
 
@@ -29,7 +29,12 @@
     <li class="navbar__item navbar-dropdown">
       <div class="navbar__item-wrapper">
         <p>О клинике</p>
-        <svg><use xlink:href="./images/Sprite.svg#navbar-arrow"></use></svg>
+        <div class="navbar__item-arrow">
+          <svg><use xlink:href="./images/Sprite.svg#navbar-arrow"></use></svg>
+        </div>
+        <div class="navbar__item-line">
+          <svg><use xlink:href="./images/Sprite.svg#navbar-line"></use></svg>
+        </div>
       </div>
       <div class="navbar__item-dropdown">
         <a href="#">Наша миссия</a>
@@ -40,7 +45,12 @@
     <li class="navbar__item navbar-dropdown">
       <div class="navbar__item-wrapper">
         <p>Полезное</p>
-        <svg><use xlink:href="./images/Sprite.svg#navbar-arrow"></use></svg>
+        <div class="navbar__item-arrow">
+          <svg><use xlink:href="./images/Sprite.svg#navbar-arrow"></use></svg>
+        </div>
+        <div class="navbar__item-line">
+          <svg><use xlink:href="./images/Sprite.svg#navbar-line"></use></svg>
+        </div>
       </div>
 
       <div class="navbar__item-dropdown">
@@ -62,7 +72,7 @@
 </div>
 
       <header class="header">
-  <div class="header__second-container">
+
     <div class="header__top">
       <div class="header__top-left">
         <div class="header__top-logo">
@@ -92,11 +102,144 @@
         </div>
       </div>
     </div>
-  </div>
+
 </header>
 
       <main class="page">
         <div class="page__container">
+          <section class="hero">
+  <div class="hero__second-container">
+    <h1 class="hero__title">
+      Ветеринарный центр, на который вы можете рассчитывать 24/7
+    </h1>
+    <ul class="hero__list">
+      <li>Придерживаемся принципов доказательной медицины</li>
+      <li>Врач никогда не пытается применить ко всем единую методику</li>
+      <li>Каждый случай уникален</li>
+    </ul>
+  </div>
+  <div class="hero__arrow">
+    <svg><use xlink:href="./images/Sprite.svg#hero-arrow"></use></svg>
+  </div>
+  <div class="hero__bg-all">
+    <picture><source srcset="./images/main/hero/bg-all.webp" type="image/webp"><img src="./images/main/hero/bg-all.png" alt="bg"></picture>
+  </div>
+  <div class="hero__bg">
+    <picture><source srcset="./images/main/hero/bg.webp" type="image/webp"><img src="./images/main/hero/bg.png" alt="bg"></picture>
+  </div>
+</section>
+
+          <section class="popular-services">
+  <div class="popular-services__second-container">
+    <div class="popular-services__wrapper">
+      <h2 class="popular-services__wrapper-title">
+        Популярные услуги для ваших питомцев
+      </h2>
+      <div class="popular-services__wrapper-buttons">
+        <a href="#" class="button popular-services__wrapper-button_white">
+          Смотреть все цены
+        </a>
+        <a href="#" class="button popular-services__wrapper-button_green">
+          Смотреть все услуги
+        </a>
+      </div>
+    </div>
+    <div class="popular-services-swiper swiper">
+      
+      <div class="swiper-wrapper">
+        
+        <div class="swiper-slide">
+          <div class="popular-services__card-wrapper">
+            <div class="popular-services__card">
+              <h4 class="popular-services__card-title">Терапия</h4>
+              <p>
+                Первичная диагностика и симптоматическое лечение, консультации
+                по содержанию и кормлению домашних животных.
+              </p>
+            </div>
+            <div class="popular-services__card">
+              <h4 class="popular-services__card-title">Хирургия</h4>
+              <p>
+                Проведение широкого спектра хирургических операций различной
+                сложности под контролем опытных ветеринаров.
+              </p>
+            </div>
+            <div class="popular-services__card">
+              <h4 class="popular-services__card-title">Дерматология</h4>
+              <p>
+                Диагностика и лечение кожных заболеваний. Забор анализов и
+                обследование на современном оборудовании.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="swiper-slide">
+          <div class="popular-services__card-wrapper">
+            <div class="popular-services__card">
+              <h4 class="popular-services__card-title">Терапия</h4>
+              <p>
+                Первичная диагностика и симптоматическое лечение, консультации
+                по содержанию и кормлению домашних животных.
+              </p>
+            </div>
+            <div class="popular-services__card">
+              <h4 class="popular-services__card-title">Хирургия</h4>
+              <p>
+                Проведение широкого спектра хирургических операций различной
+                сложности под контролем опытных ветеринаров.
+              </p>
+            </div>
+            <div class="popular-services__card">
+              <h4 class="popular-services__card-title">Дерматология</h4>
+              <p>
+                Диагностика и лечение кожных заболеваний. Забор анализов и
+                обследование на современном оборудовании.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="swiper-slide">
+          <div class="popular-services__card-wrapper">
+            <div class="popular-services__card">
+              <h4 class="popular-services__card-title">Терапия</h4>
+              <p>
+                Первичная диагностика и симптоматическое лечение, консультации
+                по содержанию и кормлению домашних животных.
+              </p>
+            </div>
+            <div class="popular-services__card">
+              <h4 class="popular-services__card-title">Хирургия</h4>
+              <p>
+                Проведение широкого спектра хирургических операций различной
+                сложности под контролем опытных ветеринаров.
+              </p>
+            </div>
+            <div class="popular-services__card">
+              <h4 class="popular-services__card-title">Дерматология</h4>
+              <p>
+                Диагностика и лечение кожных заболеваний. Забор анализов и
+                обследование на современном оборудовании.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      
+
+      
+      <div class="popular-services__swiper-button-prev">
+        <svg><use xlink:href="./images/Sprite.svg#main-arrow-left"></use></svg>
+      </div>
+      <div class="popular-services__swiper-button-next">
+        <svg><use xlink:href="./images/Sprite.svg#main-arrow-left"></use></svg>
+      </div>
+
+      
+      
+    </div>
+  </div>
+</section>
 
 
         </div>
@@ -320,5 +463,5 @@
 
     </div>
   </body>
-  <script src="js/main.min.js?_v=20231222194153"></script>
+  <script src="js/main.min.js?_v=20231223182416"></script>
 </html>
