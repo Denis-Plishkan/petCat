@@ -1,3 +1,4 @@
+import JustValidate from 'just-validate';
 import { initializeApp } from 'firebase/app';
 import {
   getAuth,
@@ -36,67 +37,164 @@ const provider = new FacebookAuthProvider();
 console.log(provider);
 console.log(auth);
 
-// const analytics = getAnalytics(app);
-
-// async function getCities(db) {
-//   const citiesCol = collection(db, 'cities');
-//   const citySnapshot = await getDocs(citiesCol);
-//   const cityList = citySnapshot.docs.map((doc) => doc.data());
-//   return cityList;
-// }
-
 const signupForm = document.getElementById('signupForm');
+
+const validator = new JustValidate(signupForm, globalConfig, dictLocale);
+
+const globalConfig = {
+  errorFieldStyle: { backgroundColor: 'red' },
+  errorFieldCssClass: ['invalid'],
+  errorLabelStyle: { backgroundColor: 'red' },
+  errorLabelCssClass: ['invalid'],
+  successFieldCssClass: ['valid'],
+  successFieldStyle: {
+    backgroundColor: 'green',
+  },
+  successLabelCssClass: ['valid'],
+  successLabelStyle: {
+    backgroundColor: 'green',
+  },
+  lockForm: false,
+  testingMode: true,
+  validateBeforeSubmitting: false,
+  submitFormAutomatically: true,
+  focusInvalidField: false,
+  tooltip: {
+    position: 'top',
+  },
+  errorsContainer: document.querySelector('errors-container'),
+};
+
+const dictLocale = [
+  {
+    key: 'en', // код языка
+    dict: {
+      required: 'This field is required', // текст для обязательного поля
+      email: 'Please enter a valid email address', // текст для неверного email
+    },
+  },
+  {
+    key: 'ru', // код языка
+    dict: {
+      required: 'Это поле обязательно', // текст для обязательного поля
+      email: 'Пожалуйста, введите корректный адрес электронной почты', // текст для неверного email
+    },
+  },
+];
+
+validator
+  .addField('#firstname', [
+    {
+      rule: 'required',
+    },
+    {
+      rule: 'minLength',
+      value: 2,
+    },
+    {
+      rule: 'maxLength',
+      value: 15,
+    },
+  ])
+  .addField('#lastname', [
+    {
+      rule: 'required',
+    },
+    {
+      rule: 'minLength',
+      value: 2,
+    },
+    {
+      rule: 'maxLength',
+      value: 15,
+    },
+  ])
+  .addField('#signupEmail', [
+    {
+      rule: 'required',
+    },
+    {
+      rule: 'email',
+    },
+  ])
+  .addField('#signupPassword', [
+    {
+      rule: 'required',
+    },
+    {
+      rule: 'password',
+    },
+  ]);
+
+document.getElementById('firstname').addEventListener('input', function () {
+  const value = this.value.trim();
+  if (!/^[A-Za-z]+$/.test(value)) {
+    this.setCustomValidity('Поле должно содержать только буквы');
+  } else {
+    this.setCustomValidity('');
+  }
+  validator.validateInput(this);
+});
+
+document.getElementById('lastname').addEventListener('input', function () {
+  const value = this.value.trim();
+  if (!/^[A-Za-z]+$/.test(value)) {
+    this.setCustomValidity('Поле должно содержать только буквы');
+  } else {
+    this.setCustomValidity('');
+  }
+  validator.validateInput(this);
+});
 
 signupForm.addEventListener('submit', async (event) => {
   event.preventDefault();
 
-  const email = document.getElementById('signupEmail').value;
-  const password = document.getElementById('signupPassword').value;
-  const firstName = document.getElementById('firstname').value.trim();
-  const lastName = document.getElementById('lastname').value.trim();
+  if (validator.validate()) {
+    const email = document.getElementById('signupEmail').value;
+    const password = document.getElementById('signupPassword').value;
+    const firstName = document.getElementById('firstname').value.trim();
+    const lastName = document.getElementById('lastname').value.trim();
 
-  //пересмотреть
-  //   const nameRegex = /^[a-zA-Z\s]*$/;
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const user = userCredential.user;
+      console.log('Шаг 1: Пользователь успешно создан:', user);
 
-  //   if (!nameRegex.test(firstName) || !nameRegex.test(lastName)) {
-  //     alert('Имя и фамилия могут содержать только буквы и пробелы.');
-  //     return;
-  //   }
+      const userDocRef = await addDoc(collection(db, 'users'), {
+        uid: user.uid,
+        email: user.email,
+        firstName: firstName,
+        lastName: lastName,
+      });
 
-  //   if (firstName.length > 12 || lastName.length > 12) {
-  //     alert('Имя и фамилия не должны превышать 12 символов.');
-  //     return;
-  //   }
+      console.log(
+        'Шаг 2: Данные пользователя успешно добавлены в Firestore:',
+        userDocRef.email
+      );
 
-  try {
-    const userCredential = await createUserWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
-    const user = userCredential.user;
-    console.log('Шаг 1: Пользователь успешно создан:', user);
+      const localUserData = {
+        uid: user.uid,
+        email: user.email,
+        firstName: firstName,
+        lastName: lastName,
+      };
+      localStorage.setItem('user', JSON.stringify(localUserData));
 
-    const userDocRef = await addDoc(collection(db, 'users'), {
-      uid: user.uid,
-      email: user.email,
-      firstName: firstName,
-      lastName: lastName,
-    });
+      signupForm.querySelector('button').disabled = true;
 
-    console.log(
-      'Шаг 2: Данные пользователя успешно добавлены в Firestore:',
-      userDocRef.email
-    );
-
-    signupForm.querySelector('button').disabled = true;
-
-    console.log('Пользователь успешно зарегистрирован:', user);
-    window.location.href = 'index.html';
-  } catch (error) {
-    console.error('Ошибка регистрации:', error.code, error.message);
-  } finally {
-    signupForm.querySelector('button').disabled = false;
+      console.log('Пользователь успешно зарегистрирован:', user);
+      window.location.href = 'index.html';
+    } catch (error) {
+      console.error('Ошибка регистрации:', error.code, error.message);
+    } finally {
+      signupForm.querySelector('button').disabled = false;
+    }
+  } else {
+    console.log(error.code, error.message);
   }
 });
 
@@ -116,6 +214,12 @@ authForm.addEventListener('submit', async (event) => {
       password
     );
     const user = userCredential.user;
+
+    const localUserData = {
+      uid: user.uid,
+      email: user.email,
+    };
+    localStorage.setItem('user', JSON.stringify(localUserData));
 
     alert('Вы успешно вошли в систему!');
 
