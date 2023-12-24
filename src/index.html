@@ -1,17 +1,19 @@
 <!DOCTYPE html>
 <html lang="ru">
-  @@include('html/head.html', { 'title': 'vetCat', 'srcStyle': 'main' })
+  @@include('html/head.html', { 'title': 'Flowers', 'srcStyle': 'main' })
   <body>
     <div class="wrapper">
-      @@include('../src/html/components/navbar.html')
+      @@include('html/components/navbar.html')
       @@include('html/header.html')
       <main class="page">
         <div class="page__container">
-
+          @@include('html/main/hero.html')
+          @@include('html/main/popular-services.html')
+          @@include('html/main/this.html')
 
         </div>
       </main>
-      @@include('html/footer.html') @@include('html/svg-sprite.html')
+      @@include('html/footer.html')
     </div>
   </body>
   <script src="js/main.min.js"></script>

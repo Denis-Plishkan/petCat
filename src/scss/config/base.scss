@@ -1,7 +1,8 @@
 [class*='__container'] {
   max-width: $maxWidthContainer + px;
   margin: 0 auto;
-  padding: 0 $mainOffset + px;
+  // padding: 0 $mainOffset + px;
+  padding-left: 300px;
 }
 
 // Стили отзывчивых картинок (IBG) ============================================
@@ -63,7 +64,7 @@ body {
 }
 
 [class*='__second-container'] {
-  max-width: 1920px;
+  max-width: 1112px;
   margin: 0 auto;
 }
 
@@ -83,4 +84,30 @@ body {
   font-size: 16px;
   font-weight: 700;
   line-height: 24px;
+  border-radius: 16px;
+}
+
+.button_white {
+  border: 2px solid #1dc3b0;
+  color: #51555a;
+  transition: all 0.4s ease;
+
+  &:hover {
+    background: #1dc3b0;
+    color: #fff;
+    border: 2px solid #1dc3b0;
+  }
+}
+
+.button_green {
+  background: #1dc3b0;
+  color: #fff;
+  transition: all 0.4s ease;
+  border: 2px solid #1dc3b0;
+
+  &:hover {
+    background: #fff;
+    color: #51555a;
+    border: 2px solid #1dc3b0;
+  }
 }

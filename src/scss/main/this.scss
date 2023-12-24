@@ -1,0 +1,155 @@
+.this {
+  // .this__second-container
+
+  &__second-container {
+  }
+
+  // .this__title
+
+  &__title {
+    color: #292d33;
+    font-size: 48px;
+    font-weight: 700;
+    line-height: 56px;
+    margin-bottom: 72px;
+  }
+
+  // .this__wrapper
+
+  &__wrapper {
+    display: flex;
+  }
+
+  // .this__wrapper-left
+
+  &__wrapper-left {
+    margin-left: 92px;
+    margin-right: 100px;
+    padding-top: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  // .this__wrapper-left-line
+
+  &__wrapper-left-line {
+    position: relative;
+  }
+
+  &__line_green {
+    opacity: 0;
+    overflow: hidden;
+    visibility: hidden;
+    height: 0;
+    transition: all 0.4s ease;
+
+    &.active {
+      opacity: 1;
+      overflow: visible;
+      visibility: visible;
+      height: 16px;
+    }
+
+    p {
+      color: #1dc3b0;
+      font-size: 30px;
+      font-weight: 700;
+      line-height: 32px;
+      position: relative;
+      bottom: 16px;
+    }
+  }
+
+  &__line_grey {
+    opacity: 1;
+    overflow: visible;
+    visibility: visible;
+    text-align: end;
+    height: 16px;
+    transition: all 0.4s ease;
+
+    &.active {
+      opacity: 0;
+      overflow: hidden;
+      visibility: hidden;
+      height: 0;
+    }
+  }
+
+  // .this__wrapper-center
+
+  &__wrapper-center {
+  }
+
+  // .this__wrapper-center-title
+
+  &__wrapper-center-title {
+    color: #292d33;
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 35px;
+    margin-bottom: 32px;
+  }
+
+  // .this__wrapper-center-text
+
+  &__wrapper-center-text {
+    color: #292d33;
+    line-height: 28px;
+    min-width: 323px;
+    margin-bottom: 116px;
+  }
+
+  // .this__wrapper-right
+
+  &__wrapper-right {
+    position: relative;
+    left: 42px;
+    bottom: 113px;
+  }
+
+  // .this__round
+
+  &__round {
+  }
+
+  // .this__round-wrapper
+
+  &__round-wrapper {
+    position: relative;
+  }
+
+  // .this__round-wrapper-green
+
+  &__round-wrapper-green {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  // .this__round-wrapper-photo
+
+  &__round-wrapper-photo {
+    position: absolute;
+    left: -10%;
+    top: 50%;
+
+    img {
+      position: relative;
+      z-index: 1;
+      bottom: 9px;
+    }
+
+    &::after {
+      position: absolute;
+      content: '';
+      top: 0;
+      left: 0;
+      width: 438px;
+      height: 444px;
+      border-radius: 50%;
+      background: #eef3f7;
+    }
+  }
+}
