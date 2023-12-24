@@ -1,19 +1,14 @@
-.header {
-  // .header__top-logo
 
-  &__top-logo {
-  }
-}
 .navbar {
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-  gap: 28px;
-  margin-top: 45px;
-  padding-left: 56px;
-  overflow-y: auto;
-  height: 520px;
-  justify-content: stretch;
+  &__items {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    margin-top: 54px;
+    padding-left: 56px;
+    overflow-y: auto;
+    height: 520px;
+  }
 
   // .navbar__wrapper
 
@@ -162,8 +157,4 @@
     background: #f72056;
     color: #fff;
   }
-}
-.navbar-dropdown {
-}
-.button {
 }
