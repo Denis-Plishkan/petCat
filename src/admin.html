@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ru">
+  @@include('html/head.html', { 'title': 'vetCat', 'srcStyle': 'admin' })
+
+  <body>
+    <div class="wrapper">
+      <main class="page">
+        <div class="page__container"></div>
+
+        <div class="container">
+          <h1>Sign up</h1>
+          <form id="signupForm">
+            <div>
+              <input
+                type="text"
+                name="firstname"
+                id="firstname"
+                placeholder="First Name"
+              />
+            </div>
+            <div>
+              <input
+                type="text"
+                name="lastname"
+                id="lastname"
+                placeholder="Last Name"
+              />
+            </div>
+            <div>
+              <input
+                type="email"
+                name="signupEmail"
+                id="signupEmail"
+                placeholder="Email"
+              />
+            </div>
+            <div>
+              <input
+                type="password"
+                name="signupPassword"
+                id="signupPassword"
+                placeholder="Password"
+              />
+            </div>
+            <button id="signupBtn" type="submit">Sign Up</button>
+          </form>
+        </div>
+
+        <div class="container">
+          <h1>Sign In</h1>
+          <form id="authForm">
+            <div>
+              <input
+                type="email"
+                name="loginEmail"
+                id="loginEmail"
+                placeholder="Email"
+              />
+            </div>
+            <div>
+              <input
+                type="password"
+                name="loginPassword"
+                id="loginPassword"
+                placeholder="Password"
+              />
+            </div>
+            <button id="loginBtn" type="submit">Sign In</button>
+          </form>
+        </div>
+
+        <div class="container">
+          <button
+            type="button"
+            id="facebook-login"
+            name="facebook-login"
+            class="btn btn-primary btn-lg btn-block"
+          >
+            <i class="fa fa-facebook"></i> Login with Facebook
+          </button>
+
+          <div
+            class="fb-login-button"
+            data-width=""
+            data-size=""
+            data-button-type=""
+            data-layout=""
+            data-auto-logout-link="true"
+            data-use-continue-as="false"
+          ></div>
+        </div>
+      </main>
+    </div>
+  </body>
+  <script src="js/main.min.js"></script>
+
+  <!-- <script>
+    window.fbAsyncInit = function () {
+      FB.init({
+        appId: '{your-app-id}',
+        cookie: true,
+        xfbml: true,
+        version: '{api-version}',
+      });
+
+      FB.AppEvents.logPageView();
+    };
+
+    (function (d, s, id) {
+      var js,
+        fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) {
+        return;
+      }
+      js = d.createElement(s);
+      js.id = id;
+      js.src = 'https://connect.facebook.net/en_US/sdk.js';
+      fjs.parentNode.insertBefore(js, fjs);
+    })(document, 'script', 'facebook-jssdk');
+  </script>
+  <script
+    async
+    defer
+    crossorigin="anonymous"
+    src="https://connect.facebook.net/ru_RU/sdk.js#xfbml=1&version=v18.0&appId=726327036094152"
+    nonce="WVGWrpI3"
+  ></script> -->
+</html>
