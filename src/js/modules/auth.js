@@ -47,88 +47,92 @@ console.log(auth);
 
 const signupForm = document.getElementById('signupForm');
 
-signupForm.addEventListener('submit', async (event) => {
-  event.preventDefault();
+if (signupForm) {
+  signupForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
 
-  const email = document.getElementById('signupEmail').value;
-  const password = document.getElementById('signupPassword').value;
-  const firstName = document.getElementById('firstname').value.trim();
-  const lastName = document.getElementById('lastname').value.trim();
+    const email = document.getElementById('signupEmail').value;
+    const password = document.getElementById('signupPassword').value;
+    const firstName = document.getElementById('firstname').value.trim();
+    const lastName = document.getElementById('lastname').value.trim();
 
-  //пересмотреть
-  //   const nameRegex = /^[a-zA-Z\s]*$/;
+    //пересмотреть
+    //   const nameRegex = /^[a-zA-Z\s]*$/;
 
-  //   if (!nameRegex.test(firstName) || !nameRegex.test(lastName)) {
-  //     alert('Имя и фамилия могут содержать только буквы и пробелы.');
-  //     return;
-  //   }
+    //   if (!nameRegex.test(firstName) || !nameRegex.test(lastName)) {
+    //     alert('Имя и фамилия могут содержать только буквы и пробелы.');
+    //     return;
+    //   }
 
-  //   if (firstName.length > 12 || lastName.length > 12) {
-  //     alert('Имя и фамилия не должны превышать 12 символов.');
-  //     return;
-  //   }
+    //   if (firstName.length > 12 || lastName.length > 12) {
+    //     alert('Имя и фамилия не должны превышать 12 символов.');
+    //     return;
+    //   }
 
-  try {
-    const userCredential = await createUserWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
-    const user = userCredential.user;
-    console.log('Шаг 1: Пользователь успешно создан:', user);
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const user = userCredential.user;
+      console.log('Шаг 1: Пользователь успешно создан:', user);
 
-    const userDocRef = await addDoc(collection(db, 'users'), {
-      uid: user.uid,
-      email: user.email,
-      firstName: firstName,
-      lastName: lastName,
-    });
+      const userDocRef = await addDoc(collection(db, 'users'), {
+        uid: user.uid,
+        email: user.email,
+        firstName: firstName,
+        lastName: lastName,
+      });
 
-    console.log(
-      'Шаг 2: Данные пользователя успешно добавлены в Firestore:',
-      userDocRef.email
-    );
+      console.log(
+        'Шаг 2: Данные пользователя успешно добавлены в Firestore:',
+        userDocRef.email
+      );
 
-    signupForm.querySelector('button').disabled = true;
+      signupForm.querySelector('button').disabled = true;
 
-    console.log('Пользователь успешно зарегистрирован:', user);
-    window.location.href = 'index.html';
-  } catch (error) {
-    console.error('Ошибка регистрации:', error.code, error.message);
-  } finally {
-    signupForm.querySelector('button').disabled = false;
-  }
-});
+      console.log('Пользователь успешно зарегистрирован:', user);
+      window.location.href = 'index.html';
+    } catch (error) {
+      console.error('Ошибка регистрации:', error.code, error.message);
+    } finally {
+      signupForm.querySelector('button').disabled = false;
+    }
+  });
+}
 
 // //////
 const authForm = document.getElementById('authForm');
 
-authForm.addEventListener('submit', async (event) => {
-  event.preventDefault();
+if (authForm) {
+  authForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
 
-  const email = document.getElementById('loginEmail').value;
-  const password = document.getElementById('loginPassword').value;
+    const email = document.getElementById('loginEmail').value;
+    const password = document.getElementById('loginPassword').value;
 
-  try {
-    const userCredential = await signInWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
-    const user = userCredential.user;
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const user = userCredential.user;
 
-    alert('Вы успешно вошли в систему!');
+      alert('Вы успешно вошли в систему!');
 
-    authForm.querySelector('button').disabled = true;
+      authForm.querySelector('button').disabled = true;
 
-    console.log('Пользователь успешно вошел:', user);
-    window.location.href = 'index.html';
-  } catch (error) {
-    console.error('Ошибка входа:', error.code, error.message);
-  } finally {
-    authForm.querySelector('button').disabled = false;
-  }
-});
+      console.log('Пользователь успешно вошел:', user);
+      window.location.href = 'index.html';
+    } catch (error) {
+      console.error('Ошибка входа:', error.code, error.message);
+    } finally {
+      authForm.querySelector('button').disabled = false;
+    }
+  });
+}
 
 //Регистрация новых пользователей
 // createUserWithEmailAndPassword(auth, email, password)
