@@ -1,6 +1,6 @@
-import { auth, signInWithEmailAndPassword } from './firebase-Config';
-import './facebook-login';
-import './google-login';
+import { auth, signInWithEmailAndPassword } from './modules/firebase-Config';
+import './modules/facebook-login';
+import './modules/google-login';
 
 function checkUserAdmin(email, password) {
   return email === 'admin@mail.com' && password === '123456';

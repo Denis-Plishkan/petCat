@@ -1,7 +1,7 @@
 import JustValidate from 'just-validate';
-import './firebase-Config';
-import './facebook-login';
-import './google-login';
+import './modules/firebase-Config';
+import './modules/facebook-login';
+import './modules/google-login';
 
 const signupForm = document.getElementById('signupForm');
 const validator = new JustValidate(signupForm);
