@@ -1,4 +1,4 @@
-import './firebase-Config';
+import { auth, signInWithEmailAndPassword } from './firebase-Config';
 import './facebook-login';
 import './google-login';
 
@@ -35,7 +35,7 @@ if (authForm) {
 
       console.log('Пользователь успешно вошел:', user);
       if (checkUserAdmin(user.email, password)) {
-        window.location.href = 'admin-page.html';
+        window.location.href = 'admin.html';
       } else {
         window.location.href = 'index.html';
       }
