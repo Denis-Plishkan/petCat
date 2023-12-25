@@ -1,3 +1,24 @@
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+  sendPasswordResetEmail,
+  sendEmailVerification,
+  signInWithPopup,
+  getRedirectResult,
+  FacebookAuthProvider,
+  GoogleAuthProvider,
+} from 'firebase/auth';
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  getDocs,
+} from 'firebase/firestore/lite';
+
+import { initializeApp } from 'firebase/app';
+
 const firebaseConfig = {
   apiKey: 'AIzaSyA98uniRsm9RWCyTgE6RdWDF6tVgPqCccw',
   authDomain: 'vetcat-2880a.firebaseapp.com',
@@ -8,11 +29,10 @@ const firebaseConfig = {
   appId: '1:738330368561:web:29c125cd7cfb0dda67d310',
   measurementId: 'G-3Y0WBP9XT8',
 };
+
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
-const user = auth.currentUser;
-const provider = new FacebookAuthProvider();
+const firebaseApp = initializeApp(firebaseConfig);
 
-console.log(provider);
-console.log(auth);
+export { firebaseApp, db, auth };

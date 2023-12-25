@@ -1,4 +1,6 @@
 import './firebase-Config';
+import './facebook-login';
+import './google-login';
 
 function checkUserAdmin(email, password) {
   return email === 'admin@mail.com' && password === '123456';
@@ -44,28 +46,3 @@ if (authForm) {
     }
   });
 }
-
-document
-  .getElementById('facebook-login')
-  .addEventListener('click', function () {
-    signInWithPopup(auth, provider)
-      .then((result) => {
-        const user = result.user;
-
-        const credential = FacebookAuthProvider.credentialFromResult(result);
-        const accessToken = credential.accessToken;
-
-        alert('Welcome ' + user.displayName);
-        console.log(user);
-      })
-      .catch((error) => {
-        // Handle Errors here.
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorMessage);
-        // The email of the user's account used.
-        const email = error.customData.email;
-        // The AuthCredential type that was used.
-        const credential = FacebookAuthProvider.credentialFromError(error);
-      });
-  });
