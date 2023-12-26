@@ -1,5 +1,12 @@
 import JustValidate from 'just-validate';
-import './modules/firebase-Config';
+import {
+  auth,
+  createUserWithEmailAndPassword,
+  addDoc,
+  collection,
+  firebaseConfig,
+  db,
+} from './modules/firebase-Config';
 import './modules/facebook-login';
 import './modules/google-login';
 
@@ -18,7 +25,7 @@ validator
     },
     {
       rule: 'maxLength',
-      value: 15,
+      value: 24,
     },
   ])
 
@@ -27,7 +34,9 @@ validator
       rule: 'required',
     },
     {
-      rule: 'email',
+      rule: 'customRegexp',
+      value: /^[a-zA-Z0-9.-]+@[^\s@]+\.[\p{L}]{2,}$/u,
+      errorMessage: 'Email is invalid',
     },
   ])
 
