@@ -30,6 +30,7 @@ const getDataFromFirestore = async () => {
       );
     });
 
+    //циклом отрендерить и вставить
     //спросить за порядок показа и как лучше
     // const temp = dataArray[0];
     // dataArray[0] = dataArray[1];
