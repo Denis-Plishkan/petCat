@@ -166,7 +166,8 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#/admin/services" class="nav-link">
+                <!-- <a href="#/admin/services" class="nav-link"> -->
+                <a href="admin.html" class="nav-link">
                   <i class="nav-icon fas fa-th"></i>
                   <p>
                     Услуги клиники
@@ -175,7 +176,8 @@
                 </a>
                 <ul class="nav nav-treeview">
                   <li class="nav-item">
-                    <a href="#/admin/services/services-str" class="nav-link">
+                    <!-- <a href="#/admin/services/services-str" class="nav-link"> -->
+                    <a href="admin.html" class="nav-link">
                       <i class="far fa-circle nav-icon"></i>
                       <p>Добавить услугу</p>
                     </a>
@@ -183,8 +185,7 @@
                 </ul>
               </li>
               <li class="nav-item">
-                <!-- <a href="#/admin/services" class="nav-link"> -->
-                <a href="admin-2.html" class="nav-link">
+                <a href="#/admin/services" class="nav-link">
                   <i class="nav-icon fas fa-th"></i>
                   <p>
                     Специалисты
@@ -193,8 +194,7 @@
                 </a>
                 <ul class="nav nav-treeview">
                   <li class="nav-item">
-                    <!-- <a href="#/admin/services/services-str" class="nav-link"> -->
-                    <a href="admin-2.html" class="nav-link">
+                    <a href="#/admin/services/services-str" class="nav-link">
                       <i class="far fa-circle nav-icon"></i>
                       <p>Добавить персонал</p>
                     </a>
@@ -275,17 +275,35 @@
         </div>
         <!-- /.sidebar -->
       </aside>
-      <!-- <div class="content-wrapper" style="min-height: 1220px">
+      <div class="content-wrapper" style="min-height: 1220px">
         <div class="content">
           <div class="">
-            <h2>Создание услуги</h2>
+            <h2>Создание карты работника</h2>
             <div class="mt-5">
               <div class="mt-3">
-                <label for="title">Название услуги</label
+                <label for="title">Полное имя работника</label
                 ><input
                   id="title"
                   type="text"
-                  placeholder="Название услуги"
+                  placeholder="Полное имя"
+                  style="width: 50%"
+                />
+              </div>
+              <div class="mt-3">
+                <label for="title">Должность</label
+                ><input
+                  id="title"
+                  type="text"
+                  placeholder="Должность"
+                  style="width: 50%"
+                />
+              </div>
+              <div class="mt-3">
+                <label for="title">Специализации</label
+                ><input
+                  id="title"
+                  type="text"
+                  placeholder="Специализации"
                   style="width: 50%"
                 />
               </div>
@@ -301,9 +319,9 @@
                 </div>
               </div>
               <div class="mt-3">
-                <label for="desctiption">Описание</label
+                <label for="desctiption">Образование</label
                 ><textarea
-                  placeholder="Описание услуги"
+                  placeholder="Образование"
                   id="desctiption"
                   cols="30"
                   rows="10"
@@ -311,9 +329,9 @@
                 ></textarea>
               </div>
               <div class="mt-3">
-                <label for="desctiption">Статья</label
+                <label for="desctiption">Профессиональные навыки</label
                 ><textarea
-                  placeholder="Текст статьи"
+                  placeholder="Проф. навыки"
                   id="text"
                   cols="30"
                   rows="10"
@@ -328,15 +346,15 @@
                 type="button"
                 class="btn btn-block btn-success btn-lg"
               >
-                Завершить создание услуги
+                Завершить создание карты специалиста
               </button>
 
               <div id="errorText" class="text-danger mt-2"></div>
             </div>
           </div>
         </div>
-      </div> -->
-      <div class="content-wrapper"></div>
+      </div>
+      <!-- <div class="content-wrapper"></div> -->
     </div>
   </body>
   <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>

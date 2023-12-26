@@ -15,8 +15,11 @@ import {
   collection,
   addDoc,
   getDocs,
+  connectFirestoreEmulator,
 } from 'firebase/firestore/lite';
 
+import { getDatabase, ref, onValue } from 'firebase/database';
+import { getStorage, uploadBytes, storage } from 'firebase/storage';
 import { initializeApp } from 'firebase/app';
 
 const firebaseConfig = {
@@ -32,6 +35,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const storage = getStorage(firebaseApp);
 const auth = getAuth(app);
 const firebaseApp = initializeApp(firebaseConfig);
 
@@ -39,6 +43,9 @@ export {
   firebaseApp,
   db,
   auth,
+  app,
+  storage,
+  uploadBytes,
   collection,
   addDoc,
   getAuth,
@@ -47,4 +54,7 @@ export {
   onAuthStateChanged,
   sendPasswordResetEmail,
   signInWithPopup,
+  getFirestore,
+  ref,
+  onValue,
 };
