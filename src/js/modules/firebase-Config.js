@@ -19,7 +19,7 @@ import {
 } from 'firebase/firestore/lite';
 
 import { getDatabase, ref, onValue } from 'firebase/database';
-import { getStorage, uploadBytes, storage } from 'firebase/storage';
+import { getStorage, uploadBytes } from 'firebase/storage';
 import { initializeApp } from 'firebase/app';
 
 const firebaseConfig = {
@@ -33,14 +33,18 @@ const firebaseConfig = {
   measurementId: 'G-3Y0WBP9XT8',
 };
 
+// const app = initializeApp(firebaseConfig);
+// const db = getFirestore(app);
+// const storage = getStorage(firebaseApp);
+// const auth = getAuth(app);
+// const firebaseApp = initializeApp(firebaseConfig);
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const storage = getStorage(firebaseApp);
 const auth = getAuth(app);
-const firebaseApp = initializeApp(firebaseConfig);
+const storage = getStorage(app);
 
+// firebaseApp,
 export {
-  firebaseApp,
   db,
   auth,
   app,
