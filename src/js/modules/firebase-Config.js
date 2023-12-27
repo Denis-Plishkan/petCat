@@ -52,6 +52,7 @@ export {
   uploadBytes,
   collection,
   addDoc,
+  getDocs,
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
