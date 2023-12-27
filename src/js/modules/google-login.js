@@ -1,23 +1,49 @@
-import { auth } from './firebase-Config';
+import { auth, db, collection, getDocs, addDoc } from './firebase-Config';
 import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 
 const googleProvider = new GoogleAuthProvider();
 
 document.getElementById('google-login').addEventListener('click', function () {
   signInWithPopup(auth, googleProvider)
-    .then((result) => {
+    .then(async (result) => {
       const user = result.user;
 
-      const credential = GoogleAuthProvider.credentialFromResult(result);
-      const accessToken = credential.accessToken;
+      const { displayName, email, uid } = user;
 
-      alert('Welcome ' + user.displayName);
+      const userQuery = collection(db, 'users');
+      const userSnapshot = await getDocs(userQuery);
+      const existingUser = userSnapshot.docs.find(
+        (doc) => doc.data().uid === uid
+      );
+
+      if (!existingUser) {
+        try {
+          const userDocRef = await addDoc(collection(db, 'users'), {
+            uid: uid,
+            email: email,
+            fullname: displayName,
+            isAdmin: false,
+          });
+
+          console.log(
+            'Данные пользователя успешно добавлены в Firestore:',
+            userDocRef.email
+          );
+        } catch (error) {
+          console.error(
+            'Ошибка при добавлении данных пользователя в Firestore:',
+            error
+          );
+        }
+      }
+
+      alert('Welcome ' + displayName);
       console.log(user);
 
       const localUserData = {
-        uid: user.uid,
-        displayName: user.displayName,
-        email: user.email,
+        uid: uid,
+        displayName: displayName,
+        email: email,
       };
       localStorage.setItem('user', JSON.stringify(localUserData));
 

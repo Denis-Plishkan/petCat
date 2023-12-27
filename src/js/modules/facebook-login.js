@@ -1,4 +1,4 @@
-import { auth } from './firebase-Config';
+import { auth, db, collection, getDocs, addDoc } from './firebase-Config';
 import { signInWithPopup, FacebookAuthProvider } from 'firebase/auth';
 
 const facebookProvider = new FacebookAuthProvider();
@@ -7,24 +7,47 @@ document
   .getElementById('facebook-login')
   .addEventListener('click', function () {
     signInWithPopup(auth, facebookProvider)
-      .then((result) => {
+      .then(async (result) => {
         const user = result.user;
 
-        const credential = FacebookAuthProvider.credentialFromResult(result);
-        const accessToken = credential.accessToken;
+        const { displayName, email, uid } = user;
 
-        alert('Welcome ' + user.displayName);
+        const userQuery = collection(db, 'users');
+        const userSnapshot = await getDocs(userQuery);
+        const existingUser = userSnapshot.docs.find(
+          (doc) => doc.data().uid === uid
+        );
+
+        if (!existingUser) {
+          try {
+            const userDocRef = await addDoc(collection(db, 'users'), {
+              uid: uid,
+              email: email,
+              fullname: displayName,
+              isAdmin: false,
+            });
+
+            console.log(
+              'Данные пользователя успешно добавлены в Firestore:',
+              userDocRef.email
+            );
+          } catch (error) {
+            console.error(
+              'Ошибка при добавлении данных пользователя в Firestore:',
+              error
+            );
+          }
+        }
+
+        alert('Welcome ' + displayName);
         console.log(user);
         window.location.href = 'index.html';
       })
       .catch((error) => {
-        // Handle Errors here.
         const errorCode = error.code;
         const errorMessage = error.message;
         console.log(errorMessage);
-        // The email of the user's account used.
         const email = error.customData.email;
-        // The AuthCredential type that was used.
         const credential = FacebookAuthProvider.credentialFromError(error);
       });
   });

@@ -6,6 +6,7 @@ import {
   storage,
   getDocs,
 } from './modules/firebase-Config';
+import { verifyIdToken, getClaims } from 'firebase/auth';
 
 document.addEventListener('DOMContentLoaded', async function () {
   let userCounter = 0;
@@ -32,6 +33,8 @@ document.addEventListener('DOMContentLoaded', async function () {
     let content = '';
     console.log('Hash:', window.location.hash);
     switch (hash) {
+      case '#/admin/services/':
+        content = ``;
       case '#/admin/services/services-str':
         content = `
           <div class="content">
@@ -234,3 +237,51 @@ document.addEventListener('DOMContentLoaded', async function () {
   window.addEventListener('load', updateContent);
   window.addEventListener('hashchange', updateContent);
 });
+
+// import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+// import { db, collection, addDoc, storage } from './modules/firebase-Config';
+
+// document
+//   .getElementById('submitBtn')
+//   .addEventListener('click', async function () {
+//     const titleInput = document.getElementById('title');
+//     const descriptionInput = document.getElementById('desctiption');
+//     const errorText = document.getElementById('errorText');
+
+//     errorText.textContent = '';
+
+//     if (!titleInput.value || !descriptionInput.value) {
+//       errorText.textContent =
+//         'Ошибка: Поля "Фотография" и "Историия" обязательны для заполнения.';
+//       return;
+//     }
+
+//     const fileInput = document.getElementById('img-for-story');
+//     const file = fileInput.files[0];
+
+//     try {
+//       let imageUrl = '';
+
+//       if (file) {
+//         const storageRef = ref(storage, file.name);
+//         await uploadBytes(storageRef, file);
+//         imageUrl = await getDownloadURL(storageRef);
+//         console.log('URL фотографии:', imageUrl);
+//       }
+
+//       const docRef = await addDoc(collection(db, 'story'), {
+//         title: titleInput.value,
+//         description: descriptionInput.value,
+//         imageUrl: imageUrl,
+//       });
+
+//       console.log('Документ успешно добавлен с ID: ', docRef.id);
+
+//       titleInput.value = '';
+//       descriptionInput.value = '';
+
+//       document.getElementById('submitBtn').setAttribute('disabled', 'true');
+//     } catch (error) {
+//       console.error('Ошибка: ', error.message, error.code);
+//     }
+//   });

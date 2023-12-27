@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="Put your description here." />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="./images/cat.png" type="image/x-icon" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback"
+    />
+    <script
+      src="https://code.jquery.com/jquery-3.7.1.min.js"
+      integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+      crossorigin="anonymous"
+    ></script>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"
+    />
+
+    <link rel="stylesheet" href="css/admin.min.css" />
+    <title>Admin Page</title>
+  </head>
+
+  <body class="hold-transition sidebar-mini layout-fixed">
+    <div class="wrapper">
+      <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+        <!-- Left navbar links -->
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" data-widget="pushmenu" href="#" role="button"
+              ><i class="fas fa-bars"></i
+            ></a>
+          </li>
+          <li class="nav-item d-none d-sm-inline-block">
+            <a href="admin.html" class="nav-link">На главную</a>
+          </li>
+          <li class="nav-item d-none d-sm-inline-block">
+            <a href="#" class="nav-link">Контакты</a>
+          </li>
+        </ul>
+
+        <!-- Right navbar links -->
+        <ul class="navbar-nav ml-auto">
+          <!-- Navbar Search -->
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              data-widget="navbar-search"
+              href="#"
+              role="button"
+            >
+              <i class="fas fa-search"></i>
+            </a>
+            <div class="navbar-search-block">
+              <form class="form-inline">
+                <div class="input-group input-group-sm">
+                  <input
+                    class="form-control form-control-navbar"
+                    type="search"
+                    placeholder="Search"
+                    aria-label="Search"
+                  />
+                  <div class="input-group-append">
+                    <button class="btn btn-navbar" type="submit">
+                      <i class="fas fa-search"></i>
+                    </button>
+                    <button
+                      class="btn btn-navbar"
+                      type="button"
+                      data-widget="navbar-search"
+                    >
+                      <i class="fas fa-times"></i>
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </li>
+        </ul>
+      </nav>
+
+      <aside class="main-sidebar sidebar-dark-gray-dark elevation-4">
+        <a href="admin.html" class="brand-link">
+          <img
+            src="./images/logo.png"
+            alt="AdminLTE Logo"
+            class="brand-image img-circle-cat elevation-3"
+          />
+          <!-- <span class="brand-text font-weight-light">Admin</span> -->
+        </a>
+
+        <!-- Sidebar -->
+        <div class="sidebar">
+          <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+            <div class="image">
+              <img
+                src="./images/admin/user2-160x160.jpg"
+                class="img-circle elevation-2"
+                alt="User Image"
+              />
+            </div>
+            <div class="info">
+              <a href="#" class="d-block">Admin-name</a>
+            </div>
+          </div>
+
+          <!-- SidebarSearch Form -->
+          <div class="form-inline">
+            <div class="input-group" data-widget="sidebar-search">
+              <input
+                class="form-control form-control-sidebar"
+                type="search"
+                placeholder="Search"
+                aria-label="Search"
+              />
+              <div class="input-group-append">
+                <button class="btn btn-sidebar">
+                  <i class="fas fa-search fa-fw"
+                    ><svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      fill="currentColor"
+                      class="bi bi-search"
+                      viewBox="0 0 16 16"
+                    >
+                      <path
+                        d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"
+                      />
+                    </svg>
+                  </i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sidebar Menu -->
+          <nav class="mt-2">
+            <ul
+              class="nav nav-pills nav-sidebar flex-column"
+              data-widget="treeview"
+              role="menu"
+              data-accordion="false"
+            >
+              <li class="nav-item menu-open">
+                <a href="#/admin" class="nav-link active">
+                  <i class="nav-icon fas fa-tachometer-alt"></i>
+                  <p>
+                    Cтатистика
+                    <i class="right fas fa-angle-left"></i>
+                  </p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <!-- <a href="#/admin/services" class="nav-link"> -->
+                <a href="admin.html" class="nav-link">
+                  <i class="nav-icon fas fa-th"></i>
+                  <p>
+                    Услуги клиники
+                    <i class="fas fa-angle-left right"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <!-- <a href="#/admin/services/services-str" class="nav-link"> -->
+                    <a href="admin.html" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Добавить услугу</p>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <li class="nav-item">
+                <a href="#/admin/services" class="nav-link">
+                  <i class="nav-icon fas fa-th"></i>
+                  <p>
+                    Специалисты
+                    <i class="fas fa-angle-left right"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="#/admin/services/services-str" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Добавить персонал</p>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <li class="nav-item">
+                <a href="#/admin/services" class="nav-link">
+                  <i class="nav-icon fas fa-th"></i>
+                  <p>
+                    Контактная информация
+                    <i class="fas fa-angle-left right"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="#/admin/services/services-str" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Изменить контакты</p>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <li class="nav-item">
+                <a href="#/admin/services" class="nav-link">
+                  <i class="nav-icon fas fa-th"></i>
+                  <p>
+                    Истории пациентов
+                    <i class="fas fa-angle-left right"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="#/admin/services/services-str" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Добавить историю</p>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <li class="nav-item">
+                <a href="#/admin/services" class="nav-link">
+                  <i class="nav-icon fas fa-th"></i>
+                  <p>
+                    Отзывы
+                    <i class="fas fa-angle-left right"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="#/admin/services/services-str" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Добавить отзыв</p>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <li class="nav-item">
+                <a href="#/admin/services" class="nav-link">
+                  <i class="nav-icon fas fa-th"></i>
+                  <p>
+                    Записи на приём
+                    <i class="fas fa-angle-left right"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="#/admin/services/services-str" class="nav-link">
+                      <i class="far fa-circle nav-icon"></i>
+                      <p>Добавить запись</p>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </nav>
+          <!-- /.sidebar-menu -->
+        </div>
+        <!-- /.sidebar -->
+      </aside>
+      <div class="content-wrapper" style="min-height: 1220px">
+        <div class="content">
+          <div class="">
+            <h2>Добавление истории пациента</h2>
+            <div class="mt-5">
+              <div class="mt-3">
+                <p>Фотография для истории</p>
+                <div class="add">
+                  <input
+                    class="img-top-input"
+                    id="img-for-story"
+                    type="file"
+                    accept="image/* "
+                  />
+                </div>
+              </div>
+              <div class="mt-3">
+                <label for="title">Что случилось</label
+                ><input
+                  id="title"
+                  type="text"
+                  placeholder="История"
+                  style="width: 50%"
+                />
+              </div>
+              <div class="form-group">
+                <label>Когда произошло:</label>
+                <div
+                  class="input-group date"
+                  id="reservationdate"
+                  data-target-input="nearest"
+                >
+                  <input
+                    type="text"
+                    class="form-control datetimepicker-input"
+                    data-target="#reservationdate"
+                  />
+                  <div
+                    class="input-group-append"
+                    data-target="#reservationdate"
+                    data-toggle="datetimepicker"
+                  >
+                    <div class="input-group-text">
+                      <i class="fa fa-calendar"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-5">
+              <button
+                id="submitBtn"
+                type="button"
+                class="btn btn-block btn-success btn-lg"
+              >
+                Завершить создание итории пациента
+              </button>
+
+              <div id="errorText" class="text-danger mt-2"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="content-wrapper"></div> -->
+    </div>
+  </body>
+  <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
+  <script src="js/admin.min.js"></script>
+</html>
