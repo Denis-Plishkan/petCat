@@ -1,0 +1,32 @@
+.specialists-card {
+  // .specialists-card__photo
+
+  &__photo {
+    margin-bottom: 16px;
+    img {
+      width: 344px;
+      height: 400px;
+      object-fit: cover;
+    }
+  }
+
+  // .specialists-card__name
+
+  &__name {
+    color: #292d33;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 24px;
+    max-width: 207px;
+    margin-bottom: 6px;
+  }
+
+  // .specialists-card__job-title
+
+  &__job-title {
+    color:  #51555a;
+    // font-family: Manrope;
+    font-size: 16px;
+    line-height: 24px;
+  }
+}

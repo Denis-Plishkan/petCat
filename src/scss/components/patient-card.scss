@@ -1,0 +1,31 @@
+.patient-card {
+  // .patient-card__photo
+
+  &__photo {
+    margin-bottom: 16px;
+    img {
+      width: 248px;
+      height: 248px;
+      object-fit: cover;
+    }
+  }
+
+  // .patient-card__disease
+
+  &__disease {
+    color: #292d33;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 24px;
+    max-width: 248px;
+    margin-bottom: 10px;
+  }
+
+  // .patient-card__data
+
+  &__data {
+    color:  #797c80;
+    line-height: 20px;
+    font-size: 14px;
+  }
+}
