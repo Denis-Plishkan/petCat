@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Put your description here.">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="shortcut icon" href="./images/cat.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback&_v=20231227180844">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js?_v=20231227180844" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css?_v=20231227180844" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css?_v=20231227180844">
+
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css?_v=20231227180844">
+
+    <link rel="stylesheet" href="css/admin.min.css?_v=20231227180844">
+    <title>Admin Page</title>
+  </head>
+
+  <body class="hold-transition layout-fixed sidebar-mini">
+    <div class="wrapper">
+      <nav class="main-header navbar navbar-expand navbar-light navbar-white">
+        
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+          </li>
+          <li class="nav-item d-none d-sm-inline-block">
+            <a href="admin.html" class="nav-link">На главную</a>
+          </li>
+          <li class="nav-item d-none d-sm-inline-block">
+            <a href="#" class="nav-link">Контакты</a>
+          </li>
+        </ul>
+
+        
+        <ul class="navbar-nav ml-auto">
+          
+          <li class="nav-item">
+            <a class="nav-link" data-widget="navbar-search" href="#" role="button">
+              <i class="fas fa-search"></i>
+            </a>
+            <div class="navbar-search-block">
+              <form class="form-inline">
+                <div class="input-group input-group-sm">
+                  <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
+                  <div class="input-group-append">
+                    <button class="btn btn-navbar" type="submit">
+                      <i class="fas fa-search"></i>
+                    </button>
+                    <button class="btn btn-navbar" type="button" data-widget="navbar-search">
+                      <i class="fas fa-times"></i>
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </li>
+        </ul>
+      </nav>
+
+      <aside class="elevation-4 main-sidebar sidebar-dark-gray-dark">
+        <a href="admin.html" class="brand-link">
+          <img src="./images/logo.png" alt="AdminLTE Logo" class="brand-image elevation-3 img-circle-cat">
+          
+        </a>
+
+        
+        <div class="sidebar">
+          <div class="mt-3 d-flex mb-3 pb-3 user-panel">
+            <div class="image">
+              <img src="./images/admin/user2-160x160.jpg" class="elevation-2 img-circle" alt="User Image">
+            </div>
+            <div class="info">
+              <a href="#" class="d-block">Admin-name</a>
+            </div>
+          </div>
+
+          
+          <div class="form-inline">
+            <div class="input-group" data-widget="sidebar-search">
+              <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
+              <div class="input-group-append">
+                <button class="btn btn-sidebar">
+                  <i class="fas fa-search fa-fw"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                      <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                    </svg>
+                  </i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          
+          <nav class="mt-2">
+            <ul class="nav flex-column nav-pills nav-sidebar" data-widget="treeview" role="menu" data-accordion="false">
+              <li class="nav-item menu-open">
+                <a href="#/admin" class="nav-link active">
+                  <i class="fas nav-icon fa-tachometer-alt"></i>
+                  <p>
+                    Cтатистика
+                    <i class="fas fa-angle-left right"></i>
+                  </p>
+                </a>
+              </li>
+              <li class="nav-item">
+                
+                <a href="admin.html" class="nav-link">
+                  <i class="fas nav-icon fa-th"></i>
+                  <p>
+                    Услуги клиники
+                    <i class="fas fa-angle-left right"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    
+                    <a href="admin.html" class="nav-link">
+                      <i class="nav-icon fa-circle far"></i>
+                      <p>Добавить услугу</p>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <li class="nav-item">
+                <a href="#/admin/services" class="nav-link">
+                  <i class="fas nav-icon fa-th"></i>
+                  <p>
+                    Специалисты
+                    <i class="fas fa-angle-left right"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="#/admin/services/services-str" class="nav-link">
+                      <i class="nav-icon fa-circle far"></i>
+                      <p>Добавить персонал</p>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <li class="nav-item">
+                <a href="#/admin/services" class="nav-link">
+                  <i class="fas nav-icon fa-th"></i>
+                  <p>
+                    Контактная информация
+                    <i class="fas fa-angle-left right"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="#/admin/services/services-str" class="nav-link">
+                      <i class="nav-icon fa-circle far"></i>
+                      <p>Изменить контакты</p>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <li class="nav-item">
+                <a href="#/admin/services" class="nav-link">
+                  <i class="fas nav-icon fa-th"></i>
+                  <p>
+                    Истории пациентов
+                    <i class="fas fa-angle-left right"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="#/admin/services/services-str" class="nav-link">
+                      <i class="nav-icon fa-circle far"></i>
+                      <p>Добавить историю</p>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <li class="nav-item">
+                <a href="#/admin/services" class="nav-link">
+                  <i class="fas nav-icon fa-th"></i>
+                  <p>
+                    Отзывы
+                    <i class="fas fa-angle-left right"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="#/admin/services/services-str" class="nav-link">
+                      <i class="nav-icon fa-circle far"></i>
+                      <p>Добавить отзыв</p>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <li class="nav-item">
+                <a href="#/admin/services" class="nav-link">
+                  <i class="fas nav-icon fa-th"></i>
+                  <p>
+                    Записи на приём
+                    <i class="fas fa-angle-left right"></i>
+                  </p>
+                </a>
+                <ul class="nav nav-treeview">
+                  <li class="nav-item">
+                    <a href="#/admin/services/services-str" class="nav-link">
+                      <i class="nav-icon fa-circle far"></i>
+                      <p>Добавить запись</p>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </nav>
+          
+        </div>
+        
+      </aside>
+      <div class="content-wrapper" style="min-height: 1220px">
+        <div class="content">
+          <div class="">
+            <h2>Создание карты работника</h2>
+            <div class="mt-5">
+              <div class="mt-3">
+                <label for="title">Полное имя работника</label><input id="title" type="text" placeholder="Полное имя" style="width: 50%">
+              </div>
+              <div class="mt-3">
+                <label for="title">Должность</label><input id="title" type="text" placeholder="Должность" style="width: 50%">
+              </div>
+              <div class="mt-3">
+                <label for="title">Специализации</label><input id="title" type="text" placeholder="Специализации" style="width: 50%">
+              </div>
+              <div class="mt-3">
+                <p>Фотография для личной страницы</p>
+                <div class="add">
+                  <input class="img-top-input" id="img-for-page" type="file" accept="image/* ">
+                </div>
+              </div>
+              <div class="mt-3">
+                <label for="desctiption">Образование</label><textarea placeholder="Образование" id="desctiption" cols="30" rows="10" style="width: 100%; height: 100px; resize: none"></textarea>
+              </div>
+              <div class="mt-3">
+                <label for="desctiption">Профессиональные навыки</label><textarea placeholder="Проф. навыки" id="text" cols="30" rows="10" style="width: 100%; height: 200px; resize: none"></textarea>
+              </div>
+            </div>
+
+            <div class="mt-5">
+              <button id="submitBtn" type="button" class="btn btn-block btn-lg btn-success">
+                Завершить создание карты специалиста
+              </button>
+
+              <div id="errorText" class="mt-2 text-danger"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </body>
+  <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js?_v=20231227180844"></script>
+  <script src="js/admin.min.js?_v=20231227180844"></script>
+</html>

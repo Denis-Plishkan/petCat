@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Put your description here.">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="shortcut icon" href="./images/cat.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback&_v=20231227180844">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js?_v=20231227180844" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css?_v=20231227180844" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js?_v=20231227180844"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css?_v=20231227180844">
+    <link rel="stylesheet" href="css/admin.min.css?_v=20231227180844">
+    <title>Login</title>
+  </head>
+
+  <body class="hold-transition register-page">
+    <div class="register-box">
+      <div class="register-logo">
+        <a href=""><b>Admin</b>LTE</a>
+      </div>
+      <div class="card">
+        <div class="card-body register-card-body">
+          <p class="login-box-msg">Register a new membership</p>
+          <form action="" method="post" id="signupForm">
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" placeholder="Full name" id="fullName">
+              <div class="input-group-append">
+                <div class="input-group-text">
+                  <i class="bi bi-person-fill">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
+                      <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
+                    </svg>
+                  </i>
+                </div>
+              </div>
+            </div>
+            <div class="input-group mb-3">
+              <input type="email" class="form-control" placeholder="Email" id="signupEmail">
+              <div class="input-group-append">
+                <div class="input-group-text">
+                  <i class="bi bi-envelope-fill">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-envelope-fill" viewBox="0 0 16 16">
+                      <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555ZM0 4.697v7.104l5.803-3.558zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586l-1.239-.757Zm3.436-.586L16 11.801V4.697l-5.803 3.546Z"/>
+                    </svg>
+                  </i>
+                </div>
+              </div>
+            </div>
+            <div class="input-group mb-3">
+              <input type="password" class="form-control" id="signupPassword" placeholder="Password">
+              <div class="input-group-append">
+                <div class="input-group-text">
+                  <i class="bi bi-lock-fill">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-lock-fill" viewBox="0 0 16 16">
+                      <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2m3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2"/>
+                    </svg>
+                  </i>
+                </div>
+              </div>
+            </div>
+            <div class="input-group mb-3">
+              <input type="password" class="form-control" placeholder="Retype password" id="repeatPassword">
+              <div class="input-group-append">
+                <div class="input-group-text">
+                  <i class="bi bi-lock-fill">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-lock-fill" viewBox="0 0 16 16">
+                      <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2m3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2"/>
+                    </svg>
+                  </i>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-8">
+                <div class="icheck-primary">
+                  <input type="checkbox" id="agreeTerms" name="terms" value="agree">
+                  <label for="agreeTerms">
+                    I agree to the <a href="#">terms</a>
+                  </label>
+                </div>
+              </div>
+
+              <div class="col-4">
+                <button type="submit" class="btn btn-block btn-primary" id="signupBtn">
+                  Register
+                </button>
+              </div>
+            </div>
+          </form>
+          <div class="text-center social-auth-links">
+            <p>- OR -</p>
+            <a href="#" class="btn btn-block btn-primary" id="facebook-login">
+              <i class="fab mr-2 fa-facebook"></i>
+              Sign up using Facebook
+            </a>
+            <a href="#" class="btn btn-block btn-danger" id="google-login">
+              <i class="fab mr-2 fa-google-plus"></i>
+              Sign up using Google+
+            </a>
+          </div>
+          <a href="auth.html" class="text-center">I already have a membership</a>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js?_v=20231227180844"></script>
+
+  <script src="js/login.min.js?_v=20231227180844"></script>
+</html>
