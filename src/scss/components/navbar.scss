@@ -3,7 +3,7 @@
   &__items {
     display: flex;
     flex-direction: column;
-    gap: 28px;
+    gap: 25px;
     margin-top: 54px;
     padding-left: 56px;
     overflow-y: auto;
@@ -36,7 +36,6 @@
   // .navbar__item
 
   &__item {
-    height: 20px;
     a {
       color: #51555a;
       font-size: 20px;
@@ -155,6 +154,13 @@
   &__button {
     border-radius: 16px;
     background: #f72056;
+    border: 2px solid #f72056;
     color: #fff;
+    transition: all 0.4s ease;
+
+    &:hover {
+      background: #f5fbfc;
+      color: #51555a;  
+    }
   }
 }
