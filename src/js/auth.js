@@ -12,11 +12,9 @@ if (authForm) {
   authForm.addEventListener('submit', async (event) => {
     event.preventDefault();
 
-    // Получаем элементы для вывода ошибок
     const emailError = document.getElementById('emailError');
     const passwordError = document.getElementById('passwordError');
 
-    // Сбрасываем предыдущие ошибки
     emailError.textContent = '';
     passwordError.textContent = '';
 

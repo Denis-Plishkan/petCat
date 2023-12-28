@@ -138,7 +138,6 @@ document.addEventListener('DOMContentLoaded', async function () {
         break;
 
       default:
-        // Вызываем функцию для обновления счетчика пользователей
         await usersCount();
 
         content = `
