@@ -1,4 +1,8 @@
 .instagram {
+  position: relative;
+  background:linear-gradient(90deg, #E8FAFA 0%, #DCF2E8 100%);
+  margin-bottom: 138px;
+
   // .instagram__second-container
 
   &__second-container {
@@ -7,11 +11,57 @@
   // .instagram__title
 
   &__title {
+    color: #292d33;
+    font-size: 48px;
+    font-weight: 700;
+    line-height: 56px;
+    padding-top: 64px;
+    margin-bottom: 38px;
   }
 
   // .instagram__wrapper
 
   &__wrapper {
+    padding-bottom: 104px;
+    display: flex;
+  }
+
+  &__wrapper-wrap {
+    min-width: 86px;
+  }
+
+  &__wrapper-right-top {
+    right: 56px;
+    position: absolute;
+    top: -127px;
+  }
+
+  &__wrapper-right-bottom {
+    position: relative;
+  }
+
+  &__wrapper-right-bottom-smallest {
+    position: absolute;
+    top: 389px;
+    left: 120px;
+  }
+
+  &__wrapper-right-bottom-small {
+    position: absolute;
+    top: 389px;
+    left: 204px;
+  }
+
+  &__wrapper-right-bottom-middle {
+    position: absolute;
+    top: 308px;
+    left: 300px;
+  }
+
+  &__wrapper-right-bottom-biggest {
+    position: absolute;
+    top: 241px;
+    left: 512px;
   }
 
   // .instagram__wrapper-photos
@@ -19,11 +69,14 @@
   &__wrapper-photos {
     max-width: 536px;
     min-height: 536px;
+    box-shadow: 0px 4px 20px 0px rgba(26, 57, 63, 0.1);
+    border-radius: 16px;
   }
 
   // .instagram__wrapper-photos-top
 
   &__wrapper-photos-top {
+    display: flex;
   }
 
   // .instagram__wrapper-photos-top-insta
@@ -34,6 +87,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    background: #fff;
+    border-radius: 0 16px 0 0;
 
     img {
       width: 64px;
@@ -44,6 +99,7 @@
   // .instagram__wrapper-photos-bottom
 
   &__wrapper-photos-bottom {
+    display: flex;
   }
 
   // .instagram__wrapper-photos-bottom-followers
@@ -59,6 +115,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    background: #fff;
+    border-radius: 0 0 0 16px;
   }
 
   // .instagram__followers-top
@@ -72,10 +130,28 @@
   // .instagram__followers-top-num
 
   &__followers-top-num {
+    color: #292d33;
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 35px;
   }
 
   // .instagram__followers-bottom
 
   &__followers-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    a {
+      color: #1dc3b0;
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 24px;
+      transition: all 0.4s ease;
+
+      &:hover {
+        color: #292d33;
+      }
+    }
   }
 }
