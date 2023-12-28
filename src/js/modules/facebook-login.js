@@ -41,6 +41,13 @@ document
 
         alert('Welcome ' + displayName);
         console.log(user);
+
+        const localUserData = {
+          uid: uid,
+          displayName: displayName,
+          email: email,
+        };
+        localStorage.setItem('user', JSON.stringify(localUserData));
         window.location.href = 'index.html';
       })
       .catch((error) => {

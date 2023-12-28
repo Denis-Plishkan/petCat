@@ -1,12 +1,47 @@
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import {
+  auth,
   db,
   collection,
   addDoc,
   storage,
   getDocs,
+  onAuthStateChanged,
 } from './modules/firebase-Config';
 import { verifyIdToken, getClaims } from 'firebase/auth';
+
+onAuthStateChanged(auth, async function (user) {
+  if (!user) {
+    window.location.href = 'login.html';
+  } else {
+    const userQuery = collection(db, 'users');
+    const userSnapshot = await getDocs(userQuery);
+    const existingUser = userSnapshot.docs.find(
+      (doc) => doc.data().uid === user.uid
+    );
+
+    if (existingUser) {
+      const isAdmin = existingUser.data().isAdmin;
+
+      if (!isAdmin) {
+        const errorMessage = 'Куда мы лезим?';
+        const errorMessageContainer = document.getElementById('errorMessage');
+
+        if (errorMessageContainer) {
+          errorMessageContainer.textContent = errorMessage;
+        } else {
+          const errorContainer = document.createElement('div');
+          errorContainer.id = 'errorMessage';
+          errorContainer.textContent = errorMessage;
+          errorContainer.style.color = 'red';
+          document.body.appendChild(errorContainer);
+        }
+
+        window.location.href = 'index.html';
+      }
+    }
+  }
+});
 
 document.addEventListener('DOMContentLoaded', async function () {
   let userCounter = 0;
@@ -237,7 +272,7 @@ document.addEventListener('DOMContentLoaded', async function () {
   window.addEventListener('load', updateContent);
   window.addEventListener('hashchange', updateContent);
 });
-
+//////истории
 // import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 // import { db, collection, addDoc, storage } from './modules/firebase-Config';
 
