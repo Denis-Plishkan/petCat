@@ -1,11 +1,47 @@
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import {
+  auth,
   db,
   collection,
   addDoc,
   storage,
   getDocs,
+  onAuthStateChanged,
 } from './modules/firebase-Config';
+import { verifyIdToken, getClaims } from 'firebase/auth';
+
+onAuthStateChanged(auth, async function (user) {
+  if (!user) {
+    window.location.href = 'login.html';
+  } else {
+    const userQuery = collection(db, 'users');
+    const userSnapshot = await getDocs(userQuery);
+    const existingUser = userSnapshot.docs.find(
+      (doc) => doc.data().uid === user.uid
+    );
+
+    if (existingUser) {
+      const isAdmin = existingUser.data().isAdmin;
+
+      if (!isAdmin) {
+        const errorMessage = 'Куда мы лезим?';
+        const errorMessageContainer = document.getElementById('errorMessage');
+
+        if (errorMessageContainer) {
+          errorMessageContainer.textContent = errorMessage;
+        } else {
+          const errorContainer = document.createElement('div');
+          errorContainer.id = 'errorMessage';
+          errorContainer.textContent = errorMessage;
+          errorContainer.style.color = 'red';
+          document.body.appendChild(errorContainer);
+        }
+
+        window.location.href = 'index.html';
+      }
+    }
+  }
+});
 
 document.addEventListener('DOMContentLoaded', async function () {
   let userCounter = 0;
@@ -32,6 +68,8 @@ document.addEventListener('DOMContentLoaded', async function () {
     let content = '';
     console.log('Hash:', window.location.hash);
     switch (hash) {
+      case '#/admin/services/':
+        content = ``;
       case '#/admin/services/services-str':
         content = `
           <div class="content">
@@ -100,7 +138,6 @@ document.addEventListener('DOMContentLoaded', async function () {
         break;
 
       default:
-        // Вызываем функцию для обновления счетчика пользователей
         await usersCount();
 
         content = `
@@ -234,3 +271,51 @@ document.addEventListener('DOMContentLoaded', async function () {
   window.addEventListener('load', updateContent);
   window.addEventListener('hashchange', updateContent);
 });
+//////истории
+// import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+// import { db, collection, addDoc, storage } from './modules/firebase-Config';
+
+// document
+//   .getElementById('submitBtn')
+//   .addEventListener('click', async function () {
+//     const titleInput = document.getElementById('title');
+//     const descriptionInput = document.getElementById('desctiption');
+//     const errorText = document.getElementById('errorText');
+
+//     errorText.textContent = '';
+
+//     if (!titleInput.value || !descriptionInput.value) {
+//       errorText.textContent =
+//         'Ошибка: Поля "Фотография" и "Историия" обязательны для заполнения.';
+//       return;
+//     }
+
+//     const fileInput = document.getElementById('img-for-story');
+//     const file = fileInput.files[0];
+
+//     try {
+//       let imageUrl = '';
+
+//       if (file) {
+//         const storageRef = ref(storage, file.name);
+//         await uploadBytes(storageRef, file);
+//         imageUrl = await getDownloadURL(storageRef);
+//         console.log('URL фотографии:', imageUrl);
+//       }
+
+//       const docRef = await addDoc(collection(db, 'story'), {
+//         title: titleInput.value,
+//         description: descriptionInput.value,
+//         imageUrl: imageUrl,
+//       });
+
+//       console.log('Документ успешно добавлен с ID: ', docRef.id);
+
+//       titleInput.value = '';
+//       descriptionInput.value = '';
+
+//       document.getElementById('submitBtn').setAttribute('disabled', 'true');
+//     } catch (error) {
+//       console.error('Ошибка: ', error.message, error.code);
+//     }
+//   });
