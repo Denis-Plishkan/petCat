@@ -1,0 +1,115 @@
+.map {
+    margin-bottom: 128px;
+  // .map__second-container
+
+  &__second-container {
+  }
+
+  // .map__title
+
+  &__title {
+    color: #292d33;
+    font-size: 48px;
+    font-weight: 700;
+    line-height: 56px;
+    margin-bottom: 56px;
+  }
+
+  // .map__wrapper
+
+  &__wrapper {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  // .map__wrapper-left
+
+  &__wrapper-left {
+    width: 728px;
+    height: 536px;
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border-radius: 8px;
+    }
+  }
+
+  // .map__wrapper-right
+
+  &__wrapper-right {
+    margin-top: 8px;
+  }
+
+  &__wrapper-right-tel {
+    color: #292d33;
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 35px;
+  }
+
+  &__wrapper-right-text {
+    color: #797c80;
+    font-size: 17px;
+    line-height: 28px;
+    margin-bottom: 34px;
+  }
+
+  &__wrapper-right-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 17px;
+    margin-bottom: 40px;
+  }
+
+  // .map__wrapper-right-card
+
+  &__wrapper-right-card {
+  }
+
+  // .map__card
+
+  &__card {
+    width: 344px;
+    height: 128px;
+    border-radius: 8px;
+    background: linear-gradient(90deg, #e8fafa 0%, #dcf2e8 100%);
+    padding: 16px 24px;
+    position: relative;
+  }
+
+  &__card-title {
+    color: #292d33;
+    font-family: Manrope;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 24px;
+    margin-bottom: 10px;
+  }
+
+  &__card-text {
+    color: #51555a;
+    font-size: 14px;
+    line-height: 16px;
+  }
+
+  // .map__card-num
+
+  &__card-num {
+    position: absolute;
+    right: 28px;
+    bottom: 0;
+    svg {
+      width: 38px;
+      height: 56px;
+    }
+  }
+
+  &__card-num-bottom {
+    right: 16px;
+    svg {
+      width: 56px;
+      height: 64px;
+    }
+  }
+}
