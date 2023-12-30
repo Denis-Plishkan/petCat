@@ -1,16 +1,40 @@
+import JustValidate from 'just-validate';
 import { auth, signInWithEmailAndPassword } from './modules/firebase-Config';
 import './modules/facebook-login';
 import './modules/google-login';
 
 function checkUserAdmin(email, password) {
-  return email === 'admin@mail.com' && password === '123456';
+  return email === 'admin@mail.com' && password === 'qwe123456';
 }
 
 const authForm = document.getElementById('authForm');
+const validator = new JustValidate(authForm);
+validator
+  .addField('#loginEmail', [
+    {
+      rule: 'required',
+    },
+    {
+      rule: 'customRegexp',
+      value: /^[a-zA-Z0-9.-]+@[^\s@]+\.[\p{L}]{2,}$/u,
+      errorMessage: 'Email is invalid',
+    },
+  ])
+
+  .addField('#loginPassword', [
+    {
+      rule: 'required',
+    },
+    {
+      rule: 'password',
+    },
+  ]);
 
 if (authForm) {
   authForm.addEventListener('submit', async (event) => {
     event.preventDefault();
+
+    const isValid = validator.validate();
 
     const emailError = document.getElementById('emailError');
     const passwordError = document.getElementById('passwordError');
@@ -30,7 +54,7 @@ if (authForm) {
       }
       return;
     }
-
+    const errorMessageElement = document.getElementById('errorMessage');
     try {
       const userCredential = await signInWithEmailAndPassword(
         auth,
@@ -60,14 +84,11 @@ if (authForm) {
 
       if (
         error.code === 'auth/user-not-found' ||
-        error.code === 'auth/invalid-email'
+        error.code === 'auth/invalid-email' ||
+        error.code === 'auth/wrong-password'
       ) {
-        emailError.textContent = 'Неправильный email';
-        console.error('Ошибка входа: Неправильный email');
-      } else if (error.code === 'auth/wrong-password') {
-        passwordError.textContent = 'Неправильный пароль';
-        console.error('Ошибка входа: Неправильный пароль');
       } else {
+        alert('Неправильный email или пароль');
         console.error(' Oшибка:', error);
       }
     } finally {

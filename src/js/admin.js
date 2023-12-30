@@ -13,6 +13,14 @@ import {
   onAuthStateChanged,
 } from './modules/firebase-Config';
 import { verifyIdToken, getClaims } from 'firebase/auth';
+import {
+  getDataFromFirestore,
+  createCard,
+  createService,
+  uploadImage,
+  getDataFromServices,
+  displayServicesInHTML,
+} from './modules/services-admin';
 
 onAuthStateChanged(auth, async function (user) {
   if (!user) {
@@ -43,6 +51,7 @@ onAuthStateChanged(auth, async function (user) {
 
         window.location.href = 'index.html';
       }
+    } else {
     }
   }
 });
@@ -66,7 +75,8 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
   }
 
-  async function updateContent() {
+  const updateContent = async () => {
+    // submitBtn.addEventListener('click', async function () {
     let hash = window.location.hash;
 
     let content = '';
@@ -78,9 +88,10 @@ document.addEventListener('DOMContentLoaded', async function () {
         <h2 class="popular-services__wrapper-title">
         Список всех услуг на данный момент
       </h2>
-        <div class="swiper-wrapper" id="swiperWrapper"></div>
-        </div>`;
-        getDataFromFirestore();
+        <div class="services-wrapper" id="services-body"></div>
+        </div>
+        `;
+        getDataFromServices();
         break;
 
       case '#/admin/services/services-str':
@@ -136,7 +147,8 @@ document.addEventListener('DOMContentLoaded', async function () {
 
               <div class="mt-5">
                 <button
-                  id="submitBtn"
+                data-form-type="service"
+                id="submitServiceBtn"
                   type="button"
                   class="btn btn-block btn-success btn-lg"
                 >
@@ -148,6 +160,91 @@ document.addEventListener('DOMContentLoaded', async function () {
             </div>
           </div>
         `;
+
+        break;
+
+      case '#/admin/all-stories':
+        content = ` 
+        <div class="content">
+        <h2 class="popular-services__wrapper-title">
+        Список всех историй пациентов
+      </h2>
+      <div class="history"> 
+      <div class="history__cards" id="history-body">
+      </div>
+        </div>
+        </div>
+        `;
+        getDataFromStories();
+        break;
+
+      case '#/admin/all-stories/stories-str':
+        content = `
+        <div class="content">
+        <div class="">
+          <h2>Добавление истории пациента</h2>
+          <div class="mt-5">
+            <div class="mt-3">
+              <p>Фотография для истории</p>
+              <div class="add">
+                <input
+                  class="img-top-page"
+                  id="img-for-story"
+                  type="file"
+                  accept="image/* "
+                />
+              </div>
+            </div>
+            <div class="mt-3">
+              <label for="title">Что случилось</label
+              ><input
+                id="title"
+                type="text"
+                placeholder="История"
+                style="width: 50%"
+              />
+            </div>
+            <div class="form-group">
+              <label>Когда произошло:</label>
+              <div
+                class="input-group date"
+                id="reservationdate"
+                data-target-input="nearest"
+              >
+                <input
+                  type="text"
+                  class="form-control datetimepicker-input"
+                  data-target="#reservationdate"
+                />
+                <div
+                  class="input-group-append"
+                  data-target="#reservationdate"
+                  data-toggle="datetimepicker"
+                >
+                  <div class="input-group-text">
+                    <i class="fa fa-calendar"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-5">
+            <button
+            data-form-type="story"
+            id="submitStoryBtn"
+              type="button"
+              class="btn btn-block btn-success btn-lg"
+            >
+              Завершить создание итории пациента
+            </button>
+
+            <div id="errorText" class="text-danger mt-2"></div>
+          </div>
+        </div>
+      </div> 
+      `;
+
         break;
 
       default:
@@ -224,62 +321,137 @@ document.addEventListener('DOMContentLoaded', async function () {
         `;
         break;
     }
+    const contentContainer = document.getElementById('dynamicContentContainer');
 
-    const dynamicContentContainer = document.getElementById(
-      'dynamicContentContainer'
-    );
-    dynamicContentContainer.innerHTML = content;
+    const submitServiceBtnHandler = async function () {
+      console.log('Кнопка нажата!');
+      const titleInput = document.getElementById('title');
+      const descriptionInput = document.getElementById('desctiption');
+      const fileInput = document.getElementById('img-for-page');
+      const textInput = document.getElementById('text');
+      const errorText = document.getElementById('errorText');
 
-    const submitBtn = document.getElementById('submitBtn');
+      errorText.textContent = '';
 
-    if (submitBtn) {
-      submitBtn.addEventListener('click', async function () {
-        const titleInput = document.getElementById('title');
-        const descriptionInput = document.getElementById('desctiption');
-        const fileInput = document.getElementById('img-for-page');
-        const textInput = document.getElementById('text');
-        const errorText = document.getElementById('errorText');
+      if (!titleInput.value || !descriptionInput.value) {
+        errorText.textContent =
+          'Ошибка: Поля "Название" и "Описание" обязательны для заполнения.';
+        return;
+      }
 
-        errorText.textContent = '';
+      const file = fileInput.files[0];
 
-        if (!titleInput.value || !descriptionInput.value) {
-          errorText.textContent =
-            'Ошибка: Поля "Название" и "Описание" обязательны для заполнения.';
-          return;
+      try {
+        let imageUrl = '';
+
+        if (file) {
+          const storageRef = ref(storage, file.name);
+          await uploadBytes(storageRef, file);
+          imageUrl = await getDownloadURL(storageRef);
+          console.log('URL фотографии:', imageUrl);
         }
 
-        const file = fileInput.files[0];
+        const docRef = await addDoc(collection(db, 'services'), {
+          title: titleInput.value,
+          description: descriptionInput.value,
+          imageUrl: imageUrl,
+        });
 
-        try {
-          let imageUrl = '';
+        console.log('Документ успешно добавлен с ID: ', docRef.id);
 
-          if (file) {
-            const storageRef = ref(storage, file.name);
-            await uploadBytes(storageRef, file);
-            imageUrl = await getDownloadURL(storageRef);
-            console.log('URL фотографии:', imageUrl);
-          }
+        titleInput.value = '';
+        descriptionInput.value = '';
+        if (fileInput) {
+          fileInput.value = '';
+        }
+        textInput.value = '';
+      } catch (error) {
+        console.error('Ошибка: ', error.message, error.code);
+      }
+    };
 
-          const docRef = await addDoc(collection(db, 'services'), {
-            title: titleInput.value,
-            description: descriptionInput.value,
-            imageUrl: imageUrl,
-          });
+    const submitServiceBtn = document.getElementById('submitServiceBtn');
 
-          console.log('Документ успешно добавлен с ID: ', docRef.id);
+    if (submitServiceBtn) {
+      submitServiceBtn.removeEventListener('click', submitServiceBtnHandler);
+      submitServiceBtn.addEventListener('click', submitServiceBtnHandler);
+    }
 
-          titleInput.value = '';
-          descriptionInput.value = '';
-          if (fileInput) {
-            fileInput.value = '';
-          }
-          textInput.value = '';
-        } catch (error) {
-          console.error('Ошибка: ', error.message, error.code);
+    const submitStoryBtnHandler = async () => {
+      console.log('Кнопка нажата!');
+      const titleInput = document.getElementById('title');
+      const imgForStoryInput = document.getElementById('img-for-story');
+      const reservationDateInput = document.getElementById('reservationdate');
+      const errorText = document.getElementById('errorText');
+
+      errorText.textContent = '';
+
+      if (!imgForStoryInput.files || !titleInput.value) {
+        errorText.textContent =
+          'Ошибка: Поля "История" и "Фотография для истории" обязательны для заполнения.';
+        return;
+      }
+
+      const file = imgForStoryInput.files[0];
+
+      if (errorText) {
+        errorText.textContent = '';
+      } else {
+        console.error('Элемент errorText не найден!');
+      }
+
+      try {
+        let imageUrl = '';
+
+        if (file) {
+          const storageRef = ref(storage, file.name);
+          await uploadBytes(storageRef, file);
+          imageUrl = await getDownloadURL(storageRef);
+          console.log('URL фотографии:', imageUrl);
+        }
+
+        const reservationDate =
+          reservationDateInput && reservationDateInput.value
+            ? new Date(reservationDateInput.value).toISOString()
+            : null;
+
+        const docRef = await addDoc(collection(db, 'story'), {
+          imageUrl: imageUrl,
+          title: titleInput.value,
+          date: reservationDate,
+        });
+
+        console.log('Документ успешно добавлен с ID: ', docRef.id);
+
+        imgForStoryInput.value = '';
+        titleInput.value = '';
+        reservationDateInput.value = '';
+      } catch (error) {
+        console.error('Ошибка: ', error.message, error.code);
+      }
+    };
+    const submitStoryBtn = document.getElementById('submitStoryBtn');
+
+    if (submitStoryBtn) {
+      submitStoryBtn.removeEventListener('click', submitStoryBtnHandler);
+      submitStoryBtn.addEventListener('click', submitStoryBtnHandler);
+    }
+
+    if (contentContainer) {
+      contentContainer.innerHTML = content;
+      document.addEventListener('click', (event) => {
+        const target = event.target;
+
+        if (target.id === 'submitServiceBtn') {
+          submitServiceBtnHandler();
+        } else if (target.id === 'submitStoryBtn') {
+          submitStoryBtnHandler();
         }
       });
+    } else {
+      console.error('Контейнер для контента не найден!');
     }
-  }
+  };
 
   window.addEventListener('load', updateContent);
   window.addEventListener('hashchange', updateContent);
@@ -301,14 +473,14 @@ document.addEventListener('DOMContentLoaded', async function () {
     return cardElement;
   };
 
-  const displayDataInHTML = (data) => {
-    const swiperWrapper = document.getElementById('swiperWrapper');
+  const displayServicesInHTML = (data) => {
+    const servicesBody = document.getElementById('services-body');
 
-    swiperWrapper.innerHTML = '';
+    servicesBody.innerHTML = '';
 
     for (let i = 0; i < data.length; i += 3) {
-      const slide = document.createElement('div');
-      slide.classList.add('swiper-slide');
+      const line = document.createElement('div');
+      line.classList.add('services-line');
 
       const cardWrapper = document.createElement('div');
       cardWrapper.classList.add('popular-services__card-wrapper');
@@ -318,12 +490,12 @@ document.addEventListener('DOMContentLoaded', async function () {
         cardWrapper.appendChild(card);
       }
 
-      slide.appendChild(cardWrapper);
-      swiperWrapper.appendChild(slide);
+      line.appendChild(cardWrapper);
+      servicesBody.appendChild(line);
     }
   };
 
-  const getDataFromFirestore = async () => {
+  const getDataFromServices = async () => {
     try {
       const querySnapshot = await getDocs(collection(db, 'services'));
       const dataArray = [];
@@ -336,14 +508,68 @@ document.addEventListener('DOMContentLoaded', async function () {
         // );
       });
 
-      displayDataInHTML(dataArray);
+      displayServicesInHTML(dataArray);
     } catch (error) {
       console.error('Ошибка при получении данных из Firestore: ', error);
     }
   };
 
-  getDataFromFirestore();
+  const createStoryCard = (imageUrl, title, date) => {
+    const cardElement = document.createElement('div');
+    cardElement.classList.add('patient-card');
+
+    const photoContainer = document.createElement('div');
+    photoContainer.classList.add('patient-card__photo');
+    const photo = document.createElement('img');
+    photo.src = imageUrl || 'placeholder_image_url.jpg';
+    photo.alt = 'photo';
+    photoContainer.appendChild(photo);
+
+    const diseaseTitle = document.createElement('h5');
+    diseaseTitle.classList.add('patient-card__disease');
+    diseaseTitle.textContent = title;
+
+    const dateElement = document.createElement('p');
+    dateElement.textContent = `Дата: ${date || 'Не указана'}`;
+
+    cardElement.appendChild(photoContainer);
+    cardElement.appendChild(diseaseTitle);
+    cardElement.appendChild(dateElement);
+
+    return cardElement;
+  };
+
+  const displayStoriesInHTML = (data) => {
+    const historyBody = document.getElementById('history-body');
+
+    historyBody.innerHTML = '';
+
+    for (const story of data) {
+      const card = createStoryCard(story.imageUrl, story.title, story.date);
+      historyBody.appendChild(card);
+    }
+  };
+
+  const getDataFromStories = async () => {
+    try {
+      const querySnapshot = await getDocs(collection(db, 'story'));
+      const dataArray = [];
+
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        dataArray.push(data);
+      });
+
+      displayStoriesInHTML(dataArray);
+    } catch (error) {
+      console.error(
+        'Ошибка при получении данных из Firestore для историй: ',
+        error
+      );
+    }
+  };
 });
+
 ////истории
 // import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 // import { db, collection, addDoc, storage } from './modules/firebase-Config';
@@ -392,3 +618,5 @@ document.addEventListener('DOMContentLoaded', async function () {
 //       console.error('Ошибка: ', error.message, error.code);
 //     }
 //   });
+
+////////
