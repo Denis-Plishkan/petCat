@@ -8,6 +8,7 @@ import {
   db,
   collection,
   addDoc,
+  setDoc,
   storage,
   getDocs,
   onAuthStateChanged,
@@ -169,8 +170,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         <h2 class="popular-services__wrapper-title">
         Список всех историй пациентов
       </h2>
-      <div class="history"> 
-      <div class="history__cards" id="history-body">
+      <div class="history__wrapper" id="history-body">
       </div>
         </div>
         </div>
@@ -222,7 +222,9 @@ document.addEventListener('DOMContentLoaded', async function () {
                   data-toggle="datetimepicker"
                 >
                   <div class="input-group-text">
-                    <i class="fa fa-calendar"></i>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar-fill" viewBox="0 0 16 16">
+  <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V5h16V4H0V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5"/>
+</svg>
                   </div>
                 </div>
               </div>
@@ -244,6 +246,221 @@ document.addEventListener('DOMContentLoaded', async function () {
         </div>
       </div> 
       `;
+        break;
+
+      case '#/admin/employees':
+        content = `
+              <div class="content">
+              <h2 class="popular-services__wrapper-title">
+              Список всех наших работников
+            </h2>
+            <div class="answers__wrapper" id="employees-body">
+            </div>
+              </div>
+              </div>
+              `;
+        getDataFromEmployees();
+        break;
+
+      case '#/admin/employees/employees-str':
+        content = `
+            <div class="content">
+              <div class="">
+                <h2>Создание карты работника</h2>
+                <div class="mt-5">
+                  <div class="mt-3">
+                    <label for="title">Полное имя</label
+                    ><input
+                      id="full_name"
+                      type="text"
+                      placeholder="Полное имя"
+                      style="width: 50%"
+                    />
+                  </div>
+  
+                  <div class="mt-3">
+                    <label>Фотография для личной страницы</label>
+  
+                    <div class="add">
+                      <input
+                        data-v-e29172df=""
+                        class="img-top-input"
+                        id="img-for-page"
+                        type="file"
+                        accept="image/* "
+                      />
+                    </div>
+                  </div>
+                  <div class="mt-3">
+                    <label for="title">Должность</label
+                    ><input
+                      id="position"
+                      type="text"
+                      placeholder="Должность"
+                      style="width: 50%"
+                    />
+                  </div>
+                  <div class="mt-3">
+                    <label for="title">Специализации</label
+                    ><input
+                      id="specializations"
+                      type="text"
+                      placeholder="Специализации"
+                      style="width: 50%"
+                    />
+                  </div>
+                  <div class="mt-3">
+                    <label for="title">Образование</label
+                    ><input
+                      id="education"
+                      type="text"
+                      placeholder="Образование"
+                      style="width: 50%"
+                    />
+                  </div>
+                  <div class="mt-3">
+                    <label for="title">Профессиональные навыки</label
+                    ><input
+                      id="skills"
+                      type="text"
+                      placeholder="Проф. навыки"
+                      style="width: 50%"
+                    />
+                  </div>
+                </div>
+  
+                <div class="mt-5">
+                  <button
+                  data-form-type="employees"
+                  id="submitEmployeesBtn"
+                    type="button"
+                    class="btn btn-block btn-success btn-lg"
+                  >
+                    Завершить создание карты работника
+                  </button>
+  
+                  <div id="errorText" class="text-danger mt-2"></div>
+                </div>
+              </div>
+            </div>
+          `;
+
+        break;
+
+      case '#/admin/contacts/contacts-str':
+        content = `
+            <div class="content">
+              <div class="">
+                <h2>Контактные данные</h2>
+                <div class="mt-5">
+                
+                  <div class="form-group">
+<label>Номер телефона</label>
+<div class="input-group">
+<div class="input-group-prepend">
+<span class="input-group-text"><i class="fas fa-phone"></i></span>
+</div>
+<input   id="phone_number" type="text" class="form-control" data-inputmask="&quot;mask&quot;: &quot;(999) 999-9999&quot;" data-mask="" inputmode="text">
+</div>
+
+</div>
+  
+                  <div class="mt-3">
+                    <label>Фотография(если нужно)</label>
+  
+                    <div class="add">
+                      <input
+                        data-v-e29172df=""
+                        class="img-top-input"
+                        id="img-for-page"
+                        type="file"
+                        accept="image/* "
+                      />
+                    </div>
+                  </div>
+                  <div class="mt-3">
+                    <label for="title">Електронная почта</label
+                    ><input
+                      id="email"
+                      type="text"
+                      placeholder="Електронная почта"
+                      style="width: 50%"
+                    />
+                  </div>
+                  <div class="mt-3">
+                    <label for="title">Адрес</label
+                    ><input
+                      id="address"
+                      type="text"
+                      placeholder="Адрес"
+                      style="width: 50%"
+                    />
+                  </div>
+                  <div class="mt-3">
+                <label for="title">Адрес(на карте) </label
+                ><input
+                  id="address_map"
+                  type="text"
+                  placeholder="Адрес"
+                  style="width: 50%"
+                />
+                  <div class="mt-3">
+                    <label for="title">Время работы</label
+                    ><input
+                      id="working_hours"
+                      type="text"
+                      placeholder="Время работы"
+                      style="width: 50%"
+                    />
+                  </div>
+                  <div class="mt-5">
+              <h2>Как добраться до нас</h2>
+                  <div class="mt-3">
+                    <label for="title">На автобусе</label
+                    ><input
+                      id="road_by_bus"
+                      type="text"
+                      placeholder="автобусом"
+                      style="width: 50%"
+                    />
+                  </div>
+                  <div class="mt-3">
+                  <label for="title"> На тролейбусе</label
+                  ><input
+                    id="road_trolleybus"
+                    type="text"
+                    placeholder="тролейбусом"
+                    style="width: 50%"
+                  />
+                </div>
+                <div class="mt-3">
+                <label for="title">На автомобиле </label
+                ><input
+                  id="road_car"
+                  type="text"
+                  placeholder="автомобилем"
+                  style="width: 50%"
+                />
+              </div>
+              </div>
+                  
+                </div>
+  
+                <div class="mt-5">
+                  <button
+                  data-form-type="employees"
+                  id="submitCotactsBtn"
+                    type="button"
+                    class="btn btn-block btn-success btn-lg"
+                  >
+                    Завершить изменение контаков больницы
+                  </button>
+  
+                  <div id="errorText" class="text-danger mt-2"></div>
+                </div>
+              </div>
+            </div>
+          `;
 
         break;
 
@@ -323,6 +540,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
     const contentContainer = document.getElementById('dynamicContentContainer');
 
+    /////сервисы
     const submitServiceBtnHandler = async function () {
       console.log('Кнопка нажата!');
       const titleInput = document.getElementById('title');
@@ -369,14 +587,13 @@ document.addEventListener('DOMContentLoaded', async function () {
         console.error('Ошибка: ', error.message, error.code);
       }
     };
-
     const submitServiceBtn = document.getElementById('submitServiceBtn');
 
     if (submitServiceBtn) {
       submitServiceBtn.removeEventListener('click', submitServiceBtnHandler);
       submitServiceBtn.addEventListener('click', submitServiceBtnHandler);
     }
-
+    /////истории
     const submitStoryBtnHandler = async () => {
       console.log('Кнопка нажата!');
       const titleInput = document.getElementById('title');
@@ -436,6 +653,158 @@ document.addEventListener('DOMContentLoaded', async function () {
       submitStoryBtn.removeEventListener('click', submitStoryBtnHandler);
       submitStoryBtn.addEventListener('click', submitStoryBtnHandler);
     }
+    /////персонал
+    const submitEmployesBtnHandler = async () => {
+      console.log('Кнопка нажата!');
+      const fullName = document.getElementById('full_name');
+      const imgForPersonInput = document.getElementById('img-for-page');
+      const position = document.getElementById('position');
+      const specializations = document.getElementById('specializations');
+      const education = document.getElementById('education');
+      const skills = document.getElementById('skills');
+      const errorText = document.getElementById('errorText');
+
+      errorText.textContent = '';
+
+      if (!fullName.value || !position.value || !specializations.value) {
+        errorText.textContent =
+          'Ошибка: Поля "Полное имя", "Должность" и "Специализации" обязательны для заполнения.';
+        return;
+      }
+
+      const file = imgForPersonInput.files && imgForPersonInput.files[0];
+
+      if (errorText.textContent) {
+        errorText.textContent = '';
+      } else {
+        // console.error('Элемент errorText не найден!');
+      }
+
+      try {
+        let imageUrl = '';
+
+        if (file) {
+          const storageRef = ref(storage, file.name);
+          await uploadBytes(storageRef, file);
+          imageUrl = await getDownloadURL(storageRef);
+          console.log('URL фотографии:', imageUrl);
+        }
+
+        const docRef = await addDoc(collection(db, 'employees'), {
+          imageUrl: imageUrl,
+          full_name: fullName.value,
+          position: position.value,
+          specializations: specializations.value,
+          education: education.value,
+          skills: skills.value,
+          // date: reservationDateInput.value,
+        });
+
+        console.log('Документ успешно добавлен с ID: ', docRef.id);
+
+        imgForPersonInput.value = '';
+        fullName.value = '';
+        position.value = '';
+        specializations.value = '';
+        education.value = '';
+        skills.value = '';
+        // reservationDateInput.value = '';
+      } catch (error) {
+        console.error('Ошибка: ', error.message, error.code);
+      }
+    };
+
+    const submitEmployesBtn = document.getElementById('submitEmployeesBtn');
+
+    if (submitEmployesBtn) {
+      submitEmployesBtn.removeEventListener('click', submitEmployesBtnHandler);
+      submitEmployesBtn.addEventListener('click', submitEmployesBtnHandler);
+    }
+
+    const formatPhoneNumber = (phoneNumber) => {
+      // Удаляем все нецифровые символы из номера
+      const cleaned = phoneNumber.replace(/\D/g, '');
+
+      // Форматируем номер по заданным шаблонам
+      const match = cleaned.match(/^(\d{2})(\d{3})(\d{3})(\d{2})(\d{2})$/);
+      if (match) {
+        return `+${match[1]} (${match[2]}) ${match[3]}-${match[4]}-${match[5]}`;
+      }
+
+      // Возвращаем неотформатированный номер, если не удалось сопоставить
+      return phoneNumber;
+    };
+    /////контакты
+    const submitContactsBtnHandler = async () => {
+      console.log('Кнопка нажата!');
+      const phoneNumberInput = document.getElementById('phone_number');
+      const phoneNumber = phoneNumberInput.value;
+      const imgForPageInput = document.getElementById('img-for-page');
+      const email = document.getElementById('email');
+      const address = document.getElementById('address');
+      const addressMap = document.getElementById('address_map');
+      const workingHours = document.getElementById('working_hours');
+      const roadByBus = document.getElementById('road_by_bus');
+      const roadTrolleybus = document.getElementById('road_trolleybus');
+      const roadCar = document.getElementById('road_car').value;
+      const errorText = document.getElementById('errorText');
+
+      errorText.textContent = '';
+
+      const formattedPhoneNumber = formatPhoneNumber(phoneNumber);
+
+      const file = imgForPageInput.files[0];
+
+      if (errorText) {
+        errorText.textContent = '';
+      } else {
+        // console.error('Элемент errorText не найден!');
+      }
+
+      try {
+        let imageUrl = '';
+
+        if (file) {
+          const storageRef = ref(storage, file.name);
+          await uploadBytes(storageRef, file);
+          imageUrl = await getDownloadURL(storageRef);
+          console.log('URL фотографии:', imageUrl);
+        }
+
+        const docRef = await addDoc(collection(db, 'contacts'), {
+          phoneNumber: formattedPhoneNumber,
+          imageUrl: imageUrl,
+          email: email.value,
+          address: address,
+          addressMap: addressMap,
+          workingHours: workingHours,
+          roadByBus: roadByBus,
+          roadTrolleybus: roadTrolleybus,
+          roadCar: roadCar,
+        });
+
+        console.log('Документ успешно добавлен с ID: ', docRef.id);
+
+        imgForPageInput.value = '';
+        phoneNumberInput.value = '';
+        email.value = '';
+        address.value = '';
+        addressMap.value = '';
+        workingHours.value = '';
+        roadByBus.value = '';
+        roadTrolleybus.value = '';
+        roadCar.value = '';
+      } catch (error) {
+        console.error('Ошибка: ', error.message, error.code);
+      }
+    };
+
+    const submitContactsBtn = document.getElementById('submitCotactsBtn');
+
+    if (submitContactsBtn) {
+      submitContactsBtn.removeEventListener('click', submitContactsBtnHandler);
+      submitContactsBtn.addEventListener('click', submitContactsBtnHandler);
+    }
 
     if (contentContainer) {
       contentContainer.innerHTML = content;
@@ -446,6 +815,10 @@ document.addEventListener('DOMContentLoaded', async function () {
           submitServiceBtnHandler();
         } else if (target.id === 'submitStoryBtn') {
           submitStoryBtnHandler();
+        } else if (target.id === 'submitEmployeesBtn') {
+          submitEmployesBtnHandler();
+        } else if (target.id === 'submitCotactsBtn') {
+          submitContactsBtnHandler();
         }
       });
     } else {
@@ -456,6 +829,7 @@ document.addEventListener('DOMContentLoaded', async function () {
   window.addEventListener('load', updateContent);
   window.addEventListener('hashchange', updateContent);
 
+  /////сервис
   const createCard = (title, description) => {
     const cardElement = document.createElement('div');
     cardElement.classList.add('popular-services__card');
@@ -514,42 +888,49 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
   };
 
+  /////истории
   const createStoryCard = (imageUrl, title, date) => {
     const cardElement = document.createElement('div');
     cardElement.classList.add('patient-card');
 
-    const photoContainer = document.createElement('div');
-    photoContainer.classList.add('patient-card__photo');
+    const photoWrapper = document.createElement('div');
+    photoWrapper.classList.add('patient-card__photo');
+
     const photo = document.createElement('img');
-    photo.src = imageUrl || 'placeholder_image_url.jpg';
+    photo.src = imageUrl;
     photo.alt = 'photo';
-    photoContainer.appendChild(photo);
+    photoWrapper.appendChild(photo);
 
-    const diseaseTitle = document.createElement('h5');
-    diseaseTitle.classList.add('patient-card__disease');
-    diseaseTitle.textContent = title;
+    const cardTitle = document.createElement('h5');
+    cardTitle.classList.add('patient-card__disease');
+    cardTitle.textContent = title;
 
-    const dateElement = document.createElement('p');
-    dateElement.textContent = `Дата: ${date || 'Не указана'}`;
+    const dateParagraph = document.createElement('p');
+    dateParagraph.classList.add('patient-card__data');
+    dateParagraph.textContent = date;
 
-    cardElement.appendChild(photoContainer);
-    cardElement.appendChild(diseaseTitle);
-    cardElement.appendChild(dateElement);
+    cardElement.appendChild(photoWrapper);
+    cardElement.appendChild(cardTitle);
+    cardElement.appendChild(dateParagraph);
 
     return cardElement;
   };
 
   const displayStoriesInHTML = (data) => {
-    const historyBody = document.getElementById('history-body');
+    const storyBody = document.getElementById('history-body');
 
-    historyBody.innerHTML = '';
-
-    for (const story of data) {
-      const card = createStoryCard(story.imageUrl, story.title, story.date);
-      historyBody.appendChild(card);
+    if (!storyBody) {
+      console.error('Элемент history-body не найден!');
+      return;
     }
-  };
 
+    storyBody.innerHTML = '';
+
+    data.forEach((story) => {
+      const card = createStoryCard(story.imageUrl, story.title, story.date);
+      storyBody.appendChild(card);
+    });
+  };
   const getDataFromStories = async () => {
     try {
       const querySnapshot = await getDocs(collection(db, 'story'));
@@ -562,61 +943,68 @@ document.addEventListener('DOMContentLoaded', async function () {
 
       displayStoriesInHTML(dataArray);
     } catch (error) {
-      console.error(
-        'Ошибка при получении данных из Firestore для историй: ',
-        error
-      );
+      console.error('Ошибка при получении данных из Firestore: ', error);
     }
   };
+
+  /////персонал
+
+  const createCardEmploye = (fullName, position, imageUrl) => {
+    const cardElement = document.createElement('div');
+    cardElement.classList.add('specialists-card');
+
+    const cardPhoto = document.createElement('div');
+    cardPhoto.classList.add('specialists-card__photo');
+    const photoImg = document.createElement('img');
+    photoImg.src = imageUrl;
+    photoImg.alt = 'photo';
+    cardPhoto.appendChild(photoImg);
+
+    const cardName = document.createElement('h5');
+    cardName.classList.add('specialists-card__name');
+    cardName.textContent = fullName;
+
+    const cardJobTitle = document.createElement('p');
+    cardJobTitle.classList.add('specialists-card__job-title');
+    cardJobTitle.textContent = position;
+
+    cardElement.appendChild(cardPhoto);
+    cardElement.appendChild(cardName);
+    cardElement.appendChild(cardJobTitle);
+
+    return cardElement;
+  };
+
+  const displayEmployeInHTML = (data) => {
+    const employesBody = document.getElementById('employees-body');
+
+    employesBody.innerHTML = '';
+
+    data.forEach((employe) => {
+      const card = createCardEmploye(
+        employe.full_name,
+        employe.position,
+        employe.imageUrl
+      );
+      employesBody.appendChild(card);
+    });
+  };
+
+  const getDataFromEmployees = async () => {
+    try {
+      const querySnapshot = await getDocs(collection(db, 'employees'));
+      const dataArray = [];
+
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        dataArray.push(data);
+      });
+
+      displayEmployeInHTML(dataArray);
+    } catch (error) {
+      console.error('Ошибка при получении данных из Firestore: ', error);
+    }
+  };
+
+  /////контакты
 });
-
-////истории
-// import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-// import { db, collection, addDoc, storage } from './modules/firebase-Config';
-
-// document
-//   .getElementById('submitBtn')
-//   .addEventListener('click', async function () {
-//     const titleInput = document.getElementById('title');
-//     const descriptionInput = document.getElementById('desctiption');
-//     const errorText = document.getElementById('errorText');
-
-//     errorText.textContent = '';
-
-//     if (!titleInput.value || !descriptionInput.value) {
-//       errorText.textContent =
-//         'Ошибка: Поля "Фотография" и "Историия" обязательны для заполнения.';
-//       return;
-//     }
-
-//     const fileInput = document.getElementById('img-for-story');
-//     const file = fileInput.files[0];
-
-//     try {
-//       let imageUrl = '';
-
-//       if (file) {
-//         const storageRef = ref(storage, file.name);
-//         await uploadBytes(storageRef, file);
-//         imageUrl = await getDownloadURL(storageRef);
-//         console.log('URL фотографии:', imageUrl);
-//       }
-
-//       const docRef = await addDoc(collection(db, 'story'), {
-//         title: titleInput.value,
-//         description: descriptionInput.value,
-//         imageUrl: imageUrl,
-//       });
-
-//       console.log('Документ успешно добавлен с ID: ', docRef.id);
-
-//       titleInput.value = '';
-//       descriptionInput.value = '';
-
-//       document.getElementById('submitBtn').setAttribute('disabled', 'true');
-//     } catch (error) {
-//       console.error('Ошибка: ', error.message, error.code);
-//     }
-//   });
-
-////////
