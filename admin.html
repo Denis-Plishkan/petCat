@@ -6,20 +6,23 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <link rel="shortcut icon" href="./images/cat.png" type="image/x-icon">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback&_v=20231229120654">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback&_v=20231230202857">
 
-  <script src="https://code.jquery.com/jquery-3.7.1.min.js?_v=20231229120654" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js?_v=20231230202857" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css?_v=20231229120654" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js?_v=20231230202857"></script>
+  
 
-  <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js?_v=20231229120654"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css?_v=20231230202857" rel="stylesheet">
 
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css?_v=20231229120654">
+  <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js?_v=20231230202857"></script>
 
-  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css?_v=20231229120654">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css?_v=20231230202857">
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js?_v=20231229120654"></script>
-  <link rel="stylesheet" href="css/admin.min.css?_v=20231229120654">
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css?_v=20231230202857">
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js?_v=20231230202857"></script>
+  <link rel="stylesheet" href="css/admin.min.css?_v=20231230202857">
   <title>Admin-page</title>
 </head>
 
@@ -120,6 +123,14 @@
           </a>
           <ul class="nav nav-treeview">
             <li class="nav-item">
+              <a href="#/admin/services" class="nav-link">
+                <i class="nav-icon fa-circle far"></i>
+                <p>Все услуги</p>
+              </a>
+            </li>
+          </ul>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
               <a href="#/admin/services/services-str" class="nav-link">
                 <i class="nav-icon fa-circle far"></i>
                 <p>Добавить услугу</p>
@@ -128,8 +139,7 @@
           </ul>
         </li>
         <li class="nav-item">
-          
-          <a href="admin-2.html" class="nav-link">
+          <a href="" class="nav-link">
             <i class="fas nav-icon fa-th"></i>
             <p>
               Специалисты
@@ -138,8 +148,15 @@
           </a>
           <ul class="nav nav-treeview">
             <li class="nav-item">
-              
-              <a href="admin-2.html" class="nav-link">
+              <a href="#/admin/employees" class="nav-link">
+                <i class="nav-icon fa-circle far"></i>
+                <p>Весь штат</p>
+              </a>
+            </li>
+          </ul>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a href="#/admin/employees/employees-str" class="nav-link">
                 <i class="nav-icon fa-circle far"></i>
                 <p>Добавить персонал</p>
               </a>
@@ -147,7 +164,7 @@
           </ul>
         </li>
         <li class="nav-item">
-          <a href="#/admin/services" class="nav-link">
+          <a href="#/admin/contacts" class="nav-link">
             <i class="fas nav-icon fa-th"></i>
             <p>
               Контактная информация
@@ -156,7 +173,15 @@
           </a>
           <ul class="nav nav-treeview">
             <li class="nav-item">
-              <a href="#/admin/services/services-str" class="nav-link">
+              <a href="#/admin/contacts" class="nav-link">
+                <i class="nav-icon fa-circle far"></i>
+                <p>Текущие данные</p>
+              </a>
+            </li>
+          </ul>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a href="#/admin/contacts/contacts-str" class="nav-link">
                 <i class="nav-icon fa-circle far"></i>
                 <p>Изменить контакты</p>
               </a>
@@ -164,8 +189,7 @@
           </ul>
         </li>
         <li class="nav-item">
-          
-          <a href="admin-3.html" class="nav-link">
+          <a href="#/admin/services" class="nav-link">
             <i class="fas nav-icon fa-th"></i>
             <p>
               Истории пациентов
@@ -174,7 +198,15 @@
           </a>
           <ul class="nav nav-treeview">
             <li class="nav-item">
-              <a href="admin-3.html" class="nav-link">
+              <a href="#/admin/all-stories" class="nav-link">
+                <i class="nav-icon fa-circle far"></i>
+                <p>Все истории</p>
+              </a>
+            </li>
+          </ul>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a href="#/admin/all-stories/stories-str" class="nav-link">
                 <i class="nav-icon fa-circle far"></i>
                 <p>Добавить историю</p>
               </a>
@@ -222,10 +254,11 @@
   
 </aside>
 
-      <div id="dynamicContentContainer" class="content-wrapper" style="min-height: 1220px"></div>
+      <div id="dynamicContentContainer" class="content-wrapper" style="height: 100%"></div>
 
 
     </div>
   </body>
-  <script src="js/admin.min.js?_v=20231229120654"></script>
+  <script src="js/admin.min.js?_v=20231230202857"></script>
+  <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js?_v=20231230202857"></script>
 </html>
