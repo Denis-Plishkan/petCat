@@ -2,6 +2,16 @@
   position: fixed;
   width: 100%;
   z-index: 10;
+  opacity: 1;
+  transition: all 0.4s ease;
+
+  &.header-scroll {
+    opacity: 0.5;
+  }
+
+  &:hover {
+    opacity: 1;
+  }
   
   // .header__container
 
@@ -21,6 +31,7 @@
     height: 96px;
     align-items: center;
     position: relative;
+    background: #fff;
 
     &::before {
       position: absolute;

@@ -1,4 +1,6 @@
 .patient-card {
+  width: 248px;
+  height: 392px;
   // .patient-card__photo
 
   &__photo {
@@ -8,6 +10,13 @@
       height: 248px;
       object-fit: cover;
     }
+  }
+
+  &__wrapper {
+    height: calc(100% - 267px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
   }
 
   // .patient-card__disease
@@ -24,7 +33,7 @@
   // .patient-card__data
 
   &__data {
-    color:  #797c80;
+    color: #797c80;
     line-height: 20px;
     font-size: 14px;
   }
