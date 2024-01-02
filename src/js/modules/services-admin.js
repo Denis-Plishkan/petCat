@@ -9,10 +9,10 @@ import {
   doc,
 } from './firebase-Config';
 
-export const createCard = (serviceId, title, description) => {
+const createCard = (id, title, description) => {
   const cardElement = document.createElement('div');
   cardElement.classList.add('popular-services__card');
-  cardElement.dataset.id = serviceId;
+  cardElement.setAttribute('data-id', id);
 
   const cardTitle = document.createElement('h4');
   cardTitle.classList.add('popular-services__card-title');
@@ -43,7 +43,7 @@ export const displayServicesInHTML = (data) => {
       for (let j = i; j < i + 3 && j < data.length; j++) {
         const card = createCard(data[j].id, data[j].title, data[j].description);
         card.addEventListener('click', () => {
-          navigateToService(data[j].id);
+          navigateToService(card.getAttribute('data-id'));
         });
         cardWrapper.appendChild(card);
       }
