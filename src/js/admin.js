@@ -31,7 +31,11 @@ import {
   displayEmployeesPage,
 } from './modules/admin/employees-admin';
 
-import { initializeArticlesForm } from './modules/admin/articles-admin';
+import {
+  displayArticlesInHTML,
+  getDataFromArticles,
+  initializeArticlesForm,
+} from './modules/admin/articles-admin';
 
 import { initializeContactsForm } from './modules/admin/contacts-admin';
 
@@ -488,6 +492,23 @@ document.addEventListener('DOMContentLoaded', async function () {
               </div>
             </div>
           `;
+
+        break;
+
+      case '#/admin/articles':
+        content = `
+                <div class="content">
+                <h2 class="popular-services__wrapper-title">
+                Список всех cтатей
+              </h2>
+              <div class="answers__wrapper" id="articles-body">
+              </div>
+                </div>
+                </div>
+                `;
+        getDataFromArticles().then((articlesData) => {
+          displayArticlesInHTML(articlesData);
+        });
 
         break;
 
