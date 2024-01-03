@@ -24,6 +24,7 @@ import {
   setDoc,
   getDocs,
   getDoc,
+  deleteDoc,
 } from 'firebase/firestore';
 
 import { doc as firestoreDoc } from 'firebase/firestore';
@@ -66,6 +67,7 @@ export {
   setDoc,
   getDoc,
   getDocs,
+  deleteDoc,
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,

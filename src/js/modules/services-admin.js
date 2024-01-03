@@ -210,6 +210,7 @@ export const displayServicePage = async (id) => {
           updatedText,
           imageUrl
         );
+        window.location.reload();
       });
     } else {
       console.error('Документ с указанным идентификатором не найден.');

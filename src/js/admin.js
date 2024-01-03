@@ -28,6 +28,7 @@ import {
   displayEmployeInHTML,
   getDataFromEmployees,
   initializeEmployeesForm,
+  displayEmployeesPage,
 } from './modules/employees-admin';
 
 import { initializeContactsForm } from './modules/contacts-admin';
@@ -84,7 +85,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
   const updateContent = async () => {
     let hash = window.location.hash;
-
+    let id;
     let content = '';
 
     switch (hash) {
@@ -110,7 +111,7 @@ document.addEventListener('DOMContentLoaded', async function () {
       //   break;
 
       case '#/admin/services/2BOwRPf8ywdBrrQT5piV':
-        const id = hash.split('/').pop().trim();
+        id = hash.split('/').pop().trim();
 
         console.log('Страница:', id);
         displayServicePage(id);
@@ -291,6 +292,12 @@ document.addEventListener('DOMContentLoaded', async function () {
         const employeeId = hash.split('/').pop();
         console.log('Страница:', employeeId);
         displayServicePage(employeeId);
+        break;
+
+      case '#/admin/employees/qDwyUEAn5BfHgJGIZhuN':
+        id = hash.split('/').pop().trim();
+        console.log('Страница:', id);
+        displayEmployeesPage(id);
         break;
 
       case '#/admin/employees/employees-str':
