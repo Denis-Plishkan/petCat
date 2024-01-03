@@ -95,6 +95,7 @@
   // .popular-services__card
 
   &__card {
+    cursor: pointer;
     width: 344px;
     height: 240px;
     border-radius: 8px;
@@ -119,34 +120,6 @@
 
   &__swiper-wrapper {
     position: relative;
-  }
-
-  // .popular-services__swiper-button-prev
-
-  &__swiper-button-prev {
-    cursor: pointer;
-    position: absolute;
-    top: 50%;
-    left: -24px;
-    transform: translate(-50%, -50%);
-    svg {
-      width: 32px;
-      height: 32px;
-    }
-  }
-
-  // .popular-services__swiper-button-next
-
-  &__swiper-button-next {
-    cursor: pointer;
-    position: absolute;
-    top: 50%;
-    right: -56px;
-    transform: translate(-50%, -50%);
-    svg {
-      width: 32px;
-      height: 32px;
-    }
   }
 }
 .services-line {
@@ -190,30 +163,6 @@
     margin-bottom: 8px;
     height: 400px;
     width: 400px;
-  }
-
-  &__swiper-button-prev {
-    cursor: pointer;
-    position: absolute;
-    top: 50%;
-    left: -24px;
-    transform: translate(-50%, -50%);
-    svg {
-      width: 32px;
-      height: 32px;
-    }
-  }
-
-  &__swiper-button-next {
-    cursor: pointer;
-    position: absolute;
-    top: 50%;
-    right: -56px;
-    transform: translate(-50%, -50%);
-    svg {
-      width: 32px;
-      height: 32px;
-    }
   }
 
   &__bottom-photo {
@@ -264,37 +213,10 @@
     justify-content: space-between;
     position: relative;
   }
-
-  // .answers__swiper-button-prev
-
-  &__swiper-button-prev {
-    cursor: pointer;
-    position: absolute;
-    top: 50%;
-    left: -24px;
-    transform: translate(-50%, -50%);
-    svg {
-      width: 32px;
-      height: 32px;
-    }
-  }
-
-  // .answers__swiper-button-next
-
-  &__swiper-button-next {
-    cursor: pointer;
-    position: absolute;
-    top: 50%;
-    right: -56px;
-    transform: translate(-50%, -50%);
-    svg {
-      width: 32px;
-      height: 32px;
-    }
-  }
 }
 
 .specialists-card {
+  cursor: pointer;
   // .specialists-card__photo
 
   &__photo {
@@ -327,6 +249,7 @@
   }
 }
 .patient-card {
+  cursor: pointer;
   // .patient-card__photo
 
   &__photo {
@@ -356,4 +279,7 @@
     line-height: 20px;
     font-size: 14px;
   }
+}
+.img {
+  margin: 10px;
 }

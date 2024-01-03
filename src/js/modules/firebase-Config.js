@@ -10,13 +10,23 @@ import {
   FacebookAuthProvider,
   GoogleAuthProvider,
 } from 'firebase/auth';
+// import {
+//   getFirestore,
+//   collection,
+//   addDoc,
+//   getDocs,
+//   connectFirestoreEmulator,
+// } from 'firebase/firestore/lite';
 import {
   getFirestore,
   collection,
   addDoc,
+  setDoc,
   getDocs,
-  connectFirestoreEmulator,
-} from 'firebase/firestore/lite';
+  getDoc,
+} from 'firebase/firestore';
+
+import { doc as firestoreDoc } from 'firebase/firestore';
 
 import { getDatabase, ref, onValue } from 'firebase/database';
 import { getStorage, uploadBytes } from 'firebase/storage';
@@ -44,6 +54,7 @@ const auth = getAuth(app);
 const storage = getStorage(app);
 
 // firebaseApp,
+export const doc = firestoreDoc;
 export {
   db,
   auth,
@@ -52,6 +63,8 @@ export {
   uploadBytes,
   collection,
   addDoc,
+  setDoc,
+  getDoc,
   getDocs,
   getAuth,
   createUserWithEmailAndPassword,

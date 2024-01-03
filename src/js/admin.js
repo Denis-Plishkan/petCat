@@ -7,14 +7,15 @@ import {
   setDoc,
   storage,
   getDocs,
+  getDoc,
   onAuthStateChanged,
 } from './modules/firebase-Config';
 
 import {
   displayServicesInHTML,
   getDataFromServices,
-  serviceId,
   initializeServiceForm,
+  displayServicePage,
 } from './modules/services-admin';
 
 import {
@@ -100,6 +101,19 @@ document.addEventListener('DOMContentLoaded', async function () {
         getDataFromServices().then((servicesData) => {
           displayServicesInHTML(servicesData);
         });
+        break;
+
+      // case /^#\/admin\/services\//:
+      //   const id = hash.split('/').pop();
+      //   console.log('Страница:', id);
+      //   await displayServicePage(id);
+      //   break;
+
+      case '#/admin/services/2BOwRPf8ywdBrrQT5piV':
+        const id = hash.split('/').pop().trim();
+
+        console.log('Страница:', id);
+        displayServicePage(id);
         break;
 
       case '#/admin/services/services-str':
@@ -271,6 +285,12 @@ document.addEventListener('DOMContentLoaded', async function () {
           displayEmployeInHTML(employeesData);
         });
 
+        break;
+
+      case /^#\/admin\/employees\//:
+        const employeeId = hash.split('/').pop();
+        console.log('Страница:', employeeId);
+        displayServicePage(employeeId);
         break;
 
       case '#/admin/employees/employees-str':

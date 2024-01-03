@@ -8,9 +8,10 @@ import {
   getDocs,
 } from './firebase-Config';
 
-export const createCardEmploye = (fullName, position, imageUrl) => {
+export const createCardEmploye = (id, fullName, position, imageUrl) => {
   const cardElement = document.createElement('div');
   cardElement.classList.add('specialists-card');
+  cardElement.setAttribute('data-id', id);
 
   const cardPhoto = document.createElement('div');
   cardPhoto.classList.add('specialists-card__photo');
@@ -31,7 +32,10 @@ export const createCardEmploye = (fullName, position, imageUrl) => {
   cardElement.appendChild(cardName);
   cardElement.appendChild(cardJobTitle);
 
-  // cardElement.dataset.id = id;
+  cardElement.addEventListener('click', () => {
+    navigateToEmployee(id);
+  });
+
   return cardElement;
 };
 
@@ -42,6 +46,7 @@ export const displayEmployeInHTML = (data) => {
 
   data.forEach((employe) => {
     const card = createCardEmploye(
+      employe.id,
       employe.full_name,
       employe.position,
       employe.imageUrl
@@ -57,7 +62,8 @@ export const getDataFromEmployees = async () => {
 
     querySnapshot.forEach((doc) => {
       const data = doc.data();
-      dataArray.push(data);
+      // dataArray.push(data);
+      dataArray.push(Object.assign({}, data, { id: doc.id }));
     });
 
     return dataArray;
@@ -127,4 +133,7 @@ export const initializeEmployeesForm = () => {
   if (submitEmployesBtn) {
     submitEmployesBtn.addEventListener('click', submitEmployesBtnHandler);
   }
+};
+const navigateToEmployee = (employeeId) => {
+  window.location.hash = `#/admin/employees/${employeeId}`;
 };
