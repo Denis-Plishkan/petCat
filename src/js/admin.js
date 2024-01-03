@@ -16,22 +16,24 @@ import {
   getDataFromServices,
   initializeServiceForm,
   displayServicePage,
-} from './modules/services-admin';
+} from './modules/admin/services-admin';
 
 import {
   displayStoriesInHTML,
   getDataFromStories,
   initializeStoryForm,
-} from './modules/stories-admin';
+} from './modules/admin/stories-admin';
 
 import {
   displayEmployeInHTML,
   getDataFromEmployees,
   initializeEmployeesForm,
   displayEmployeesPage,
-} from './modules/employees-admin';
+} from './modules/admin/employees-admin';
 
-import { initializeContactsForm } from './modules/contacts-admin';
+import { initializeArticlesForm } from './modules/admin/articles-admin';
+
+import { initializeContactsForm } from './modules/admin/contacts-admin';
 
 onAuthStateChanged(auth, async function (user) {
   if (!user) {
@@ -104,7 +106,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         });
         break;
 
-      case '#/admin/services/2BOwRPf8ywdBrrQT5piV':
+      case '#/admin/services/hn8O7z4jFkC4PoymSO2x':
         id = hash.split('/').pop().trim();
 
         console.log('Страница:', id);
@@ -489,6 +491,75 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         break;
 
+      case '#/admin/articles/articles-str':
+        content = `
+          <div class="content">
+          <div class="">
+            <h2>Добавление статьи </h2>
+            <div class="mt-5">
+              <div class="mt-3">
+                <p>Фотография для статьи</p>
+                <div class="add">
+                  <input
+                    class="img-top-page"
+                    id="img-for-articles"
+                    type="file"
+                    accept="image/* "
+                  />
+                </div>
+              </div>
+              <div class="mt-3">
+                <label for="title">Что случилось</label
+                ><input
+                  id="title"
+                  type="text"
+                  placeholder="История"
+                  style="width: 50%"
+                />
+              </div>
+              <div class="form-group">
+                <label>Когда произошло:</label>
+                <div
+                  class="input-group date"
+                  id="reservationdate"
+                  data-target-input="nearest"
+                >
+                  <input
+                  id="reservationDate"
+                    type="text"
+                    class="form-control datetimepicker-input"
+                    data-target="#reservationdate"
+                  />
+                  <div
+                    class="input-group-append"
+                    data-target="#reservationdate"
+                    data-toggle="datetimepicker"
+                  >
+                    <div class="input-group-text">
+                    <i class="fa fa-calendar"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+  
+            <div class="mt-5">
+              <button
+              data-form-type="articles"
+              id="submitArticlesBtn"
+                type="button"
+                class="btn btn-block btn-success btn-lg"
+              >
+                Завершить создание статьи 
+              </button>
+  
+              <div id="errorText" class="text-danger mt-2"></div>
+            </div>
+          </div>
+        </div> 
+        `;
+        break;
+
       default:
         await usersCount();
 
@@ -577,7 +648,8 @@ document.addEventListener('DOMContentLoaded', async function () {
   initializeStoryForm();
   //форма контактов
   initializeContactsForm();
-  //форма
+  //форма статей
+  initializeArticlesForm();
 
   window.addEventListener('hashchange', async () => {
     await updateContent();
@@ -589,5 +661,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     initializeStoryForm();
     //форма контактов
     initializeContactsForm();
+    //форма статей
+    initializeArticlesForm();
   });
 });

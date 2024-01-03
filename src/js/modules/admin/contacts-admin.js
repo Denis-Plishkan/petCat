@@ -6,7 +6,7 @@ import {
   addDoc,
   storage,
   getDocs,
-} from './firebase-Config';
+} from '../firebase-Config';
 
 const formatPhoneNumber = (phoneNumber) => {
   const cleaned = phoneNumber.replace(/\D/g, '');

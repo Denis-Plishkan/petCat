@@ -8,7 +8,7 @@ import {
   getDocs,
   getDoc,
   doc,
-} from './firebase-Config';
+} from '../firebase-Config';
 
 const createCard = (id, title, description) => {
   const cardElement = document.createElement('div');

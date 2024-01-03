@@ -9,7 +9,7 @@ import {
   getDoc,
   deleteDoc,
   doc,
-} from './firebase-Config';
+} from '../firebase-Config';
 
 export const createCardEmploye = (id, fullName, position, imageUrl) => {
   const cardElement = document.createElement('div');
