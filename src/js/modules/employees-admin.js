@@ -129,6 +129,8 @@ const submitEmployesBtnHandler = async () => {
     education.value = '';
     skills.value = '';
     // reservationDateInput.value = '';
+
+    showMessage('Карточка работника успешно создана');
   } catch (error) {
     console.error('Ошибка: ', error.message, error.code);
   }

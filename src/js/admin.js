@@ -104,12 +104,6 @@ document.addEventListener('DOMContentLoaded', async function () {
         });
         break;
 
-      // case /^#\/admin\/services\//:
-      //   const id = hash.split('/').pop();
-      //   console.log('Страница:', id);
-      //   await displayServicePage(id);
-      //   break;
-
       case '#/admin/services/2BOwRPf8ywdBrrQT5piV':
         id = hash.split('/').pop().trim();
 
@@ -288,13 +282,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         break;
 
-      case /^#\/admin\/employees\//:
-        const employeeId = hash.split('/').pop();
-        console.log('Страница:', employeeId);
-        displayServicePage(employeeId);
-        break;
-
-      case '#/admin/employees/qDwyUEAn5BfHgJGIZhuN':
+      case '#/admin/employees/DPClXFuGF1IOwoA9Txgg':
         id = hash.split('/').pop().trim();
         console.log('Страница:', id);
         displayEmployeesPage(id);
