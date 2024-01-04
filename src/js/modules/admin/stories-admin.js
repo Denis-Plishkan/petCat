@@ -49,7 +49,7 @@ export const displayStoriesInHTML = (data) => {
       line.classList.add('story-line');
 
       const cardWrapper = document.createElement('div');
-      cardWrapper.classList.add('history-card__wrapper');
+      cardWrapper.classList.add('history__wrapper-top');
 
       for (let j = i; j < i + 3 && j < data.length; j++) {
         const card = createStoryCard(

@@ -1,11 +1,14 @@
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import {
-  auth,
   db,
   collection,
   addDoc,
+  setDoc,
   storage,
   getDocs,
+  getDoc,
+  deleteDoc,
+  doc,
 } from '../firebase-Config';
 
 const formatPhoneNumber = (phoneNumber) => {
