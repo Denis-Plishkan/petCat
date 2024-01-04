@@ -1,14 +1,16 @@
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import {
-  auth,
   db,
   collection,
   addDoc,
+  setDoc,
   storage,
   getDocs,
-} from './firebase-Config';
+  getDoc,
+  doc,
+} from '../firebase-Config';
 
-export const createStoryCard = (imageUrl, title, date) => {
+export const createArticlesCard = (imageUrl, title, date, text) => {
   const cardElement = document.createElement('div');
   cardElement.classList.add('patient-card');
 
@@ -24,40 +26,49 @@ export const createStoryCard = (imageUrl, title, date) => {
   cardTitle.classList.add('patient-card__disease');
   cardTitle.textContent = title;
 
+  //   const cardText = document.createElement('p');
+  //   cardText.classList.add('patient-card__text');
+  //   cardText.textContent = text;
+
   const dateParagraph = document.createElement('p');
   dateParagraph.classList.add('patient-card__data');
   dateParagraph.textContent = date;
 
   cardElement.appendChild(photoWrapper);
   cardElement.appendChild(cardTitle);
+  //   cardElement.appendChild(cardText);
   cardElement.appendChild(dateParagraph);
 
   return cardElement;
 };
 
-export const displayStoriesInHTML = (data) => {
-  const storyBody = document.getElementById('history-body');
+export const displayArticlesInHTML = (data) => {
+  const articlesBody = document.getElementById('articles-body');
 
-  if (!storyBody) {
-    console.error('Элемент history-body не найден!');
+  if (!articlesBody) {
+    console.error('Элемент articles-body не найден!');
     return;
   }
 
-  storyBody.innerHTML = '';
+  articlesBody.innerHTML = '';
 
   if (data) {
-    data.forEach((story) => {
-      const card = createStoryCard(story.imageUrl, story.title, story.date);
-      storyBody.appendChild(card);
+    data.forEach((articles) => {
+      const card = createArticlesCard(
+        articles.imageUrl,
+        articles.title,
+        // articles.text,
+        articles.date
+      );
+      articlesBody.appendChild(card);
     });
   } else {
     console.error('Данные для отображения не определены');
   }
 };
-
-export const getDataFromStories = async () => {
+export const getDataFromArticles = async () => {
   try {
-    const querySnapshot = await getDocs(collection(db, 'story'));
+    const querySnapshot = await getDocs(collection(db, 'articles'));
     const dataArray = [];
 
     querySnapshot.forEach((doc) => {
@@ -71,28 +82,21 @@ export const getDataFromStories = async () => {
     return [];
   }
 };
-
-const submitStoryBtnHandler = async () => {
+const submitArticlesBtnHandler = async () => {
   const titleInput = document.getElementById('title');
-  const imgForStoryInput = document.getElementById('img-for-story');
+  const imgForArticlesInput = document.getElementById('img-for-articles');
   const reservationDateInput = document.getElementById('reservationdate');
   const errorText = document.getElementById('errorText');
 
   errorText.textContent = '';
 
-  if (!imgForStoryInput.files || !titleInput.value) {
+  if (!imgForArticlesInput.files || !titleInput.value) {
     errorText.textContent =
-      'Ошибка: Поля "История" и "Фотография для истории" обязательны для заполнения.';
+      'Ошибка: Поля "История" и "Фотография для статьи" обязательны для заполнения.';
     return;
   }
 
-  const file = imgForStoryInput.files[0];
-
-  if (errorText) {
-    errorText.textContent = '';
-  } else {
-    console.error('Элемент errorText не найден!');
-  }
+  const file = imgForArticlesInput.files[0];
 
   try {
     let imageUrl = '';
@@ -109,13 +113,14 @@ const submitStoryBtnHandler = async () => {
         ? new Date(reservationDateInput.value).toISOString()
         : null;
 
-    const docRef = await addDoc(collection(db, 'story'), {
+    const docRef = await addDoc(collection(db, 'articles'), {
       imageUrl: imageUrl,
       title: titleInput.value,
+
       date: reservationDate,
     });
 
-    imgForStoryInput.value = '';
+    imgForArticlesInput.value = '';
     titleInput.value = '';
     reservationDateInput.value = '';
   } catch (error) {
@@ -123,10 +128,10 @@ const submitStoryBtnHandler = async () => {
   }
 };
 
-export const initializeStoryForm = () => {
-  const submitStoryBtn = document.getElementById('submitStoryBtn');
+export const initializeArticlesForm = () => {
+  const submitArticlesBtn = document.getElementById('submitArticlesBtn');
 
-  if (submitStoryBtn) {
-    submitStoryBtn.addEventListener('click', submitStoryBtnHandler);
+  if (submitArticlesBtn) {
+    submitArticlesBtn.addEventListener('click', submitArticlesBtnHandler);
   }
 };

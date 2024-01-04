@@ -16,22 +16,30 @@ import {
   getDataFromServices,
   initializeServiceForm,
   displayServicePage,
-} from './modules/services-admin';
+  getServiceDetails,
+} from './modules/admin/services-admin';
 
 import {
   displayStoriesInHTML,
   getDataFromStories,
   initializeStoryForm,
-} from './modules/stories-admin';
+  displayStoryPage,
+} from './modules/admin/stories-admin';
 
 import {
   displayEmployeInHTML,
   getDataFromEmployees,
   initializeEmployeesForm,
   displayEmployeesPage,
-} from './modules/employees-admin';
+} from './modules/admin/employees-admin';
 
-import { initializeContactsForm } from './modules/contacts-admin';
+import {
+  displayArticlesInHTML,
+  getDataFromArticles,
+  initializeArticlesForm,
+} from './modules/admin/articles-admin';
+
+import { initializeContactsForm } from './modules/admin/contacts-admin';
 
 onAuthStateChanged(auth, async function (user) {
   if (!user) {
@@ -43,7 +51,9 @@ onAuthStateChanged(auth, async function (user) {
       (doc) => doc.data().uid === user.uid
     );
 
-    if (existingUser) {
+    if (!existingUser) {
+      window.location.href = 'login.html';
+    } else {
       const isAdmin = existingUser.data().isAdmin;
 
       if (!isAdmin) {
@@ -62,7 +72,6 @@ onAuthStateChanged(auth, async function (user) {
 
         window.location.href = 'index.html';
       }
-    } else {
     }
   }
 });
@@ -104,12 +113,12 @@ document.addEventListener('DOMContentLoaded', async function () {
         });
         break;
 
-      case '#/admin/services/2BOwRPf8ywdBrrQT5piV':
+      case /^#\/admin\/services\/(.+)$/: {
         id = hash.split('/').pop().trim();
-
         console.log('Страница:', id);
-        displayServicePage(id);
+        updateServiceContent(id);
         break;
+      }
 
       case '#/admin/services/services-str':
         content = `
@@ -197,6 +206,13 @@ document.addEventListener('DOMContentLoaded', async function () {
         });
         break;
 
+      case /^#\/admin\/all-stories\/(.+)$/: {
+        id = hash.split('/').pop().trim();
+        console.log('Страница:', id);
+        displayStoryPage(id);
+        break;
+      }
+
       case '#/admin/all-stories/stories-str':
         content = `
         <div class="content">
@@ -282,11 +298,12 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         break;
 
-      case '#/admin/employees/DPClXFuGF1IOwoA9Txgg':
+      case /^#\/admin\/employees\/(.+)$/: {
         id = hash.split('/').pop().trim();
         console.log('Страница:', id);
         displayEmployeesPage(id);
         break;
+      }
 
       case '#/admin/employees/employees-str':
         content = `
@@ -489,6 +506,99 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         break;
 
+      case '#/admin/articles':
+        content = `
+                <div class="content">
+                <h2 class="popular-services__wrapper-title">
+                Список всех cтатей
+              </h2>
+              <div class="answers__wrapper" id="articles-body">
+              </div>
+                </div>
+                </div>
+                `;
+        getDataFromArticles().then((articlesData) => {
+          displayArticlesInHTML(articlesData);
+        });
+
+        break;
+
+      // case /^#\/admin\/articles\/(.+)$/: {
+      //   id = hash.split('/').pop().trim();
+      //   console.log('Страница:', id);
+      //   displayEmployeesPage(id);
+      //   break;
+      // }
+
+      case '#/admin/articles/articles-str':
+        content = `
+          <div class="content">
+          <div class="">
+            <h2>Добавление статьи </h2>
+            <div class="mt-5">
+              <div class="mt-3">
+                <p>Фотография для статьи</p>
+                <div class="add">
+                  <input
+                    class="img-top-page"
+                    id="img-for-articles"
+                    type="file"
+                    accept="image/* "
+                  />
+                </div>
+              </div>
+              <div class="mt-3">
+                <label for="title">Что случилось</label
+                ><input
+                  id="title"
+                  type="text"
+                  placeholder="История"
+                  style="width: 50%"
+                />
+              </div>
+              <div class="form-group">
+                <label>Когда произошло:</label>
+                <div
+                  class="input-group date"
+                  id="reservationdate"
+                  data-target-input="nearest"
+                >
+                  <input
+                  id="reservationDate"
+                    type="text"
+                    class="form-control datetimepicker-input"
+                    data-target="#reservationdate"
+                  />
+                  <div
+                    class="input-group-append"
+                    data-target="#reservationdate"
+                    data-toggle="datetimepicker"
+                  >
+                    <div class="input-group-text">
+                    <i class="fa fa-calendar"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+  
+            <div class="mt-5">
+              <button
+              data-form-type="articles"
+              id="submitArticlesBtn"
+                type="button"
+                class="btn btn-block btn-success btn-lg"
+              >
+                Завершить создание статьи 
+              </button>
+  
+              <div id="errorText" class="text-danger mt-2"></div>
+            </div>
+          </div>
+        </div> 
+        `;
+        break;
+
       default:
         await usersCount();
 
@@ -568,26 +678,71 @@ document.addEventListener('DOMContentLoaded', async function () {
     appElement.innerHTML = content;
   };
 
-  await updateContent();
-  //форма сервиса
-  initializeServiceForm();
-  //форма работника
-  initializeEmployeesForm();
-  //форма истории
-  initializeStoryForm();
-  //форма контактов
-  initializeContactsForm();
-  //форма
+  // await updateContent();
+  // //форма сервиса
+  // initializeServiceForm();
+  // //форма работника
+  // initializeEmployeesForm();
+  // //форма истории
+  // initializeStoryForm();
+  // //форма контактов
+  // initializeContactsForm();
+  // //форма статей
+  // initializeArticlesForm();
+  // const hash = window.location.hash;
+  // if (hash.match(/^#\/admin\/services\/(.+)$/)) {
+  //   const id = hash.split('/').pop().trim();
+  //   displayServicePage(id);
+  // }
 
-  window.addEventListener('hashchange', async () => {
+  // window.addEventListener('hashchange', async () => {
+  //   await updateContent();
+  //   //форма сервиса
+  //   initializeServiceForm();
+  //   //форма работника
+  //   initializeEmployeesForm();
+  //   //форма истории
+  //   initializeStoryForm();
+  //   //форма контактов
+  //   initializeContactsForm();
+  //   //форма статей
+  //   initializeArticlesForm();
+  //   const hash = window.location.hash;
+  //   if (hash.match(/^#\/admin\/services\/(.+)$/)) {
+  //     const id = hash.split('/').pop().trim();
+  //     displayServicePage(id);
+  //   }
+  // });
+
+  const updateContentPage = async () => {
     await updateContent();
-    //форма сервиса
+
     initializeServiceForm();
-    //форма работника
     initializeEmployeesForm();
-    //форма истории
     initializeStoryForm();
-    //форма контактов
     initializeContactsForm();
-  });
+    initializeArticlesForm();
+
+    const hash = window.location.hash;
+    if (hash.match(/^#\/admin\/services\/(.+)$/)) {
+      const id = hash.split('/').pop().trim();
+      await displayServicePage(id);
+    }
+    if (hash.match(/^#\/admin\/employees\/(.+)$/)) {
+      const id = hash.split('/').pop().trim();
+      await displayEmployeesPage(id);
+    }
+    if (hash.match(/^#\/admin\/articles\/(.+)$/)) {
+      const id = hash.split('/').pop().trim();
+      await displayEmployeesPage(id);
+    }
+    if (hash.match(/^#\/admin\/all-stories\/(.+)$/)) {
+      const id = hash.split('/').pop().trim();
+      await displayStoryPage(id);
+    }
+  };
+
+  window.addEventListener('load', updateContentPage);
+
+  window.addEventListener('hashchange', updateContentPage);
 });

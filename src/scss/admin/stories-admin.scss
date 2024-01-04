@@ -1,0 +1,76 @@
+.history {
+  background: #eef3f7;
+  margin-bottom: 28px;
+
+  &__second-container {
+  }
+
+  &__wrapper {
+    position: relative;
+    margin: 0 2px;
+  }
+
+  &__wrapper-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    margin-bottom: 64px;
+    padding-top: 128px;
+  }
+
+  &__wrapper-top-title {
+    color: #292d33;
+    font-size: 48px;
+    line-height: 56px;
+    font-weight: 700;
+    max-width: 785px;
+  }
+
+  &__button {
+  }
+
+  &__cards {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    margin-bottom: 8px;
+    height: 400px;
+    width: 400px;
+  }
+
+  &__bottom-photo {
+    text-align: center;
+  }
+}
+.patient-card {
+  cursor: pointer;
+  // .patient-card__photo
+
+  &__photo {
+    margin-bottom: 16px;
+    img {
+      width: 248px;
+      height: 248px;
+      object-fit: cover;
+    }
+  }
+
+  // .patient-card__disease
+
+  &__disease {
+    color: #292d33;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 24px;
+    max-width: 248px;
+    margin-bottom: 10px;
+  }
+
+  // .patient-card__data
+
+  &__data {
+    color: #797c80;
+    line-height: 20px;
+    font-size: 14px;
+  }
+}

@@ -1,12 +1,15 @@
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import {
-  auth,
   db,
   collection,
   addDoc,
+  setDoc,
   storage,
   getDocs,
-} from './firebase-Config';
+  getDoc,
+  deleteDoc,
+  doc,
+} from '../firebase-Config';
 
 const formatPhoneNumber = (phoneNumber) => {
   const cleaned = phoneNumber.replace(/\D/g, '');
