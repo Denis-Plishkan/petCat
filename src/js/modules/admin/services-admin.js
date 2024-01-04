@@ -7,6 +7,7 @@ import {
   storage,
   getDocs,
   getDoc,
+  deleteDoc,
   doc,
 } from '../firebase-Config';
 
@@ -64,14 +65,9 @@ export const getDataFromServices = async () => {
     const querySnapshot = await getDocs(collection(db, 'services'));
     const dataArray = [];
 
-    // querySnapshot.forEach((doc) => {
-    //   const data = doc.data();
-    //   dataArray.push(data);
-    //   console.log('ID документа:', doc.id);
-    // });
     querySnapshot.docs.forEach((doc) => {
       const data = doc.data();
-      // dataArray.push({ ...data, id: doc.id });
+
       dataArray.push(Object.assign({}, data, { id: doc.id }));
     });
     console.log('Данные', dataArray);
@@ -116,7 +112,10 @@ const submitServiceBtnHandler = async function () {
     const docRef = await addDoc(collection(db, 'services'), {
       title: titleInput.value,
       description: descriptionInput.value,
-      imageUrl: imageUrl,
+      img: {
+        default: imageUrl,
+        webP: '',
+      },
     });
 
     titleInput.value = '';
@@ -143,6 +142,7 @@ export const displayServicePage = async (id) => {
     const serviceData = await getServiceDetails(id);
 
     if (serviceData) {
+      console.log('Данные сервиса:', serviceData);
       const contentElement = document.getElementById('app');
 
       contentElement.innerHTML = `
@@ -160,7 +160,7 @@ export const displayServicePage = async (id) => {
             Главная картинка:
             </h2>
             <div data-v-fee137ad="" class="img">
-            <img data-v-fee137ad="" src="${serviceData.imageUrl}" alt="">
+            <img data-v-fee137ad="" src="${serviceData.img.default}" alt="">
             </div>
             <div data-v-fee137ad="" class="add">
             <label data-v-fee137ad="" for="img-top">Загрузить новое фото:</label>
@@ -173,6 +173,7 @@ export const displayServicePage = async (id) => {
             </div>
             <div data-v-fee137ad="" class="block-btn mt-5"> 
             <button id="updateServiceBtn" class="btn btn-block btn-success ">Сохранить изменения</button>
+            <button type="button" id="deleteServiceBtn" class="btn btn-block btn-danger "style="width: 30%;" >Удалить эту услугу </button>
             </div>
           </div>       
         </div>
@@ -190,17 +191,12 @@ export const displayServicePage = async (id) => {
         const fileInput = document.getElementById('img-top');
         const file = fileInput.files[0];
 
-        let imageUrl = serviceData.imageUrl;
+        let img = serviceData.img || {};
 
         if (file) {
           const storageRef = ref(storage, file.name);
           await uploadBytes(storageRef, file);
-          imageUrl = await getDownloadURL(storageRef);
-        }
-        if (file) {
-          const storageRef = ref(storage, file.name);
-          await uploadBytes(storageRef, file);
-          imageUrl = await getDownloadURL(storageRef);
+          img.default = await getDownloadURL(storageRef);
         }
 
         await updateServiceData(
@@ -208,12 +204,30 @@ export const displayServicePage = async (id) => {
           updatedTitle,
           updatedDescription,
           updatedText,
-          imageUrl
+          {
+            img,
+          }
         );
         window.location.reload();
       });
-    } else {
-      console.error('Документ с указанным идентификатором не найден.');
+
+      const deleteServiceBtn = document.getElementById('deleteServiceBtn');
+      deleteServiceBtn.addEventListener('click', async () => {
+        try {
+          const confirmation = confirm(
+            'Вы уверены, что хотите удалить эту услугу?'
+          );
+          if (!confirmation) {
+            return;
+          }
+
+          await deleteServiceData(id);
+
+          window.location.hash = '#/admin/services';
+        } catch (error) {
+          console.error('Ошибка при удалении данных из Firestore: ', error);
+        }
+      });
     }
   } catch (error) {
     console.error('Ошибка при получении данных из Firestore: ', error);
@@ -225,7 +239,7 @@ export const updateServiceData = async (
   updatedTitle,
   updatedDescription,
   updatedText,
-  updatedImageUrl
+  updatedImg
 ) => {
   try {
     const serviceRef = doc(collection(db, 'services'), id);
@@ -234,7 +248,7 @@ export const updateServiceData = async (
       title: updatedTitle,
       description: updatedDescription,
       text: updatedText,
-      imageUrl: updatedImageUrl,
+      img: updatedImg.img,
     };
 
     await setDoc(serviceRef, updateData, { merge: true });
@@ -247,7 +261,20 @@ export const updateServiceData = async (
   }
 };
 
-const getServiceDetails = async (id) => {
+export const deleteServiceData = async (id) => {
+  try {
+    const employeeRef = doc(collection(db, 'services'), id);
+    await deleteDoc(employeeRef);
+
+    showMessage('Данные успешно удалены');
+
+    console.log('Данные успешно удалены.');
+  } catch (error) {
+    console.error('Ошибка при удалении данных в Firestore: ', error);
+  }
+};
+
+export const getServiceDetails = async (id) => {
   try {
     const serviceCollectionRef = collection(db, 'services');
     const serviceDocRef = doc(serviceCollectionRef, id);

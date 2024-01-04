@@ -16,12 +16,14 @@ import {
   getDataFromServices,
   initializeServiceForm,
   displayServicePage,
+  getServiceDetails,
 } from './modules/admin/services-admin';
 
 import {
   displayStoriesInHTML,
   getDataFromStories,
   initializeStoryForm,
+  displayStoryPage,
 } from './modules/admin/stories-admin';
 
 import {
@@ -49,7 +51,9 @@ onAuthStateChanged(auth, async function (user) {
       (doc) => doc.data().uid === user.uid
     );
 
-    if (existingUser) {
+    if (!existingUser) {
+      window.location.href = 'login.html';
+    } else {
       const isAdmin = existingUser.data().isAdmin;
 
       if (!isAdmin) {
@@ -68,7 +72,6 @@ onAuthStateChanged(auth, async function (user) {
 
         window.location.href = 'index.html';
       }
-    } else {
     }
   }
 });
@@ -110,12 +113,12 @@ document.addEventListener('DOMContentLoaded', async function () {
         });
         break;
 
-      case '#/admin/services/hn8O7z4jFkC4PoymSO2x':
+      case /^#\/admin\/services\/(.+)$/: {
         id = hash.split('/').pop().trim();
-
         console.log('Страница:', id);
-        displayServicePage(id);
+        updateServiceContent(id);
         break;
+      }
 
       case '#/admin/services/services-str':
         content = `
@@ -203,6 +206,13 @@ document.addEventListener('DOMContentLoaded', async function () {
         });
         break;
 
+      case /^#\/admin\/all-stories\/(.+)$/: {
+        id = hash.split('/').pop().trim();
+        console.log('Страница:', id);
+        displayStoryPage(id);
+        break;
+      }
+
       case '#/admin/all-stories/stories-str':
         content = `
         <div class="content">
@@ -288,11 +298,12 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         break;
 
-      case '#/admin/employees/DPClXFuGF1IOwoA9Txgg':
+      case /^#\/admin\/employees\/(.+)$/: {
         id = hash.split('/').pop().trim();
         console.log('Страница:', id);
         displayEmployeesPage(id);
         break;
+      }
 
       case '#/admin/employees/employees-str':
         content = `
@@ -512,6 +523,13 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         break;
 
+      // case /^#\/admin\/articles\/(.+)$/: {
+      //   id = hash.split('/').pop().trim();
+      //   console.log('Страница:', id);
+      //   displayEmployeesPage(id);
+      //   break;
+      // }
+
       case '#/admin/articles/articles-str':
         content = `
           <div class="content">
@@ -660,29 +678,71 @@ document.addEventListener('DOMContentLoaded', async function () {
     appElement.innerHTML = content;
   };
 
-  await updateContent();
-  //форма сервиса
-  initializeServiceForm();
-  //форма работника
-  initializeEmployeesForm();
-  //форма истории
-  initializeStoryForm();
-  //форма контактов
-  initializeContactsForm();
-  //форма статей
-  initializeArticlesForm();
+  // await updateContent();
+  // //форма сервиса
+  // initializeServiceForm();
+  // //форма работника
+  // initializeEmployeesForm();
+  // //форма истории
+  // initializeStoryForm();
+  // //форма контактов
+  // initializeContactsForm();
+  // //форма статей
+  // initializeArticlesForm();
+  // const hash = window.location.hash;
+  // if (hash.match(/^#\/admin\/services\/(.+)$/)) {
+  //   const id = hash.split('/').pop().trim();
+  //   displayServicePage(id);
+  // }
 
-  window.addEventListener('hashchange', async () => {
+  // window.addEventListener('hashchange', async () => {
+  //   await updateContent();
+  //   //форма сервиса
+  //   initializeServiceForm();
+  //   //форма работника
+  //   initializeEmployeesForm();
+  //   //форма истории
+  //   initializeStoryForm();
+  //   //форма контактов
+  //   initializeContactsForm();
+  //   //форма статей
+  //   initializeArticlesForm();
+  //   const hash = window.location.hash;
+  //   if (hash.match(/^#\/admin\/services\/(.+)$/)) {
+  //     const id = hash.split('/').pop().trim();
+  //     displayServicePage(id);
+  //   }
+  // });
+
+  const updateContentPage = async () => {
     await updateContent();
-    //форма сервиса
+
     initializeServiceForm();
-    //форма работника
     initializeEmployeesForm();
-    //форма истории
     initializeStoryForm();
-    //форма контактов
     initializeContactsForm();
-    //форма статей
     initializeArticlesForm();
-  });
+
+    const hash = window.location.hash;
+    if (hash.match(/^#\/admin\/services\/(.+)$/)) {
+      const id = hash.split('/').pop().trim();
+      await displayServicePage(id);
+    }
+    if (hash.match(/^#\/admin\/employees\/(.+)$/)) {
+      const id = hash.split('/').pop().trim();
+      await displayEmployeesPage(id);
+    }
+    if (hash.match(/^#\/admin\/articles\/(.+)$/)) {
+      const id = hash.split('/').pop().trim();
+      await displayEmployeesPage(id);
+    }
+    if (hash.match(/^#\/admin\/all-stories\/(.+)$/)) {
+      const id = hash.split('/').pop().trim();
+      await displayStoryPage(id);
+    }
+  };
+
+  window.addEventListener('load', updateContentPage);
+
+  window.addEventListener('hashchange', updateContentPage);
 });

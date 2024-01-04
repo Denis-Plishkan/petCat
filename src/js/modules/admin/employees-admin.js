@@ -11,7 +11,7 @@ import {
   doc,
 } from '../firebase-Config';
 
-export const createCardEmploye = (id, fullName, position, imageUrl) => {
+const createCardEmploye = (id, fullName, position, imageUrl) => {
   const cardElement = document.createElement('div');
   cardElement.classList.add('specialists-card');
   cardElement.setAttribute('data-id', id);
@@ -35,27 +35,42 @@ export const createCardEmploye = (id, fullName, position, imageUrl) => {
   cardElement.appendChild(cardName);
   cardElement.appendChild(cardJobTitle);
 
-  cardElement.addEventListener('click', () => {
-    navigateToEmployee(id);
-  });
-
   return cardElement;
 };
 
 export const displayEmployeInHTML = (data) => {
-  const employesBody = document.getElementById('employees-body');
+  const employeesBody = document.getElementById('employees-body');
 
-  employesBody.innerHTML = '';
+  if (employeesBody) {
+    employeesBody.innerHTML = '';
 
-  data.forEach((employe) => {
-    const card = createCardEmploye(
-      employe.id,
-      employe.full_name,
-      employe.position,
-      employe.imageUrl
-    );
-    employesBody.appendChild(card);
-  });
+    for (let i = 0; i < data.length; i += 3) {
+      const line = document.createElement('div');
+      line.classList.add('specialists-line');
+
+      const cardWrapper = document.createElement('div');
+      cardWrapper.classList.add('specialists-card__wrapper');
+
+      for (let j = i; j < i + 3 && j < data.length; j++) {
+        const card = createCardEmploye(
+          data[j].id,
+          data[j].full_name,
+          data[j].position,
+          data[j].img.default
+        );
+
+        card.addEventListener('click', () => {
+          navigateToEmployee(data[j].id);
+        });
+        cardWrapper.appendChild(card);
+      }
+
+      line.appendChild(cardWrapper);
+      employeesBody.appendChild(line);
+    }
+  } else {
+    console.error('Element with id "v-body" not found.');
+  }
 };
 
 export const getDataFromEmployees = async () => {
@@ -65,7 +80,7 @@ export const getDataFromEmployees = async () => {
 
     querySnapshot.forEach((doc) => {
       const data = doc.data();
-      // dataArray.push(data);
+
       dataArray.push(Object.assign({}, data, { id: doc.id }));
     });
     console.log('Данные', dataArray);
@@ -76,6 +91,7 @@ export const getDataFromEmployees = async () => {
     return [];
   }
 };
+
 const navigateToEmployee = (id) => {
   window.location.hash = `#/admin/employees/${id}`;
 };
@@ -99,10 +115,6 @@ const submitEmployesBtnHandler = async () => {
 
   const file = imgForPersonInput.files && imgForPersonInput.files[0];
 
-  if (errorText.textContent) {
-    errorText.textContent = '';
-  }
-
   try {
     let imageUrl = '';
 
@@ -113,12 +125,15 @@ const submitEmployesBtnHandler = async () => {
     }
 
     const docRef = await addDoc(collection(db, 'employees'), {
-      imageUrl: imageUrl,
       full_name: fullName.value,
       position: position.value,
       specializations: specializations.value,
       education: education.value,
       skills: skills.value,
+      img: {
+        default: imageUrl,
+        webP: '',
+      },
       // date: reservationDateInput.value,
     });
 
@@ -149,6 +164,7 @@ export const displayEmployeesPage = async (id) => {
     const employeesData = await getEmployeesDetails(id);
 
     if (employeesData) {
+      console.log('Данные paботника:', employeesData);
       const contentElement = document.getElementById('app');
 
       contentElement.innerHTML = `
@@ -166,7 +182,7 @@ export const displayEmployeesPage = async (id) => {
             Фотография работника:
             </h2>
             <div data-v-fee137ad="" class="img">
-            <img data-v-fee137ad="" src="${employeesData.imageUrl}" alt="">
+            <img data-v-fee137ad="" src="${employeesData.img.default}" alt="">
             </div>
             <div data-v-fee137ad="" class="add">
             <label data-v-fee137ad="" for="img-top">Загрузить новое фото:</label>
@@ -194,20 +210,17 @@ export const displayEmployeesPage = async (id) => {
         const fileInput = document.getElementById('img-top');
         const file = fileInput.files[0];
 
-        let imageUrl = employeesData.imageUrl;
+        let img = employeesData.img || {};
 
         if (file) {
           const storageRef = ref(storage, file.name);
           await uploadBytes(storageRef, file);
-          imageUrl = await getDownloadURL(storageRef);
+          img.default = await getDownloadURL(storageRef);
         }
 
-        await updateEmployeesData(
-          id,
-          updatedFullName,
-          updatedPosition,
-          imageUrl
-        );
+        await updateEmployeesData(id, updatedFullName, updatedPosition, {
+          img,
+        });
         window.location.reload();
       });
 
@@ -228,8 +241,6 @@ export const displayEmployeesPage = async (id) => {
           console.error('Ошибка при удалении данных из Firestore: ', error);
         }
       });
-    } else {
-      console.error('Документ с указанным идентификатором не найден.');
     }
   } catch (error) {
     console.error('Ошибка при получении данных из Firestore: ', error);
@@ -247,7 +258,7 @@ export const updateEmployeesData = async (
   id,
   updatedFullName,
   updatedPosition,
-  updatedImageUrl
+  updatedImg
 ) => {
   try {
     const employeeRef = doc(collection(db, 'employees'), id);
@@ -256,7 +267,7 @@ export const updateEmployeesData = async (
       full_name: updatedFullName,
       position: updatedPosition,
 
-      imageUrl: updatedImageUrl,
+      img: updatedImg.img,
     };
 
     await setDoc(employeeRef, updateData, { merge: true });
