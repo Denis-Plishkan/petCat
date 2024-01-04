@@ -1,0 +1,69 @@
+.costs {
+    margin-bottom: 90px;
+
+  &__card-wrapper {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__card {
+    border-radius: 8px;
+    background: var(--1, linear-gradient(90deg, #e8fafa 0%, #dcf2e8 100%));
+    box-shadow: 0px 0px 10px 0px rgba(49, 53, 54, 0.05) inset;
+    width: 536px;
+    min-height: 672px;
+    padding: 35px 56px 55px 56px;
+
+  }
+
+  &__card-title {
+    color: #292d33;
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 35px;
+    margin-bottom: 6px;
+  }
+
+  &__card-text {
+    color: #51555a;
+    font-size: 14px;
+    line-height: 20px;
+    margin-bottom: 34px;
+    position: relative;
+
+    &::after {
+        position: absolute;
+        content: '';
+        width: 100%;
+        height: 1px;
+        bottom: -22px;
+        left: 0;
+        background: #CFDFE5;
+    }
+  }
+
+  &__card-wrapper-text {
+    color: #1dc3b0;
+    font-size: 26px;
+    line-height: 36px;
+    max-width: 536px;
+    margin-top: 36px;
+  }
+
+  &__card-name-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  &__card-name {
+    display: flex;
+    justify-content: space-between;
+    p {
+      color: #292d33;
+      font-size: 17px;
+      line-height: 24px;
+      max-width: 344px;
+    }
+  }
+}

@@ -13,6 +13,8 @@ export const webpackConfig = (isMode) => {
   return {
     entry: {
       main: path.join(paths.src, 'js/main.js'),
+      allServices: path.join(paths.src, 'js/allServices.js'),
+      oneService: path.join(paths.src, 'js/oneService.js'),
       auth: path.join(paths.src, 'js/auth.js'),
       login: path.join(paths.src, 'js/login.js'),
       admin: path.join(paths.src, 'js/admin.js'),
