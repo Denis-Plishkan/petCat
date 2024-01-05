@@ -40,3 +40,16 @@ function historySwiper() {
 }
 historySwiper();
 
+function recordingSwiper() {
+  let swiper = new Swiper('.recording-swiper', {
+    slidesPerView: '3',
+    spaceBetween: 40,
+    speed: 900,
+    navigation: {
+      nextEl: '.recording__swiper-button-next',
+      prevEl: '.recording__swiper-button-prev',
+    },
+  });
+}
+recordingSwiper();
+

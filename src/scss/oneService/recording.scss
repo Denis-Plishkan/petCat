@@ -1,6 +1,5 @@
-.answers {
-    margin-bottom: 186px;
-  // .answers__second-container
+.recording {
+  margin-bottom: 186px;
 
   &__second-container {
   }
@@ -10,8 +9,6 @@
     margin: 0 2px;
   }
 
-  // .answers__wrapper
-
   &__wrapper-top {
     display: flex;
     justify-content: space-between;
@@ -19,28 +16,18 @@
     margin-bottom: 60px;
   }
 
-  // .answers__wrapper-title
-
   &__wrapper-top-title {
     color: #292d33;
-    font-size: 48px;
-    line-height: 56px;
+    font-size: 30px;
     font-weight: 700;
-    max-width: 701px;
+    line-height: 35px;
   }
-
-  // .answers__button
 
   &__button {
   }
 
-  // .answers__cards
-
   &__cards {
- 
   }
-
-  // .answers__swiper-button-prev
 
   &__swiper-button-prev {
     cursor: pointer;
@@ -53,8 +40,6 @@
       height: 32px;
     }
   }
-
-  // .answers__swiper-button-next
 
   &__swiper-button-next {
     cursor: pointer;

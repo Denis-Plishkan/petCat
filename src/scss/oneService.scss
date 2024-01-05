@@ -1,4 +1,8 @@
 @import 'style';
+@import "../../node_modules/swiper/swiper-bundle";
 
 @import 'oneService/oneService';
 @import 'oneService/costs';
+@import 'oneService/recording';
+
+@import 'components/specialists-card';
