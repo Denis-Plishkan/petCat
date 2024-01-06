@@ -12,10 +12,10 @@
 
   &__wrapper-top {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: end;
-    margin-bottom: 64px;
-    padding-top: 128px;
+
+    padding-top: 50px;
   }
 
   &__wrapper-top-title {

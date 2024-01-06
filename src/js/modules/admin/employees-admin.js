@@ -68,8 +68,6 @@ export const displayEmployeInHTML = (data) => {
       line.appendChild(cardWrapper);
       employeesBody.appendChild(line);
     }
-  } else {
-    console.error('Element with id "v-body" not found.');
   }
 };
 

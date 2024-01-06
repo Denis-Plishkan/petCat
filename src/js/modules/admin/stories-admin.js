@@ -56,7 +56,7 @@ export const displayStoriesInHTML = (data) => {
           data[j].id,
           data[j].title,
           data[j].date,
-          data[j].img
+          data[j].img.default
         );
 
         card.addEventListener('click', () => {
@@ -169,15 +169,15 @@ export const displayStoryPage = async (id) => {
         <div class="content">
           <div class="employees-details">
             <h2 class="popular-services__wrapper-title">
-              <span contenteditable="true" id="employeesName">${storyData.title}</span>
+              <span contenteditable="true" id="storyTitle">${storyData.title}</span>
             </h2>
             <div class="popular-services__wrapper-subtitle">
-              <h3>Должность:</h3>
-              <p contenteditable="true" id="employeesPosition">${storyData.date}</p>
+              <h3>Когда произошло:</h3>
+              <p contenteditable="true" id="storyDate">${storyData.date}</p>
             </div>
             <div  class="ava flex mt-3">
             <h2 data-v-fee137ad="">
-            Фотография работника:
+            Фотография питомца:
             </h2>
             <div data-v-fee137ad="" class="img">
             <img data-v-fee137ad="" src="${storyData.img.default}" alt="">
@@ -190,7 +190,7 @@ export const displayStoryPage = async (id) => {
            
             <div data-v-fee137ad="" class="block-btn mt-5"> 
             <button type="button" id="updateStoryBtn" class="btn btn-block btn-success ">Сохранить изменения</button>
-            <button type="button" id="deleteStoryBtn" class="btn btn-block btn-danger "style="width: 30%;" >Удалить карту работника</button>
+            <button type="button" id="deleteStoryBtn" class="btn btn-block btn-danger "style="width: 30%;" >Удалить историю</button>
             </div>
           </div>       
         </div>
@@ -200,15 +200,13 @@ export const displayStoryPage = async (id) => {
 
       const updateStoryBtn = document.getElementById('updateStoryBtn');
       updateStoryBtn.addEventListener('click', async () => {
-        const updatedFullName =
-          document.getElementById('employeesName').innerText;
-        const updatedPosition =
-          document.getElementById('employeesPosition').innerText;
+        const updatedFullName = document.getElementById('storyTitle').innerText;
+        const updatedPosition = document.getElementById('storyDate').innerText;
 
         const fileInput = document.getElementById('img-top');
         const file = fileInput.files[0];
 
-        let img = employeesData.img || {};
+        let img = storyData.img || {};
 
         if (file) {
           const storageRef = ref(storage, file.name);
@@ -234,7 +232,7 @@ export const displayStoryPage = async (id) => {
 
           await deleteStoryData(id);
 
-          window.location.hash = '#/admin/story';
+          window.location.hash = '#/admin/all-stories';
         } catch (error) {
           console.error('Ошибка при удалении данных из Firestore: ', error);
         }
@@ -299,5 +297,15 @@ const getStoryDetails = async (id) => {
   } catch (error) {
     console.error('Ошибка при получении данных из Firestore: ', error);
     return null;
+  }
+};
+const showMessage = (message) => {
+  const messageBox = document.getElementById('messageBox');
+  if (messageBox) {
+    messageBox.textContent = message;
+
+    setTimeout(() => {
+      messageBox.textContent = '';
+    }, 3000);
   }
 };

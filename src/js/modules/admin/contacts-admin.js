@@ -93,3 +93,41 @@ export const initializeContactsForm = () => {
     submitContactsBtn.addEventListener('click', submitContactsBtnHandler);
   }
 };
+
+export const getDataFromContacts = async () => {
+  const contactsCollection = collection(db, 'contacts');
+
+  try {
+    const querySnapshot = await getDocs(contactsCollection);
+    if (querySnapshot.empty) {
+      return null;
+    }
+
+    const contactsData = querySnapshot.docs[0].data();
+    return contactsData;
+  } catch (error) {
+    return null;
+  }
+};
+
+const updateContactsData = async (updatedData) => {
+  const contactsCollection = collection(db, 'contacts');
+  const contactDocRef = doc(contactsCollection, 'izVX1ZrDG1gaYNHaPnAG ');
+
+  try {
+    await setDoc(contactDocRef, updatedData, { merge: true });
+    console.log('Contact data updated successfully');
+  } catch (error) {
+    console.error('Error updating contact data: ', error.message, error.code);
+  }
+};
+const showMessage = (message) => {
+  const messageBox = document.getElementById('messageBox');
+  if (messageBox) {
+    messageBox.textContent = message;
+
+    setTimeout(() => {
+      messageBox.textContent = '';
+    }, 3000);
+  }
+};

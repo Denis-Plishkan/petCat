@@ -37,9 +37,14 @@ import {
   displayArticlesInHTML,
   getDataFromArticles,
   initializeArticlesForm,
+  displayArticlesPage,
+  getArticlesDetails,
 } from './modules/admin/articles-admin';
 
-import { initializeContactsForm } from './modules/admin/contacts-admin';
+import {
+  initializeContactsForm,
+  getDataFromContacts,
+} from './modules/admin/contacts-admin';
 
 onAuthStateChanged(auth, async function (user) {
   if (!user) {
@@ -116,7 +121,7 @@ document.addEventListener('DOMContentLoaded', async function () {
       case /^#\/admin\/services\/(.+)$/: {
         id = hash.split('/').pop().trim();
         console.log('Страница:', id);
-        updateServiceContent(id);
+        displayServicePage(id);
         break;
       }
 
@@ -298,12 +303,11 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         break;
 
-      case /^#\/admin\/employees\/(.+)$/: {
+      case /^#\/admin\/employees\/(.+)$/:
         id = hash.split('/').pop().trim();
         console.log('Страница:', id);
         displayEmployeesPage(id);
         break;
-      }
 
       case '#/admin/employees/employees-str':
         content = `
@@ -388,6 +392,28 @@ document.addEventListener('DOMContentLoaded', async function () {
             </div>
           `;
 
+        break;
+
+      case '#/admin/contacts':
+        content = `
+        <div class="content">
+        <h2>Контактная информация</h2>
+        <div class="content-wrapper">
+        <p>Phone Number: ${formatPhoneNumber(contactData.phoneNumber)}</p>
+        <p>Email: ${contactData.email}</p>
+        <p>Address: ${contactData.address}</p>
+        <p>Map: <a href="${
+          contactData.addressMap
+        }" target="_blank">Open Map</a></p>
+        <p>Working Hours: ${contactData.workingHours}</p>
+        <p>Road by Bus: ${contactData.roadByBus}</p>
+        <p>Road by Trolleybus: ${contactData.roadTrolleybus}</p>
+        <p>Road by Car: ${contactData.roadCar}</p>
+      <div id="errorText" class="text-danger mt-2"></div>
+      <div id="messageBox" class="message-box"></div>
+      </div>
+      </div>
+        `;
         break;
 
       case '#/admin/contacts/contacts-str':
@@ -523,12 +549,12 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         break;
 
-      // case /^#\/admin\/articles\/(.+)$/: {
-      //   id = hash.split('/').pop().trim();
-      //   console.log('Страница:', id);
-      //   displayEmployeesPage(id);
-      //   break;
-      // }
+      case /^#\/admin\/articles\/(.+)$/: {
+        id = hash.split('/').pop().trim();
+        console.log('Страница:', id);
+        displayArticlesPage(id);
+        break;
+      }
 
       case '#/admin/articles/articles-str':
         content = `
@@ -678,42 +704,6 @@ document.addEventListener('DOMContentLoaded', async function () {
     appElement.innerHTML = content;
   };
 
-  // await updateContent();
-  // //форма сервиса
-  // initializeServiceForm();
-  // //форма работника
-  // initializeEmployeesForm();
-  // //форма истории
-  // initializeStoryForm();
-  // //форма контактов
-  // initializeContactsForm();
-  // //форма статей
-  // initializeArticlesForm();
-  // const hash = window.location.hash;
-  // if (hash.match(/^#\/admin\/services\/(.+)$/)) {
-  //   const id = hash.split('/').pop().trim();
-  //   displayServicePage(id);
-  // }
-
-  // window.addEventListener('hashchange', async () => {
-  //   await updateContent();
-  //   //форма сервиса
-  //   initializeServiceForm();
-  //   //форма работника
-  //   initializeEmployeesForm();
-  //   //форма истории
-  //   initializeStoryForm();
-  //   //форма контактов
-  //   initializeContactsForm();
-  //   //форма статей
-  //   initializeArticlesForm();
-  //   const hash = window.location.hash;
-  //   if (hash.match(/^#\/admin\/services\/(.+)$/)) {
-  //     const id = hash.split('/').pop().trim();
-  //     displayServicePage(id);
-  //   }
-  // });
-
   const updateContentPage = async () => {
     await updateContent();
 
@@ -734,7 +724,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
     if (hash.match(/^#\/admin\/articles\/(.+)$/)) {
       const id = hash.split('/').pop().trim();
-      await displayEmployeesPage(id);
+      await displayArticlesPage(id);
     }
     if (hash.match(/^#\/admin\/all-stories\/(.+)$/)) {
       const id = hash.split('/').pop().trim();
@@ -746,3 +736,93 @@ document.addEventListener('DOMContentLoaded', async function () {
 
   window.addEventListener('hashchange', updateContentPage);
 });
+
+////2
+// const loadDataAndDisplayContent = async () => {
+//   await updateContent();
+
+//   initializeServiceForm();
+//   initializeEmployeesForm();
+//   initializeStoryForm();
+//   initializeContactsForm();
+//   initializeArticlesForm();
+
+//   const hash = window.location.hash;
+//   if (hash.match(/^#\/admin\/services\/(.+)$/)) {
+//     const id = hash.split('/').pop().trim();
+//     await displayServicePage(id);
+//   }
+//   if (hash.match(/^#\/admin\/employees\/(.+)$/)) {
+//     const id = hash.split('/').pop().trim();
+//     await displayEmployeesPage(id);
+//   }
+//   if (hash.match(/^#\/admin\/articles\/(.+)$/)) {
+//     const id = hash.split('/').pop().trim();
+//     await displayArticlesPage(id);
+//   }
+//   if (hash.match(/^#\/admin\/all-stories\/(.+)$/)) {
+//     const id = hash.split('/').pop().trim();
+//     await displayStoryPage(id);
+//   }
+// };
+
+// document.addEventListener('DOMContentLoaded', async function () {
+//   await loadDataAndDisplayContent();
+//   window.addEventListener('hashchange', loadDataAndDisplayContent);
+//   window.addEventListener('popstate', handleNavigation);
+// });
+
+// const handleNavigation = (event) => {
+//   const hash = window.location.hash;
+//   if (
+//     hash.match(/^#\/admin\/services\/(.+)$/) ||
+//     hash.match(/^#\/admin\/employees\/(.+)$/) ||
+//     hash.match(/^#\/admin\/articles\/(.+)$/) ||
+//     hash.match(/^#\/admin\/all-stories\/(.+)$/)
+//   ) {
+//     event.preventDefault();
+//     loadDataAndDisplayContent();
+//   }
+// };
+
+// window.addEventListener('load', handleNavigation);
+///////3
+
+// // Добавляем слушатель события нажатия
+// window.addEventListener('hashchange', () => {
+//   // Получаем текущий хэш
+//   const currentHash = window.location.hash;
+
+//   // Вызываем функцию, которая обрабатывает текущий хэш
+//   handleHashChange(currentHash);
+//   updateContent(currentHash);
+// });
+
+// // Функция обработки изменения хэша
+// function handleHashChange(hash) {
+//   // Убеждаемся, что у нас есть правильный формат хэша
+//   if (hash && hash.match(/^#\/admin\/services\/\d+$/)) {
+//     // Получаем id из хэша (например, #/admin/articles/123)
+//     const id = hash.split('/').pop();
+
+//     // Вызываем функцию для отображения страницы статьи
+//     displayArticlesPage(id);
+//   } else {
+//     // Если хэш не соответствует ожидаемому формату, отображаем другую страницу
+//     displayDefaultPage();
+//   }
+// }
+
+// // Функция отображения страницы по умолчанию
+// function displayDefaultPage() {
+//   // Ваша логика отображения страницы по умолчанию
+//   // Например, отображение списка всех статей
+//   getDataFromServices().then((data) => {
+//     displayServicesInHTML(data);
+//   });
+// }
+
+// // Вызываем функцию обработки изменения хэша при загрузке страницы
+// document.addEventListener('DOMContentLoaded', () => {
+//   handleHashChange(window.location.hash);
+// });
