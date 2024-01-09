@@ -10,8 +10,14 @@ import {
   deleteDoc,
   doc,
 } from '../firebase-Config';
+import {
+  getSpecializationsList,
+  updateSpecializationsSection,
+} from './specializations-admin';
 
-const createCardEmploye = (id, fullName, position, imageUrl) => {
+import { displaySkills } from './skills';
+
+const createCardEmploye = (id, fullName, position, data, imageUrl) => {
   const cardElement = document.createElement('div');
   cardElement.classList.add('specialists-card');
   cardElement.setAttribute('data-id', id);
@@ -31,9 +37,21 @@ const createCardEmploye = (id, fullName, position, imageUrl) => {
   cardJobTitle.classList.add('specialists-card__job-title');
   cardJobTitle.textContent = position;
 
+  const cardSpecializations = document.createElement('p');
+  cardSpecializations.classList.add('specialists-card__specializations');
+
+  if (data.specializations && data.specializations.length > 0) {
+    cardSpecializations.textContent = `Специализации: ${data.specializations.join(
+      ', '
+    )}`;
+  } else {
+    cardSpecializations.textContent = 'Специализации: Нет данных';
+  }
+
   cardElement.appendChild(cardPhoto);
   cardElement.appendChild(cardName);
   cardElement.appendChild(cardJobTitle);
+  cardElement.appendChild(cardSpecializations);
 
   return cardElement;
 };
@@ -56,6 +74,7 @@ export const displayEmployeInHTML = (data) => {
           data[j].id,
           data[j].full_name,
           data[j].position,
+          data[j] || [],
           data[j].img.default
         );
 
@@ -98,7 +117,10 @@ const submitEmployesBtnHandler = async () => {
   const fullName = document.getElementById('full_name');
   const imgForPersonInput = document.getElementById('img-for-page');
   const position = document.getElementById('position');
-  const specializations = document.getElementById('specializations');
+  const specializationsSelect = document.getElementById('specializations');
+  const selectedSpecializations = Array.from(
+    specializationsSelect.selectedOptions
+  ).map((option) => option.value);
   const education = document.getElementById('education');
   const skills = document.getElementById('skills');
   const errorText = document.getElementById('errorText');
@@ -125,7 +147,7 @@ const submitEmployesBtnHandler = async () => {
     const docRef = await addDoc(collection(db, 'employees'), {
       full_name: fullName.value,
       position: position.value,
-      specializations: specializations.value,
+      specializations: selectedSpecializations,
       education: education.value,
       skills: skills.value,
       img: {
@@ -149,11 +171,23 @@ const submitEmployesBtnHandler = async () => {
   }
 };
 
-export const initializeEmployeesForm = () => {
+export const initializeEmployeesForm = async () => {
   const submitEmployesBtn = document.getElementById('submitEmployeesBtn');
+  const specializationsSelect = document.getElementById('specializations');
 
-  if (submitEmployesBtn) {
+  if (submitEmployesBtn && specializationsSelect) {
     submitEmployesBtn.addEventListener('click', submitEmployesBtnHandler);
+
+    const specializations = await getSpecializationsList();
+
+    specializationsSelect.innerHTML = '';
+
+    specializations.forEach((specialization) => {
+      const option = document.createElement('option');
+      option.value = specialization;
+      option.text = specialization;
+      specializationsSelect.add(option);
+    });
   }
 };
 
@@ -168,13 +202,19 @@ export const displayEmployeesPage = async (id) => {
       contentElement.innerHTML = `
         <div class="content">
           <div class="employees-details">
-            <h2 class="popular-services__wrapper-title">
+            <h2 class="employees__wrapper-title">
               <span contenteditable="true" id="employeesName">${employeesData.full_name}</span>
             </h2>
-            <div class="popular-services__wrapper-subtitle">
+            <div class="employees__wrapper-subtitle">
               <h3>Должность:</h3>
               <p contenteditable="true" id="employeesPosition">${employeesData.position}</p>
             </div>
+            <div class="employees__wrapper-subtitle">
+            <h3>Специализации:</h3>
+            <div id="specializationsContainer"></div>
+            <button id="addSpecializationBtn">Добавить специализацию</button>
+          </div>
+
             <div  class="ava flex mt-3">
             <h2 data-v-fee137ad="">
             Фотография работника:
@@ -198,6 +238,8 @@ export const displayEmployeesPage = async (id) => {
         <div id="messageBox" class="message-box"></div>
       `;
 
+      // displaySkills(employeesData.skills);
+
       const updateEmployeesBtn = document.getElementById('updateEmployeesBtn');
       updateEmployeesBtn.addEventListener('click', async () => {
         const updatedFullName =
@@ -207,21 +249,26 @@ export const displayEmployeesPage = async (id) => {
 
         const fileInput = document.getElementById('img-top');
         const file = fileInput.files[0];
-
-        let img = employeesData.img || {};
+        const img = employeesData.img || {};
 
         if (file) {
           const storageRef = ref(storage, file.name);
           await uploadBytes(storageRef, file);
           img.default = await getDownloadURL(storageRef);
         }
-
-        await updateEmployeesData(id, updatedFullName, updatedPosition, {
-          img,
-        });
+        const updatedSpecializations = employeesData.specializations;
+        await updateEmployeesData(
+          id,
+          updatedFullName,
+          updatedPosition,
+          updatedSpecializations,
+          {
+            img,
+          }
+        );
         window.location.reload();
+        await updateEmployeesData(id, employeesData);
       });
-
       const deleteEmployeesBtn = document.getElementById('deleteEmployeesBtn');
       deleteEmployeesBtn.addEventListener('click', async () => {
         try {
@@ -239,13 +286,14 @@ export const displayEmployeesPage = async (id) => {
           console.error('Ошибка при удалении данных из Firestore: ', error);
         }
       });
+
+      updateSpecializationsSection(id, employeesData);
     }
   } catch (error) {
     console.error('Ошибка при получении данных из Firestore: ', error);
   }
 };
 
-// updatedSpecializations,
 // updatedEducation,
 // updatedSkills,
 // updatedImageUrl
@@ -256,6 +304,7 @@ export const updateEmployeesData = async (
   id,
   updatedFullName,
   updatedPosition,
+  updatedSpecializations,
   updatedImg
 ) => {
   try {
@@ -264,7 +313,7 @@ export const updateEmployeesData = async (
     const updateData = {
       full_name: updatedFullName,
       position: updatedPosition,
-
+      specializations: updatedSpecializations,
       img: updatedImg.img,
     };
 

@@ -112,6 +112,7 @@ const submitServiceBtnHandler = async function () {
     const docRef = await addDoc(collection(db, 'services'), {
       title: titleInput.value,
       description: descriptionInput.value,
+      text: textInput.value,
       img: {
         default: imageUrl,
         webP: '',
@@ -120,6 +121,7 @@ const submitServiceBtnHandler = async function () {
 
     titleInput.value = '';
     descriptionInput.value = '';
+    textInput.value = '';
     if (fileInput) {
       fileInput.value = '';
     }

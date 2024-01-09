@@ -1,4 +1,3 @@
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import {
   auth,
   db,
@@ -43,7 +42,7 @@ import {
 
 import {
   initializeContactsForm,
-  getDataFromContacts,
+  displayContactPage,
 } from './modules/admin/contacts-admin';
 
 onAuthStateChanged(auth, async function (user) {
@@ -347,15 +346,13 @@ document.addEventListener('DOMContentLoaded', async function () {
                       style="width: 50%"
                     />
                   </div>
+  
                   <div class="mt-3">
-                    <label for="title">Специализации</label
-                    ><input
-                      id="specializations"
-                      type="text"
-                      placeholder="Специализации"
-                      style="width: 50%"
-                    />
-                  </div>
+  <label for="specializations">Специализации</label>
+  <select id="specializations"  multiple style="width: 50%" >
+   
+  </select>
+</div>
                   <div class="mt-3">
                     <label for="title">Образование</label
                     ><input
@@ -395,141 +392,8 @@ document.addEventListener('DOMContentLoaded', async function () {
         break;
 
       case '#/admin/contacts':
-        content = `
-        <div class="content">
-        <h2>Контактная информация</h2>
-        <div class="content-wrapper">
-        <p>Phone Number: ${formatPhoneNumber(contactData.phoneNumber)}</p>
-        <p>Email: ${contactData.email}</p>
-        <p>Address: ${contactData.address}</p>
-        <p>Map: <a href="${
-          contactData.addressMap
-        }" target="_blank">Open Map</a></p>
-        <p>Working Hours: ${contactData.workingHours}</p>
-        <p>Road by Bus: ${contactData.roadByBus}</p>
-        <p>Road by Trolleybus: ${contactData.roadTrolleybus}</p>
-        <p>Road by Car: ${contactData.roadCar}</p>
-      <div id="errorText" class="text-danger mt-2"></div>
-      <div id="messageBox" class="message-box"></div>
-      </div>
-      </div>
-        `;
-        break;
-
-      case '#/admin/contacts/contacts-str':
-        content = `
-            <div class="content">
-              <div class="">
-                <h2>Контактные данные</h2>
-                <div class="mt-5">
-                
-                  <div class="form-group">
-<label>Номер телефона</label>
-<div class="input-group">
-<div class="input-group-prepend">
-<span class="input-group-text"><i class="fas fa-phone"></i></span>
-</div>
-<input   id="phone_number" type="text" class="form-control" data-inputmask="&quot;mask&quot;: &quot;(999) 999-9999&quot;" data-mask="" inputmode="text">
-</div>
-
-</div>
-                  <div class="mt-3">
-                    <label>Фотография(если нужно)</label>
-  
-                    <div class="add">
-                      <input
-                        data-v-e29172df=""
-                        class="img-top-input"
-                        id="img-for-page"
-                        type="file"
-                        accept="image/* "
-                      />
-                    </div>
-                  </div>
-                  <div class="mt-3">
-                    <label for="title">Електронная почта</label
-                    ><input
-                      id="email"
-                      type="text"
-                      placeholder="Електронная почта"
-                      style="width: 50%"
-                    />
-                  </div>
-                  <div class="mt-3">
-                    <label for="title">Адрес</label
-                    ><input
-                      id="address"
-                      type="text"
-                      placeholder="Адрес"
-                      style="width: 50%"
-                    />
-                  </div>
-                  <div class="mt-3">
-                <label for="title">Адрес(на карте) </label
-                ><input
-                  id="address_map"
-                  type="text"
-                  placeholder="Адрес"
-                  style="width: 50%"
-                />
-                  <div class="mt-3">
-                    <label for="title">Время работы</label
-                    ><input
-                      id="working_hours"
-                      type="text"
-                      placeholder="Время работы"
-                      style="width: 50%"
-                    />
-                  </div>
-                  <div class="mt-5">
-              <h2>Как добраться до нас</h2>
-                  <div class="mt-3">
-                    <label for="title">На автобусе</label
-                    ><input
-                      id="road_by_bus"
-                      type="text"
-                      placeholder="автобусом"
-                      style="width: 50%"
-                    />
-                  </div>
-                  <div class="mt-3">
-                  <label for="title"> На тролейбусе</label
-                  ><input
-                    id="road_trolleybus"
-                    type="text"
-                    placeholder="тролейбусом"
-                    style="width: 50%"
-                  />
-                </div>
-                <div class="mt-3">
-                <label for="title">На автомобиле </label
-                ><input
-                  id="road_car"
-                  type="text"
-                  placeholder="автомобилем"
-                  style="width: 50%"
-                />
-              </div>
-              </div>
-                  
-                </div>
-  
-                <div class="mt-5">
-                  <button
-                  data-form-type="employees"
-                  id="submitCotactsBtn"
-                    type="button"
-                    class="btn btn-block btn-success btn-lg"
-                  >
-                    Завершить изменение контаков больницы
-                  </button>
-  
-                  <div id="errorText" class="text-danger mt-2"></div>
-                </div>
-              </div>
-            </div>
-          `;
-
+        const id = 'izVX1ZrDG1gaYNHaPnAG';
+        displayContactPage(id);
         break;
 
       case '#/admin/articles':

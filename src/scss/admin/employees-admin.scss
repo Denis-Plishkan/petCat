@@ -84,3 +84,22 @@
 .specialists-line {
   padding-bottom: 50px;
 }
+.specialists-card__specializations {
+  margin-top: 5px;
+  font-size: 14px;
+  color: #777;
+}
+
+.specialization-block {
+  display: inline-block;
+  margin: 0 5px;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.delete-button {
+  cursor: pointer;
+  margin-left: 5px;
+  color: red;
+}

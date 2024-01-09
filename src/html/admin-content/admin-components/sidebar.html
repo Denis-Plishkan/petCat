@@ -48,14 +48,14 @@
         role="menu"
         data-accordion="false"
       >
-        <li class="nav-item menu-open">
-          <a href="#/admin" class="nav-link active">
-            <i class="nav-icon fas fa-tachometer-alt"></i>
-            <p>
-              Cтатистика
-              <i class="right fas fa-angle-left"></i>
-            </p>
-          </a>
+        <li class="nav-item">
+          <a
+            href="#/admin"
+            class="router-link-active router-link-exact-active nav-link"
+            aria-current="page"
+            ><i class="nav-icon fas fa-chart-pie"></i>
+            <p>Статистика</p></a
+          >
         </li>
         <li class="nav-item">
           <a href="#/admin/services" class="nav-link">
@@ -107,90 +107,7 @@
             </li>
           </ul>
         </li>
-        <li class="nav-item">
-          <a href="#/admin/contacts" class="nav-link">
-            <i class="nav-icon fas fa-th"></i>
-            <p>
-              Наши контакты
-              <i class="fas fa-angle-left right"></i>
-            </p>
-          </a>
-          <ul class="nav nav-treeview">
-            <li class="nav-item">
-              <a href="#/admin/contacts" class="nav-link">
-                <i class="far fa-circle nav-icon"></i>
-                <p>Текущие данные</p>
-              </a>
-            </li>
-          </ul>
-          <ul class="nav nav-treeview">
-            <li class="nav-item">
-              <a href="#/admin/contacts/contacts-str" class="nav-link">
-                <i class="far fa-circle nav-icon"></i>
-                <p>Изменить контакты</p>
-              </a>
-            </li>
-          </ul>
-        </li>
-        <li class="nav-item">
-          <a href="#/admin/services" class="nav-link">
-            <i class="nav-icon fas fa-th"></i>
-            <p>
-              Истории пациентов
-              <i class="fas fa-angle-left right"></i>
-            </p>
-          </a>
-          <ul class="nav nav-treeview">
-            <li class="nav-item">
-              <a href="#/admin/all-stories" class="nav-link">
-                <i class="far fa-circle nav-icon"></i>
-                <p>Все истории</p>
-              </a>
-            </li>
-          </ul>
-          <ul class="nav nav-treeview">
-            <li class="nav-item">
-              <a href="#/admin/all-stories/stories-str" class="nav-link">
-                <i class="far fa-circle nav-icon"></i>
-                <p>Добавить историю</p>
-              </a>
-            </li>
-          </ul>
-        </li>
-        <li class="nav-item">
-          <a href="#/admin/services" class="nav-link">
-            <i class="nav-icon fas fa-th"></i>
-            <p>
-              Отзывы
-              <i class="fas fa-angle-left right"></i>
-            </p>
-          </a>
-          <ul class="nav nav-treeview">
-            <li class="nav-item">
-              <a href="#/admin/services/services-str" class="nav-link">
-                <i class="far fa-circle nav-icon"></i>
-                <p>Добавить отзыв</p>
-              </a>
-            </li>
-          </ul>
-        </li>
-        <li class="nav-item">
-          <a href="#/admin/services" class="nav-link">
-            <i class="nav-icon fas fa-th"></i>
-            <p>
-              Записи на приём
-              <i class="fas fa-angle-left right"></i>
-            </p>
-          </a>
-          <ul class="nav nav-treeview">
-            <li class="nav-item">
-              <a href="#/admin/services/services-str" class="nav-link">
-                <i class="far fa-circle nav-icon"></i>
-                <p>Добавить запись</p>
-              </a>
-            </li>
-          </ul>
-        </li>
+
         <li class="nav-item">
           <a href="#/admin/articles" class="nav-link">
             <i class="nav-icon fas fa-th"></i>
@@ -215,6 +132,15 @@
               </a>
             </li>
           </ul>
+        </li>
+        <li class="nav-item">
+          <a
+            href="#/admin/contacts"
+            class="router-link-active router-link-exact-active nav-link"
+            aria-current="page"
+            ><i class="nav-icon fas fa-chart-pie"></i>
+            <p>Контакты</p></a
+          >
         </li>
       </ul>
     </nav>
