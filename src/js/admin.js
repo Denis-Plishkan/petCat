@@ -235,6 +235,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                   id="img-for-story"
                   type="file"
                   accept="image/* "
+                 
                 />
               </div>
             </div>
@@ -245,6 +246,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 type="text"
                 placeholder="История"
                 style="width: 50%"
+                maxlength="60"
               />
             </div>
             <div class="form-group">
@@ -258,6 +260,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                   type="text"
                   class="form-control datetimepicker-input"
                   data-target="#reservationdate"
+                  maxlength="10"
                 />
                 <div
                   class="input-group-append"
@@ -325,6 +328,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                       type="text"
                       placeholder="Полное имя"
                       style="width: 50%"
+                      maxlength="70"
                     />
                   </div>
   
@@ -348,6 +352,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                       type="text"
                       placeholder="Должность"
                       style="width: 50%"
+                      maxlength="20"
                     />
                   </div>
   
@@ -448,29 +453,21 @@ document.addEventListener('DOMContentLoaded', async function () {
                   type="text"
                   placeholder="История"
                   style="width: 50%"
+                  maxlength="70"
                 />
               </div>
-              <div class="form-group">
-                <label>Когда произошло:</label>
-                <div
-                  class="input-group date"
-                  id="reservationdate"
-                  data-target-input="nearest"
-                >
-                  <input
-                  id="reservationDate"
-                    type="text"
-                    class="form-control datetimepicker-input"
-                    data-target="#reservationdate"
-                  />
-                  <div
-                    class="input-group-append"
-                    data-target="#reservationdate"
-                    data-toggle="datetimepicker"
-                  >
-                    <div class="input-group-text">
-                    <i class="fa fa-calendar"></i>
-                    </div>
+              <div class="mt-3">
+              <label for="reservationdate">Дата</label>
+              <input
+              id="reservationdate"
+               type="text"
+               placeholder="ДД.ММ.ГГГГ"
+               style="width: 50%"
+               oninput="formatDateInput(this)"
+               maxlength="10"
+               />
+            </div>
+                  
                   </div>
                 </div>
               </div>

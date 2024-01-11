@@ -203,29 +203,20 @@ export const displayContactPage = async (id) => {
         />
       </div>
 
-      <div class="mt-5">
-        <h2>Координаты для карты</h2>
-        <div class="mt-3">
-          <label for="latitude">Широта</label>
-          <input id="latitude" type="text" placeholder="Введите широту" style="width: 50%" />
-        </div>
-        <div class="mt-3">
-          <label for="longitude">Долгота</label>
-          <input id="longitude" type="text" placeholder="Введите долготу" style="width: 50%" />
-        </div>
-      </div>
+     
 
       <div class="map__wrapper">
         <div class="map__wrapper-left">
-          <iframe
-            src="${contact.addressMap}"
-            width="600"
-            height="450"
-            style="border: 0"
-            allowfullscreen=""
-            loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
-          ></iframe>
+        <iframe
+        src="${contact.addressMap}"
+        width="600"
+        height="450"
+        style="border: 0"
+        allowfullscreen=""
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+      ></iframe>
+      
         </div>
       </div>
 

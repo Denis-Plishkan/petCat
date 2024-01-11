@@ -17,6 +17,14 @@ import {
 
 import { displaySkills } from './skills';
 
+const limitTextLength = (element, maxLength) => {
+  const text = element.innerText || element.value;
+  if (text.length > maxLength) {
+    element.innerText = text.substring(0, maxLength);
+    element.value = text.substring(0, maxLength);
+  }
+};
+
 const createCardEmploye = (id, fullName, position, data, imageUrl) => {
   const cardElement = document.createElement('div');
   cardElement.classList.add('specialists-card');
@@ -243,6 +251,24 @@ export const displayEmployeesPage = async (id) => {
       // console.log('Навыки сотрудника:', employeesData.skills);
 
       displaySkills(employeesData.skills);
+
+      const employeesNameElement = document.getElementById('employeesName');
+      const employeesPositionElement =
+        document.getElementById('employeesPosition');
+      const serviceTextElement = document.getElementById('serviceText');
+
+      employeesNameElement.addEventListener('input', () => {
+        limitTextLength(employeesNameElement, 70);
+      });
+
+      employeesPositionElement.addEventListener('input', () => {
+        limitTextLength(employeesPositionElement, 20);
+      });
+
+      serviceTextElement.addEventListener('input', () => {
+        ///символы для текста (подумать какое значение установить)
+        limitTextLength(serviceTextElement, 500);
+      });
 
       const updateEmployeesBtn = document.getElementById('updateEmployeesBtn');
       updateEmployeesBtn.addEventListener('click', async () => {

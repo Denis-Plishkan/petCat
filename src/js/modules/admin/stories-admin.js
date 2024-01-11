@@ -11,6 +11,14 @@ import {
   doc,
 } from '../firebase-Config';
 
+const limitTextLength = (element, maxLength) => {
+  const text = element.innerText || element.value;
+  if (text.length > maxLength) {
+    element.innerText = text.substring(0, maxLength);
+    element.value = text.substring(0, maxLength);
+  }
+};
+
 export const createStoryCard = (id, title, date, imageUrl) => {
   const cardElement = document.createElement('div');
   cardElement.classList.add('patient-card');
@@ -197,6 +205,17 @@ export const displayStoryPage = async (id) => {
         <div id="errorText" class="text-danger mt-2"></div>
         <div id="messageBox" class="message-box"></div>
       `;
+
+      const storyTitleElement = document.getElementById('storyTitle');
+      const storyDateElement = document.getElementById('storyDate');
+
+      storyTitleElement.addEventListener('input', () => {
+        limitTextLength(storyTitleElement, 70);
+      });
+
+      storyDateElement.addEventListener('input', () => {
+        limitTextLength(storyDateElement, 10);
+      });
 
       const updateStoryBtn = document.getElementById('updateStoryBtn');
       updateStoryBtn.addEventListener('click', async () => {

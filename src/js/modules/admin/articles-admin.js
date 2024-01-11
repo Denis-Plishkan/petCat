@@ -1,3 +1,4 @@
+// Ваш файл firebase-actions.js
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import {
   db,
@@ -10,6 +11,23 @@ import {
   deleteDoc,
   doc,
 } from '../firebase-Config';
+
+const limitTextLength = (element, maxLength) => {
+  const text = element.innerText || element.value;
+  if (text.length > maxLength) {
+    element.innerText = text.substring(0, maxLength);
+    element.value = text.substring(0, maxLength);
+  }
+};
+
+window.formatDate = function (dateString) {
+  const date = new Date(dateString);
+  const day = date.getDate().toString().padStart(2, '0');
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const year = date.getFullYear();
+
+  return `${day}.${month}.${year}`;
+};
 
 export const createArticlesCard = (id, title, date, imageUrl) => {
   const cardElement = document.createElement('div');
@@ -27,17 +45,12 @@ export const createArticlesCard = (id, title, date, imageUrl) => {
   cardTitle.classList.add('patient-card__disease');
   cardTitle.textContent = title;
 
-  //   const cardText = document.createElement('p');
-  //   cardText.classList.add('patient-card__text');
-  //   cardText.textContent = text;
-
   const dateParagraph = document.createElement('p');
   dateParagraph.classList.add('patient-card__data');
   dateParagraph.textContent = date;
 
   cardElement.appendChild(photoWrapper);
   cardElement.appendChild(cardTitle);
-  //   cardElement.appendChild(cardText);
   cardElement.appendChild(dateParagraph);
 
   return cardElement;
@@ -75,6 +88,7 @@ export const displayArticlesInHTML = (data) => {
     }
   }
 };
+
 export const getDataFromArticles = async () => {
   try {
     const querySnapshot = await getDocs(collection(db, 'articles'));
@@ -135,7 +149,6 @@ const submitArticlesBtnHandler = async () => {
         webP: '',
       },
       title: titleInput.value,
-
       date: reservationDate,
     });
 
@@ -164,42 +177,63 @@ export const displayArticlesPage = async (id) => {
       const contentElement = document.getElementById('app');
 
       contentElement.innerHTML = `
-        <div class="content">
-          <div class="articles-details">
-            <h2 class="popular-articles__wrapper-title">
-              <span contenteditable="true" id="articlesTitle">${articlesData.title}</span>
-            </h2>
-            <div class="popular-articles__wrapper-subtitle">
-              <h3>Дата публикации/изменения :</h3>
-              <p contenteditable="true" id="articlesDate">${articlesData.date}</p>
-            </div>
-            <div  class="ava flex mt-3">
+      <div class="content">
+        <div class="articles-details">
+          <h2 class="popular-articles__wrapper-title">
+            <span contenteditable="true" id="articlesTitle">${
+              articlesData.title
+            }</span>
+          </h2>
+          <div class="popular-articles__wrapper-subtitle">
+            <h3>Дата публикации/изменения :</h3>
+            <label for="reservationdate">Дата</label>
+            <input
+              id="reservationdate"
+              type="text"
+              placeholder="ДД.ММ.ГГГГ"
+              style="width: 50%"
+              oninput="window.formatDateInput(this)"
+              maxlength="10"
+              value="${formatDate(articlesData.date)}"
+            />
+          </div>
+          <div class="ava flex mt-3">
             <h2 data-v-fee137ad="">
-            Фотография для статьи :
+              Фотография для статьи :
             </h2>
             <div data-v-fee137ad="" class="img">
-            <img data-v-fee137ad="" src="${articlesData.img.default}" alt="">
+              <img data-v-fee137ad="" src="${articlesData.img.default}" alt="">
             </div>
             <div data-v-fee137ad="" class="add">
-            <label data-v-fee137ad="" for="img-top">Загрузить новое фото:</label>
-            <input data-v-fee137ad="" class="img-top-input" id="img-top" type="file" accept="image/* ">
+              <label data-v-fee137ad="" for="img-top">Загрузить новое фото:</label>
+              <input data-v-fee137ad="" class="img-top-input" id="img-top" type="file" accept="image/* ">
             </div>
-            </div>
-           
-            <div data-v-fee137ad="" class="block-btn mt-5"> 
+          </div>
+          <div data-v-fee137ad="" class="block-btn mt-5"> 
             <button type="button" id="updateArticlesBtn" class="btn btn-block btn-success ">Сохранить изменения</button>
-            <button type="button" id="deleteArticlesBtn" class="btn btn-block btn-danger "style="width: 30%;" >Удалить эту статью </button>
-            </div>
-          </div>       
-        </div>
-        <div id="errorText" class="text-danger mt-2"></div>
-        <div id="messageBox" class="message-box"></div>
-      `;
+            <button type="button" id="deleteArticlesBtn" class="btn btn-block btn-danger " style="width: 30%;" >Удалить эту статью </button>
+          </div>
+        </div>       
+      </div>
+      <div id="errorText" class="text-danger mt-2"></div>
+      <div id="messageBox" class="message-box"></div>
+    `;
+
+      const articlesTitleElement = document.getElementById('articlesTitle');
+      const articlesDateElement = document.getElementById('reservationdate');
+
+      articlesTitleElement.addEventListener('input', () => {
+        limitTextLength(articlesTitleElement, 70);
+      });
+
+      articlesDateElement.addEventListener('input', () => {
+        window.formatDateInput(articlesDateElement);
+      });
 
       const updateArticlesBtn = document.getElementById('updateArticlesBtn');
       updateArticlesBtn.addEventListener('click', async () => {
         const updatedTitle = document.getElementById('articlesTitle').innerText;
-        const updatedDate = document.getElementById('articlesDate').innerText;
+        const updatedDate = document.getElementById('reservationdate').value;
 
         const fileInput = document.getElementById('img-top');
         const file = fileInput.files[0];
@@ -253,7 +287,6 @@ export const updateArticlesData = async (
     const updateData = {
       title: updatedTitle,
       date: updatedDate,
-
       img: updatedImg.img,
     };
 
@@ -297,6 +330,7 @@ const getArticlesDetails = async (id) => {
     return null;
   }
 };
+
 const showMessage = (message) => {
   const messageBox = document.getElementById('messageBox');
   if (messageBox) {
