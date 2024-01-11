@@ -214,7 +214,10 @@ export const displayEmployeesPage = async (id) => {
             <div id="specializationsContainer"></div>
             <button id="addSpecializationBtn">Добавить специализацию</button>
           </div>
-
+          <div class="employees__wrapper-subtitle">
+          <h3>${employeesData.skills.title}:</h3>
+          <ul id="skillsList"></ul>
+          </div> 
             <div  class="ava flex mt-3">
             <h2 data-v-fee137ad="">
             Фотография работника:
@@ -237,8 +240,9 @@ export const displayEmployeesPage = async (id) => {
         <div id="errorText" class="text-danger mt-2"></div>
         <div id="messageBox" class="message-box"></div>
       `;
+      // console.log('Навыки сотрудника:', employeesData.skills);
 
-      // displaySkills(employeesData.skills);
+      displaySkills(employeesData.skills);
 
       const updateEmployeesBtn = document.getElementById('updateEmployeesBtn');
       updateEmployeesBtn.addEventListener('click', async () => {

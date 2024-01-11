@@ -11,6 +11,14 @@ import {
   doc,
 } from '../firebase-Config';
 
+const limitTextLength = (element, maxLength) => {
+  const text = element.innerText || element.value;
+  if (text.length > maxLength) {
+    element.innerText = text.substring(0, maxLength);
+    element.value = text.substring(0, maxLength);
+  }
+};
+
 const createCard = (id, title, description) => {
   const cardElement = document.createElement('div');
   cardElement.classList.add('popular-services__card');
@@ -70,6 +78,8 @@ export const getDataFromServices = async () => {
 
       dataArray.push(Object.assign({}, data, { id: doc.id }));
     });
+
+    displayServicesInHTML(dataArray);
     console.log('Данные', dataArray);
 
     return dataArray;
@@ -151,11 +161,11 @@ export const displayServicePage = async (id) => {
         <div class="content">
           <div class="service-details">
             <h2 class="popular-services__wrapper-title">
-              <span contenteditable="true" id="serviceTitle">${serviceData.title}</span>
+              <span contenteditable="true"  maxlength="50" id="serviceTitle">${serviceData.title}</span>
             </h2>
             <div class="popular-services__wrapper-subtitle">
               <h3>Краткое описание:</h3>
-              <p contenteditable="true" id="serviceDescription">${serviceData.description}</p>
+              <p contenteditable="true"   maxlength="300"  id="serviceDescription">${serviceData.description}</p>
             </div>
             <div  class="ava flex mt-3">
             <h2 data-v-fee137ad="">
@@ -182,6 +192,24 @@ export const displayServicePage = async (id) => {
         <div id="errorText" class="text-danger mt-2"></div>
         <div id="messageBox" class="message-box"></div>
       `;
+
+      const serviceTitleElement = document.getElementById('serviceTitle');
+      const serviceDescriptionElement =
+        document.getElementById('serviceDescription');
+      const serviceTextElement = document.getElementById('serviceText');
+
+      serviceTitleElement.addEventListener('input', () => {
+        limitTextLength(serviceTitleElement, 40);
+      });
+
+      serviceDescriptionElement.addEventListener('input', () => {
+        limitTextLength(serviceDescriptionElement, 300);
+      });
+
+      serviceTextElement.addEventListener('input', () => {
+        ///символы для текста (подумать какое значение установить)
+        limitTextLength(serviceTextElement, 500);
+      });
 
       const updateServiceBtn = document.getElementById('updateServiceBtn');
       updateServiceBtn.addEventListener('click', async () => {

@@ -137,6 +137,8 @@ document.addEventListener('DOMContentLoaded', async function () {
                     type="text"
                     placeholder="Название услуги"
                     style="width: 50%"
+                    maxlength="40"
+               
                   />
                 </div>
 
@@ -161,6 +163,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                     cols="30"
                     rows="10"
                     style="width: 100%; height: 100px; resize: none"
+                    maxlength="300"
                   ></textarea>
                 </div>
                 <div class="mt-3">
@@ -171,6 +174,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                     cols="30"
                     rows="10"
                     style="width: 100%; height: 200px; resize: none"
+                    maxlength="500"
                   ></textarea>
                 </div>
               </div>
