@@ -9,7 +9,7 @@ import {
   getDoc,
   deleteDoc,
   doc,
-} from '../firebase-Сonfig';
+} from '../firebase-config';
 import {
   getSpecializationsList,
   updateSpecializationsSection,

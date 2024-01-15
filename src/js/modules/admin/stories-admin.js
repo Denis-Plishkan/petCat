@@ -9,7 +9,7 @@ import {
   setDoc,
   deleteDoc,
   doc,
-} from '../firebase-Сonfig';
+} from '../firebase-config';
 
 const limitTextLength = (element, maxLength) => {
   const text = element.innerText || element.value;

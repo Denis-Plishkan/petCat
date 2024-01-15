@@ -1,4 +1,4 @@
-import { db, collection, getDocs } from '../firebase-Config';
+import { db, collection, getDocs } from '../firebase-config';
 
 const answerWrapper = document.querySelectorAll('.answer-slide');
 
@@ -7,7 +7,7 @@ async function answer() {
   const querySnapshot = await getDocs(answersCollection);
 
   querySnapshot.forEach((doc) => {
-    const { img, position, full_name} = doc.data();
+    const { img, position, full_name } = doc.data();
 
     let template = `
     <div class="swiper-slide">
@@ -31,7 +31,6 @@ async function answer() {
 
     answerWrapper.forEach((slide) => {
       slide.insertAdjacentHTML('beforeend', template);
-      
     });
   });
 }

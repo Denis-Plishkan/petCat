@@ -1,4 +1,4 @@
-import { db, collection, getDocs } from '../firebase-Config';
+import { db, collection, getDocs } from '../firebase-config';
 
 const popularServicesWrapper = document.querySelectorAll('.services-swiper');
 

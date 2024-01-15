@@ -1,4 +1,4 @@
-import { auth, db, collection, getDocs, addDoc } from './firebase-Сonfig';
+import { auth, db, collection, getDocs, addDoc } from './firebase-config';
 import { signInWithPopup, FacebookAuthProvider } from 'firebase/auth';
 
 const facebookProvider = new FacebookAuthProvider();

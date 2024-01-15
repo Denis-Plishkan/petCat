@@ -1,5 +1,5 @@
 import JustValidate from 'just-validate';
-import { auth, signInWithEmailAndPassword } from './modules/firebase-Сonfig';
+import { auth, signInWithEmailAndPassword } from './modules/firebase-config';
 import './modules/facebook-login';
 import './modules/google-login';
 

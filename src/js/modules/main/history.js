@@ -1,4 +1,4 @@
-import { db, collection, getDocs } from '../firebase-Config';
+import { db, collection, getDocs } from '../firebase-config';
 
 const historyWrapper = document.querySelectorAll('.history-slide');
 
@@ -7,7 +7,7 @@ async function history() {
   const querySnapshot = await getDocs(historyCollection);
 
   querySnapshot.forEach((doc) => {
-    const { img, title, date} = doc.data();
+    const { img, title, date } = doc.data();
 
     let template = `
     <div class="swiper-slide ">
@@ -33,7 +33,6 @@ async function history() {
 
     historyWrapper.forEach((slide) => {
       slide.insertAdjacentHTML('beforeend', template);
-      
     });
   });
 }

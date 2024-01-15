@@ -7,7 +7,7 @@ import {
   storage,
   getDocs,
   getDoc,
-} from './modules/firebase-Сonfig';
+} from './modules/firebase-config';
 import {
   displayServicesInHTML,
   getDataFromServices,

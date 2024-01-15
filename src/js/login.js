@@ -6,7 +6,7 @@ import {
   collection,
   firebaseConfig,
   db,
-} from './modules/firebase-Сonfig';
+} from './modules/firebase-config';
 import './modules/facebook-login';
 import './modules/google-login';
 
