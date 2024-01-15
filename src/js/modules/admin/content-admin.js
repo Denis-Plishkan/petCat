@@ -129,6 +129,12 @@ export async function updateContent() {
               </div>
             </div>
             <div class="mt-3">
+      <img
+        id="img-preview"
+        style="width: 100%; height: 100%;"
+      />
+    </div>
+            <div class="mt-3">
               <label for="title">Что случилось</label
               ><input
                 id="title"

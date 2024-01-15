@@ -29,16 +29,6 @@ const formatDate = (dateString) => {
   return `${day}.${month}.${year}`;
 };
 
-const articleDateElement = document.getElementById('articleDate');
-
-if (articleDateElement) {
-  articleDateElement.addEventListener('input', () => {
-    const date = new Date(articleDateElement.value);
-    const formattedDate = formatDate(date);
-    articleDateElement.value = formattedDate;
-  });
-}
-
 export const createArticlesCard = (id, title, date, imageUrl) => {
   const cardElement = document.createElement('div');
   cardElement.classList.add('patient-card');
@@ -210,10 +200,12 @@ export const displayArticlesPage = async (articleId) => {
     
               <label for="articleDate">Редактировать дату:</label>
               <input
-              id="articleDate"
+              id="editArticleDate"
                 type="date"
                 style="width: 50%"
                 value="${formatDate(articleData.date)}"
+                min="1000-01-01" 
+                max="9999-12-31"  
               />
             </div>
             <div class="article-image flex mt-3">
@@ -251,29 +243,60 @@ export const displayArticlesPage = async (articleId) => {
         articleDateElement.value = formattedDate;
       });
 
+      const editArticleDateElement = document.getElementById('editArticleDate');
+
+      const updateDataOnDateChange = (formattedEditedDate) => {
+        currentArticleDate = formattedEditedDate;
+      };
+
+      if (editArticleDateElement) {
+        editArticleDateElement.addEventListener('input', () => {
+          const editedDate = new Date(editArticleDateElement.value);
+
+          updateDataOnDateChange(formatDate(editedDate));
+        });
+      }
+
+      let currentArticleDate = formatDate(new Date());
+
+      const editArticleDateInput = document.getElementById('editArticleDate');
+
+      if (editArticleDateInput) {
+        editArticleDateInput.value = currentArticleDate;
+
+        editArticleDateInput.addEventListener('input', () => {
+          const editedDate = new Date(editArticleDateInput.value);
+          currentArticleDate = formatDate(editedDate);
+        });
+      }
+
       const updateArticleInfoBtn = document.getElementById(
         'updateArticleInfoBtn'
       );
-      updateArticleInfoBtn.addEventListener('click', async () => {
-        const updatedTitle = document.getElementById('articlesTitle').innerText;
-        const updatedDate = document.getElementById('articleDate').value;
 
-        const fileInput = document.getElementById('img-top');
-        const file = fileInput.files[0];
+      if (updateArticleInfoBtn) {
+        updateArticleInfoBtn.addEventListener('click', async () => {
+          const updatedTitle =
+            document.getElementById('articlesTitle').innerText;
+          const updatedDate = currentArticleDate;
 
-        let img = articleData.img || {};
+          const fileInput = document.getElementById('img-top');
+          const file = fileInput.files[0];
 
-        if (file) {
-          const storageRef = ref(storage, file.name);
-          await uploadBytes(storageRef, file);
-          img.default = await getDownloadURL(storageRef);
-        }
+          let img = articleData.img || {};
 
-        await updateArticleData(articleId, updatedTitle, updatedDate, {
-          img,
+          if (file) {
+            const storageRef = ref(storage, file.name);
+            await uploadBytes(storageRef, file);
+            img.default = await getDownloadURL(storageRef);
+          }
+
+          await updateArticleData(articleId, updatedTitle, updatedDate, {
+            img,
+          });
+          window.location.reload();
         });
-        // window.location.reload();
-      });
+      }
 
       const deleteArticleBtn = document.getElementById('deleteArticleBtn');
       deleteArticleBtn.addEventListener('click', async () => {

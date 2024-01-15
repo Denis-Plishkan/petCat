@@ -330,3 +330,19 @@ const showMessage = (message) => {
     }, 3000);
   }
 };
+const handleFileInputChange = () => {
+  const imgForStoryInput = document.getElementById('img-for-story');
+  const imgPreview = document.getElementById('img-preview');
+
+  if (imgForStoryInput.files && imgForStoryInput.files[0]) {
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+      imgPreview.src = e.target.result;
+    };
+
+    reader.readAsDataURL(imgForStoryInput.files[0]);
+  } else {
+    imgPreview.src = '';
+  }
+};
