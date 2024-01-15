@@ -152,6 +152,8 @@ const submitStoryBtnHandler = async () => {
     imgForStoryInput.value = '';
     titleInput.value = '';
     reservationDateInput.value = '';
+
+    alert('Карта истории успешно создана');
   } catch (error) {
     console.error('Ошибка: ', error.message, error.code);
   }

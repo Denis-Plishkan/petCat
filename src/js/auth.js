@@ -96,38 +96,3 @@ if (authForm) {
     }
   });
 }
-
-export async function onAuthStateChange(auth, user) {
-  if (!user) {
-    window.location.href = 'login.html';
-  } else {
-    const userQuery = collection(db, 'users');
-    const userSnapshot = await getDocs(userQuery);
-    const existingUser = userSnapshot.docs.find(
-      (doc) => doc.data().uid === user.uid
-    );
-
-    if (!existingUser) {
-      window.location.href = 'login.html';
-    } else {
-      const isAdmin = existingUser.data().isAdmin;
-
-      if (!isAdmin) {
-        const errorMessage = 'Куда мы лезим?';
-        const errorMessageContainer = document.getElementById('errorMessage');
-
-        if (errorMessageContainer) {
-          errorMessageContainer.textContent = errorMessage;
-        } else {
-          const errorContainer = document.createElement('div');
-          errorContainer.id = 'errorMessage';
-          errorContainer.textContent = errorMessage;
-          errorContainer.style.color = 'red';
-          document.body.appendChild(errorContainer);
-        }
-
-        window.location.href = 'index.html';
-      }
-    }
-  }
-}

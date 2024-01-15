@@ -11,6 +11,8 @@ import {
   doc,
 } from '../firebase-config';
 
+// import { updateContent } from './content-admin';
+
 const limitTextLength = (element, maxLength) => {
   const text = element.innerText || element.value;
   if (text.length > maxLength) {
@@ -136,6 +138,7 @@ const submitServiceBtnHandler = async function () {
       fileInput.value = '';
     }
     textInput.value = '';
+    alert('Карта сервиса успешно создана');
   } catch (error) {
     console.error('Ошибка: ', error.message, error.code);
   }

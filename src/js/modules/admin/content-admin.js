@@ -1,3 +1,59 @@
+import {
+  db,
+  collection,
+  addDoc,
+  setDoc,
+  storage,
+  getDocs,
+  getDoc,
+} from '../firebase-config';
+
+import {
+  displayServicesInHTML,
+  getDataFromServices,
+  initializeServiceForm,
+  displayServicePage,
+  getServiceDetails,
+} from './services-admin';
+
+import {
+  displayStoriesInHTML,
+  getDataFromStories,
+  initializeStoryForm,
+  displayStoryPage,
+} from './stories-admin';
+
+import {
+  displayEmployeInHTML,
+  getDataFromEmployees,
+  initializeEmployeesForm,
+  displayEmployeesPage,
+} from './employees-admin';
+
+import {
+  displayArticlesInHTML,
+  getDataFromArticles,
+  initializeArticlesForm,
+  displayArticlesPage,
+  getArticlesDetails,
+} from './articles-admin';
+
+import { initializeContactsForm, displayContactPage } from './contacts-admin';
+
+// import { usersCount } from './user-counter';
+
+// export async function usersCount() {
+//   const usersCollection = collection(db, 'users');
+
+//   try {
+//     const querySnapshot = await getDocs(usersCollection);
+//     return querySnapshot.size;
+//   } catch (error) {
+//     console.error('Error counting users:', error);
+//     return -1; // Возвращайте значение по умолчанию или обработайте ошибку по вашему усмотрению
+//   }
+// }
+
 export async function updateContent() {
   let hash = window.location.hash;
   let id;
@@ -27,76 +83,7 @@ export async function updateContent() {
     }
 
     case '#/admin/services/services-str':
-      content = `
-          <div class="content">
-            <div class="">
-              <h2>Создание услуги</h2>
-              <div class="mt-5">
-                <div class="mt-3">
-                  <label for="title">Название услуги</label
-                  ><input
-                    id="title"
-                    type="text"
-                    placeholder="Название услуги"
-                    style="width: 50%"
-                    maxlength="500"
-               
-                  />
-                </div>
-
-                <div class="mt-3">
-                  <label>Фотография для личной страницы</label>
-
-                  <div class="add">
-                    <input
-                      data-v-e29172df=""
-                      class="img-top-input"
-                      id="img-for-page"
-                      type="file"
-                      accept="image/* "
-                    />
-                  </div>
-                </div>
-                <div class="mt-3">
-                  <label for="desctiption">Описание</label
-                  ><textarea
-                    placeholder="Описание услуги"
-                    id="desctiption"
-                    cols="30"
-                    rows="10"
-                    style="width: 100%; height: 100px; resize: none"
-                    maxlength="500"
-                  ></textarea>
-                </div>
-                <div class="mt-3">
-                  <label for="desctiption">Статья</label
-                  ><textarea
-                    placeholder="Текст статьи"
-                    id="text"
-                    cols="30"
-                    rows="10"
-                    style="width: 100%; height: 200px; resize: none"
-                    maxlength="5000"
-                  ></textarea>
-                </div>
-              </div>
-
-              <div class="mt-5">
-                <button
-                data-form-type="service"
-                id="submitServiceBtn"
-                  type="button"
-                  class="btn btn-block btn-success btn-lg"
-                >
-                  Завершить создание услуги
-                </button>
-
-                <div id="errorText" class="text-danger mt-2"></div>
-              </div>
-            </div>
-          </div>
-        `;
-
+      content = getCreateServiceForm();
       break;
 
     case '#/admin/all-stories':
@@ -362,12 +349,12 @@ export async function updateContent() {
               <label for="reservationdate">Дата</label>
               <input
               id="reservationdate"
-               type="text"
-               placeholder="ДД.ММ.ГГГГ"
-               style="width: 50%"
-               oninput="formatDateInput(this)"
-               maxlength="10"
-               />
+              type="date"
+              style="width: 50%"
+       
+              min="1000-01-01" 
+              max="9999-12-31"  
+            />
             </div>
                   
                   </div>
@@ -393,7 +380,8 @@ export async function updateContent() {
       break;
 
     default:
-      //   await usersCount();
+      // await usersCount();
+      // <h3>${userCounter}</h3>
 
       content = `
           <div class="content-header" >
@@ -418,7 +406,7 @@ export async function updateContent() {
                 <div class="col-lg-3 col-6">
                   <div class="small-box bg-warning">
                     <div class="inner" id="totalUsers">
-                      <h3>${userCounter}</h3>
+             
                       <p>Пользователей зарегистрировано</p>
                     </div>
                     <div class="icon">
@@ -471,8 +459,82 @@ export async function updateContent() {
   appElement.innerHTML = content;
 }
 
+export function getCreateServiceForm() {
+  return `
+
+    <div class="content">
+      <div class="">
+        <h2>Создание услуги</h2>
+        <div class="mt-5">
+          <div class="mt-3">
+            <label for="title">Название услуги</label
+            ><input
+              id="title"
+              type="text"
+              placeholder="Название услуги"
+              style="width: 50%"
+              maxlength="500"
+         
+            />
+          </div>
+
+          <div class="mt-3">
+            <label>Фотография для личной страницы</label>
+
+            <div class="add">
+              <input
+                data-v-e29172df=""
+                class="img-top-input"
+                id="img-for-page"
+                type="file"
+                accept="image/* "
+              />
+            </div>
+          </div>
+          <div class="mt-3">
+            <label for="desctiption">Описание</label
+            ><textarea
+              placeholder="Описание услуги"
+              id="desctiption"
+              cols="30"
+              rows="10"
+              style="width: 100%; height: 100px; resize: none"
+              maxlength="500"
+            ></textarea>
+          </div>
+          <div class="mt-3">
+            <label for="desctiption">Статья</label
+            ><textarea
+              placeholder="Текст статьи"
+              id="text"
+              cols="30"
+              rows="10"
+              style="width: 100%; height: 200px; resize: none"
+              maxlength="5000"
+            ></textarea>
+          </div>
+        </div>
+
+        <div class="mt-5">
+          <button
+          data-form-type="service"
+          id="submitServiceBtn"
+            type="button"
+            class="btn btn-block btn-success btn-lg"
+          >
+            Завершить создание услуги
+          </button>
+
+          <div id="errorText" class="text-danger mt-2"></div>
+        </div>
+      </div>
+    </div>
+
+
+  `;
+}
 export async function updateContentPage() {
-  await updateContent();
+  const hash = window.location.hash;
 
   initializeServiceForm();
   initializeEmployeesForm();
@@ -480,21 +542,29 @@ export async function updateContentPage() {
   initializeContactsForm();
   initializeArticlesForm();
 
-  const hash = window.location.hash;
   if (hash.match(/^#\/admin\/services\/(.+)$/)) {
     const id = hash.split('/').pop().trim();
     await displayServicePage(id);
+    return;
   }
+
   if (hash.match(/^#\/admin\/employees\/(.+)$/)) {
     const id = hash.split('/').pop().trim();
     await displayEmployeesPage(id);
+    return;
   }
+
   if (hash.match(/^#\/admin\/articles\/(.+)$/)) {
     const id = hash.split('/').pop().trim();
     await displayArticlesPage(id);
+    return;
   }
+
   if (hash.match(/^#\/admin\/all-stories\/(.+)$/)) {
     const id = hash.split('/').pop().trim();
     await displayStoryPage(id);
+    return;
   }
+
+  await updateContent();
 }

@@ -102,6 +102,10 @@
     line-height: 24px;
     margin-bottom: 8px;
     word-wrap: break-word;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    -webkit-line-clamp: 2;
   }
 
   &__swiper-wrapper {

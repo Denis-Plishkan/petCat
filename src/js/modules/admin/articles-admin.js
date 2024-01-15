@@ -19,14 +19,25 @@ const limitTextLength = (element, maxLength) => {
   }
 };
 
-window.formatDate = function (dateString) {
+const formatDate = (dateString) => {
   const date = new Date(dateString);
+
   const day = date.getDate().toString().padStart(2, '0');
   const month = (date.getMonth() + 1).toString().padStart(2, '0');
   const year = date.getFullYear();
 
   return `${day}.${month}.${year}`;
 };
+
+const articleDateElement = document.getElementById('articleDate');
+
+if (articleDateElement) {
+  articleDateElement.addEventListener('input', () => {
+    const date = new Date(articleDateElement.value);
+    const formattedDate = formatDate(date);
+    articleDateElement.value = formattedDate;
+  });
+}
 
 export const createArticlesCard = (id, title, date, imageUrl) => {
   const cardElement = document.createElement('div');
@@ -139,7 +150,7 @@ const submitArticlesBtnHandler = async () => {
 
     const reservationDate =
       reservationDateInput && reservationDateInput.value
-        ? new Date(reservationDateInput.value).toISOString()
+        ? new Date(reservationDateInput.value).toLocaleDateString('ru-RU')
         : null;
 
     const docRef = await addDoc(collection(db, 'articles'), {
@@ -154,6 +165,8 @@ const submitArticlesBtnHandler = async () => {
     imgForArticlesInput.value = '';
     titleInput.value = '';
     reservationDateInput.value = '';
+
+    alert('Карта статьи успешно создана');
   } catch (error) {
     console.error('Ошибка: ', error.message, error.code);
   }
@@ -167,77 +180,88 @@ export const initializeArticlesForm = () => {
   }
 };
 
-export const displayArticlesPage = async (id) => {
+export const displayArticlesPage = async (articleId) => {
   try {
-    const articlesData = await getArticlesDetails(id);
+    const articleData = await getArticlesDetails(articleId);
 
-    if (articlesData) {
-      console.log('Статья:', articlesData);
+    if (articleData) {
+      console.log('Статья:', articleData);
       const contentElement = document.getElementById('app');
 
       contentElement.innerHTML = `
-      <div class="content">
-        <div class="articles-details">
-          <h2 class="popular-articles__wrapper-title">
-            <span contenteditable="true" id="articlesTitle">${
-              articlesData.title
-            }</span>
-          </h2>
-          <div class="popular-articles__wrapper-subtitle">
-            <h3>Дата публикации/изменения :</h3>
-            <label for="reservationdate">Дата</label>
-            <input
-              id="reservationdate"
-              type="text"
-              placeholder="ДД.ММ.ГГГГ"
-              style="width: 50%"
-              oninput="window.formatDateInput(this)"
-              maxlength="10"
-              value="${formatDate(articlesData.date)}"
-            />
-          </div>
-          <div class="ava flex mt-3">
-            <h2 data-v-fee137ad="">
-              Фотография для статьи :
+        <div class="content">
+          <div class="article-details">
+            <h2 class="article-details__title">
+              <span contenteditable="true" id="articlesTitle">${
+                articleData.title
+              }</span>
             </h2>
-            <div data-v-fee137ad="" class="img">
-              <img data-v-fee137ad="" src="${articlesData.img.default}" alt="">
+            <div class="article-details__subtitle">
+              <h3>Дата публикации/изменения:</h3>
+              <label for="articleDate">Текущая дата:</label>
+              <input
+                id="articleDate"
+                type="text"
+                style="width: 8%"
+                value="${formatDate(articleData.date)}"
+                readonly
+              />
+      
+    
+              <label for="articleDate">Редактировать дату:</label>
+              <input
+              id="articleDate"
+                type="date"
+                style="width: 50%"
+                value="${formatDate(articleData.date)}"
+              />
             </div>
-            <div data-v-fee137ad="" class="add">
-              <label data-v-fee137ad="" for="img-top">Загрузить новое фото:</label>
-              <input data-v-fee137ad="" class="img-top-input" id="img-top" type="file" accept="image/* ">
+            <div class="article-image flex mt-3">
+              <h2>
+                Изображение для статьи:
+              </h2>
+              <div class="img">
+                <img src="${articleData.img.default}" alt="">
+              </div>
+              <div class="add">
+                <label for="img-top">Загрузить новое изображение:</label>
+                <input class="img-top-input" id="img-top" type="file" accept="image/* ">
+              </div>
             </div>
-          </div>
-          <div data-v-fee137ad="" class="block-btn mt-5"> 
-            <button type="button" id="updateArticlesBtn" class="btn btn-block btn-success ">Сохранить изменения</button>
-            <button type="button" id="deleteArticlesBtn" class="btn btn-block btn-danger " style="width: 30%;" >Удалить эту статью </button>
-          </div>
-        </div>       
-      </div>
-      <div id="errorText" class="text-danger mt-2"></div>
-      <div id="messageBox" class="message-box"></div>
-    `;
+            <div class="block-btn mt-5"> 
+              <button type="button" id="updateArticleInfoBtn" class="btn btn-block btn-success ">Сохранить изменения</button>
+              <button type="button" id="deleteArticleBtn" class="btn btn-block btn-danger " style="width: 30%;" >Удалить эту статью </button>
+            </div>
+          </div>       
+        </div>
+        <div id="errorText" class="text-danger mt-2"></div>
+        <div id="messageBox" class="message-box"></div>
+      `;
 
-      const articlesTitleElement = document.getElementById('articlesTitle');
-      const articlesDateElement = document.getElementById('reservationdate');
+      const articleTitleElement = document.getElementById('articlesTitle');
+      const articleDateElement = document.getElementById('articleDate');
 
-      articlesTitleElement.addEventListener('input', () => {
-        limitTextLength(articlesTitleElement, 70);
+      articleTitleElement.addEventListener('input', () => {
+        limitTextLength(articleTitleElement, 70);
       });
 
-      articlesDateElement.addEventListener('input', () => {
-        window.formatDateInput(articlesDateElement);
+      articleDateElement.addEventListener('input', () => {
+        const date = new Date(articleDateElement.value);
+        const formattedDate = formatDate(date);
+        articleDateElement.value = formattedDate;
       });
 
-      const updateArticlesBtn = document.getElementById('updateArticlesBtn');
-      updateArticlesBtn.addEventListener('click', async () => {
+      const updateArticleInfoBtn = document.getElementById(
+        'updateArticleInfoBtn'
+      );
+      updateArticleInfoBtn.addEventListener('click', async () => {
         const updatedTitle = document.getElementById('articlesTitle').innerText;
-        const updatedDate = document.getElementById('reservationdate').value;
+        const updatedDate = document.getElementById('articleDate').value;
 
         const fileInput = document.getElementById('img-top');
         const file = fileInput.files[0];
 
-        let img = articlesData.img || {};
+        let img = articleData.img || {};
 
         if (file) {
           const storageRef = ref(storage, file.name);
@@ -245,14 +269,14 @@ export const displayArticlesPage = async (id) => {
           img.default = await getDownloadURL(storageRef);
         }
 
-        await updateArticlesData(id, updatedTitle, updatedDate, {
+        await updateArticleData(articleId, updatedTitle, updatedDate, {
           img,
         });
-        window.location.reload();
+        // window.location.reload();
       });
 
-      const deleteArticlesBtn = document.getElementById('deleteArticlesBtn');
-      deleteArticlesBtn.addEventListener('click', async () => {
+      const deleteArticleBtn = document.getElementById('deleteArticleBtn');
+      deleteArticleBtn.addEventListener('click', async () => {
         try {
           const confirmation = confirm(
             'Вы уверены, что хотите удалить эту статью ?'
@@ -261,7 +285,7 @@ export const displayArticlesPage = async (id) => {
             return;
           }
 
-          await deleteArticlesData(id);
+          await deleteArticleData(articleId);
 
           window.location.hash = '#/admin/articles';
         } catch (error) {
@@ -274,14 +298,14 @@ export const displayArticlesPage = async (id) => {
   }
 };
 
-export const updateArticlesData = async (
-  id,
+export const updateArticleData = async (
+  articleId,
   updatedTitle,
   updatedDate,
   updatedImg
 ) => {
   try {
-    const articlesRef = doc(collection(db, 'articles'), id);
+    const articleRef = doc(collection(db, 'articles'), articleId);
 
     const updateData = {
       title: updatedTitle,
@@ -289,7 +313,7 @@ export const updateArticlesData = async (
       img: updatedImg.img,
     };
 
-    await setDoc(articlesRef, updateData, { merge: true });
+    await setDoc(articleRef, updateData, { merge: true });
 
     showMessage('Данные успешно обновлены');
 
@@ -299,10 +323,10 @@ export const updateArticlesData = async (
   }
 };
 
-export const deleteArticlesData = async (id) => {
+export const deleteArticleData = async (articleId) => {
   try {
-    const articlesRef = doc(collection(db, 'articles'), id);
-    await deleteDoc(articlesRef);
+    const articleRef = doc(collection(db, 'articles'), articleId);
+    await deleteDoc(articleRef);
 
     showMessage('Данные успешно удалены');
 
@@ -320,7 +344,13 @@ const getArticlesDetails = async (id) => {
     const articlesSnapshot = await getDoc(articlesDocRef);
 
     if (articlesSnapshot.exists()) {
-      return articlesSnapshot.data();
+      const articleData = articlesSnapshot.data();
+      if (articleData.date) {
+        articleData.date = new Date(articleData.date).toLocaleDateString(
+          'ru-RU'
+        );
+      }
+      return articleData;
     } else {
       return null;
     }

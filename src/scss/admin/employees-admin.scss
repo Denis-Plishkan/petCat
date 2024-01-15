@@ -75,6 +75,10 @@
   // .specialists-card__job-title
 
   &__job-title {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    -webkit-line-clamp: 2;
     color: #51555a;
     // font-family: Manrope;
     font-size: 16px;

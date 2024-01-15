@@ -87,6 +87,7 @@
     "just-validate": "^4.3.0",
     "libphonenumber-js": "^1.10.53",
     "sass-loader": "^13.3.2",
+    "select2": "^4.1.0-rc.0",
     "style-loader": "^3.3.3",
     "swiper": "^8.4.7"
   }

@@ -7,53 +7,106 @@ import {
   storage,
   getDocs,
   getDoc,
+  onAuthStateChanged,
 } from './modules/firebase-config';
-import {
-  displayServicesInHTML,
-  getDataFromServices,
-  initializeServiceForm,
-  displayServicePage,
-  getServiceDetails,
-} from './modules/admin/services-admin';
 
 import {
-  displayStoriesInHTML,
-  getDataFromStories,
-  initializeStoryForm,
-  displayStoryPage,
-} from './modules/admin/stories-admin';
+  updateContent,
+  updateContentPage,
+} from './modules/admin/content-admin';
 
-import {
-  displayEmployeInHTML,
-  getDataFromEmployees,
-  initializeEmployeesForm,
-  displayEmployeesPage,
-} from './modules/admin/employees-admin';
+// async function onAuthStateChange(user) {
+//   if (!user) {
+//     window.location.href = 'login.html';
+//   } else {
+//     const userQuery = collection(db, 'users');
+//     const userSnapshot = await getDocs(userQuery);
+//     const existingUser = userSnapshot.docs.find(
+//       (doc) => doc.data().uid === user.uid
+//     );
 
-import {
-  displayArticlesInHTML,
-  getDataFromArticles,
-  initializeArticlesForm,
-  displayArticlesPage,
-  getArticlesDetails,
-} from './modules/admin/articles-admin';
+//     if (!existingUser) {
+//       window.location.href = 'login.html';
+//     } else {
+//       const isAdmin = existingUser.data().isAdmin;
 
-import {
-  initializeContactsForm,
-  displayContactPage,
-} from './modules/admin/contacts-admin';
+//       if (!isAdmin) {
+//         const errorMessage = 'Куда мы лезим?';
+//         const errorMessageContainer = document.getElementById('errorMessage');
 
-import { onAuthStateChange } from './auth';
-import * as ContentModule from './modules/admin/content-admin';
+//         if (errorMessageContainer) {
+//           errorMessageContainer.textContent = errorMessage;
+//         } else {
+//           const errorContainer = document.createElement('div');
+//           errorContainer.id = 'errorMessage';
+//           errorContainer.textContent = errorMessage;
+//           errorContainer.style.color = 'red';
+//           document.body.appendChild(errorContainer);
+//         }
 
+//         window.location.href = 'index.html';
+//       }
+//     }
+//   }
+// }
+onAuthStateChanged(auth, async function (user) {
+  if (!user) {
+    window.location.href = 'login.html';
+  } else {
+    const userQuery = collection(db, 'users');
+    const userSnapshot = await getDocs(userQuery);
+    const existingUser = userSnapshot.docs.find(
+      (doc) => doc.data().uid === user.uid
+    );
+
+    if (!existingUser) {
+      window.location.href = 'login.html';
+    } else {
+      const isAdmin = existingUser.data().isAdmin;
+
+      if (!isAdmin) {
+        const errorMessage = 'Куда мы лезим?';
+        const errorMessageContainer = document.getElementById('errorMessage');
+
+        if (errorMessageContainer) {
+          errorMessageContainer.textContent = errorMessage;
+        } else {
+          const errorContainer = document.createElement('div');
+          errorContainer.id = 'errorMessage';
+          errorContainer.textContent = errorMessage;
+          errorContainer.style.color = 'red';
+          document.body.appendChild(errorContainer);
+        }
+
+        window.location.href = 'index.html';
+      }
+    }
+  }
+});
+
+// async function usersCount() {
+//   const usersCollection = collection(db, 'users');
+
+//   try {
+//     const querySnapshot = await getDocs(usersCollection);
+//     userCounter = querySnapshot.size;
+
+//     return;
+//   } catch (error) {
+//     return '?';
+//   }
+// }
 document.addEventListener('DOMContentLoaded', async function () {
-  onAuthStateChange(auth, user);
-  let userCounter = 0;
+  // let userCounter = 0;
+  updateContent();
+  updateContentPage();
 
-  await ContentModule.updateContentPage();
-
-  window.addEventListener('load', HashChangeModule.handleHashChange);
-  window.addEventListener('hashchange', HashChangeModule.handleHashChange);
+  // window.addEventListener('load', async function () {
+  //   await updateContentPage();
+  // });
+  window.addEventListener('hashchange', async function () {
+    await updateContentPage();
+  });
 });
 
 ////2
@@ -145,3 +198,18 @@ document.addEventListener('DOMContentLoaded', async function () {
 // document.addEventListener('DOMContentLoaded', () => {
 //   handleHashChange(window.location.hash);
 // });
+
+$(document).ready(function () {
+  $('.select2bs4').select2({
+    theme: 'bootstrap4',
+  });
+});
+$(document).ready(function () {
+  $('.js-example-basic-multiple').select2();
+});
+$(document).ready(function () {
+  $('.select2').select2();
+});
+$(() => {
+  $('.js-example-basic-multiple').select2();
+});

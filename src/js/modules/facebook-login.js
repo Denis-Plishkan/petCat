@@ -2,14 +2,13 @@ import { auth, db, collection, getDocs, addDoc } from './firebase-config';
 import { signInWithPopup, FacebookAuthProvider } from 'firebase/auth';
 
 const facebookProvider = new FacebookAuthProvider();
+const facebookLoginButton = document.getElementById('facebook-login');
 
-document
-  .getElementById('facebook-login')
-  .addEventListener('click', function () {
+if (facebookLoginButton) {
+  facebookLoginButton.addEventListener('click', function () {
     signInWithPopup(auth, facebookProvider)
       .then(async (result) => {
         const user = result.user;
-
         const { displayName, email, uid } = user;
 
         const userQuery = collection(db, 'users');
@@ -58,3 +57,4 @@ document
         const credential = FacebookAuthProvider.credentialFromError(error);
       });
   });
+}
