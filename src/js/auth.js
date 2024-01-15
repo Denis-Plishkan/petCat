@@ -1,5 +1,5 @@
 import JustValidate from 'just-validate';
-import { auth, signInWithEmailAndPassword } from './modules/firebase-config';
+import { auth, signInWithEmailAndPassword } from './modules/firebase-Сonfig';
 import './modules/facebook-login';
 import './modules/google-login';
 
@@ -97,7 +97,7 @@ if (authForm) {
   });
 }
 
-export async function onAuthStateChanged(auth, user) {
+export async function onAuthStateChange(auth, user) {
   if (!user) {
     window.location.href = 'login.html';
   } else {

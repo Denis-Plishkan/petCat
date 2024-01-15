@@ -1,4 +1,4 @@
-import { auth, db, collection, getDocs, addDoc } from './firebase-Config';
+import { auth, db, collection, getDocs, addDoc } from './firebase-Сonfig';
 import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 
 const googleProvider = new GoogleAuthProvider();

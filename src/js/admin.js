@@ -7,8 +7,7 @@ import {
   storage,
   getDocs,
   getDoc,
-} from './modules/firebase-config';
-
+} from './modules/firebase-Сonfig';
 import {
   displayServicesInHTML,
   getDataFromServices,
@@ -44,11 +43,11 @@ import {
   displayContactPage,
 } from './modules/admin/contacts-admin';
 
-import { onAuthStateChanged } from './auth';
+import { onAuthStateChange } from './auth';
 import * as ContentModule from './modules/admin/content-admin';
 
 document.addEventListener('DOMContentLoaded', async function () {
-  onAuthStateChanged(auth, user);
+  onAuthStateChange(auth, user);
   let userCounter = 0;
 
   await ContentModule.updateContentPage();
