@@ -1,4 +1,3 @@
-// Ваш файл firebase-actions.js
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import {
   db,
@@ -10,7 +9,7 @@ import {
   setDoc,
   deleteDoc,
   doc,
-} from '../firebase-Config';
+} from '../firebase-config';
 
 const limitTextLength = (element, maxLength) => {
   const text = element.innerText || element.value;

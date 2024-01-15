@@ -1,5 +1,5 @@
 import JustValidate from 'just-validate';
-import { auth, signInWithEmailAndPassword } from './modules/firebase-Config';
+import { auth, signInWithEmailAndPassword } from './modules/firebase-config';
 import './modules/facebook-login';
 import './modules/google-login';
 
@@ -95,4 +95,39 @@ if (authForm) {
       authForm.querySelector('button').disabled = false;
     }
   });
+}
+
+export async function onAuthStateChanged(auth, user) {
+  if (!user) {
+    window.location.href = 'login.html';
+  } else {
+    const userQuery = collection(db, 'users');
+    const userSnapshot = await getDocs(userQuery);
+    const existingUser = userSnapshot.docs.find(
+      (doc) => doc.data().uid === user.uid
+    );
+
+    if (!existingUser) {
+      window.location.href = 'login.html';
+    } else {
+      const isAdmin = existingUser.data().isAdmin;
+
+      if (!isAdmin) {
+        const errorMessage = 'Куда мы лезим?';
+        const errorMessageContainer = document.getElementById('errorMessage');
+
+        if (errorMessageContainer) {
+          errorMessageContainer.textContent = errorMessage;
+        } else {
+          const errorContainer = document.createElement('div');
+          errorContainer.id = 'errorMessage';
+          errorContainer.textContent = errorMessage;
+          errorContainer.style.color = 'red';
+          document.body.appendChild(errorContainer);
+        }
+
+        window.location.href = 'index.html';
+      }
+    }
+  }
 }

@@ -12,7 +12,7 @@ import {
   getDoc,
   deleteDoc,
   doc,
-} from '../firebase-Config';
+} from '../firebase-config';
 
 const submitContactsBtnHandler = async () => {
   const phoneNumberInput = document.getElementById('phone_number');

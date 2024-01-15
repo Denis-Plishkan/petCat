@@ -9,7 +9,7 @@ import {
   getDoc,
   deleteDoc,
   doc,
-} from '../firebase-Config';
+} from '../firebase-config';
 
 export const getSpecializationsList = async () => {
   try {
