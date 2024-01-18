@@ -30,6 +30,8 @@ import {
   displayEmployeesPage,
 } from './employees-admin';
 
+import { addDiplomaField, removeField } from './education-form.js';
+
 import {
   displayArticlesInHTML,
   getDataFromArticles,
@@ -212,86 +214,77 @@ export async function updateContent() {
 
     case '#/admin/employees/employees-str':
       content = `
-            <div class="content">
-              <div class="">
-                <h2>Создание карты работника</h2>
-                <div class="mt-5">
-                  <div class="mt-3">
-                    <label for="title">Полное имя</label
-                    ><input
-                      id="full_name"
-                      type="text"
-                      placeholder="Полное имя"
-                      style="width: 50%"
-                      maxlength="300"
-                    />
-                  </div>
-  
-                  <div class="mt-3">
-                    <label>Фотография для личной страницы</label>
-  
-                    <div class="add">
-                      <input
-                        data-v-e29172df=""
-                        class="img-top-input"
-                        id="img-for-page"
-                        type="file"
-                        accept="image/* "
-                      />
-                    </div>
-                  </div>
-                  <div class="mt-3">
-                    <label for="title">Должность</label
-                    ><input
-                      id="position"
-                      type="text"
-                      placeholder="Должность"
-                      style="width: 50%"
-                      maxlength="300"
-                    />
-                  </div>
-  
-                  <div class="mt-3">
-  <label for="specializations">Специализации</label>
-  <select id="specializations"  multiple style="width: 50%" >
-   
-  </select>
-</div>
-                  <div class="mt-3">
-                    <label for="title">Образование</label
-                    ><input
-                      id="education"
-                      type="text"
-                      placeholder="Образование"
-                      style="width: 50%"
-                    />
-                  </div>
-                  <div class="mt-3">
-                    <label for="title">Профессиональные навыки</label
-                    ><input
-                      id="skills"
-                      type="text"
-                      placeholder="Проф. навыки"
-                      style="width: 50%"
-                    />
+          <div class="content">
+            <div class="">
+              <h2>Создание карты работника</h2>
+              <div class="mt-5">
+                <div class="mt-3">
+                  <label for="full_name">Полное имя</label>
+                  <input id="full_name" type="text" placeholder="Полное имя" style="width: 50%" maxlength="300" />
+                </div>
+      
+                <div class="mt-3">
+                  <label>Фотография для личной страницы</label>
+                  <div class="add">
+                    <input data-v-e29172df="" class="img-top-input" id="img-for-page" type="file" accept="image/* " />
+                    <label for="previewImage">Предварительный просмотр:</label>
+                    <img id="previewImage" style="max-width: 100%; max-height: 200px;" />
                   </div>
                 </div>
-  
-                <div class="mt-5">
-                  <button
-                  data-form-type="employees"
-                  id="submitEmployeesBtn"
-                    type="button"
-                    class="btn btn-block btn-success btn-lg"
-                  >
-                    Завершить создание карты работника
-                  </button>
-  
-                  <div id="errorText" class="text-danger mt-2"></div>
+         
+      
+                <div class="mt-3">
+                  <label for="position">Должность</label>
+                  <input id="position" type="text" placeholder="Должность" style="width: 50%" maxlength="300" />
+                </div>
+      
+                <div class="mt-3">
+                  <label for="specializations">Специализации</label>
+                  <select id="specializations" multiple style="width: 50%"></select>
+                </div>
+      
+                <div class="mt-3">
+                <label for="education">Дипломы: </label>
+                <div class="diploma-container education-container">
+                  <div class="mt-3">
+                    <label for="education">Год окончания: </label>
+                    <input class="diploma-year-input" type="text" placeholder="Год окончания" style="width: 10%" />
+                    <label for="diplomaPlace">Место окончания: </label>
+                    <input class="diploma-place-input" type="text" placeholder="информация" style="width: 50%" />
+                    <button id="addDiplomaBtn">Добавить пункт</button>
+                  </div>
                 </div>
               </div>
+              
+              <div class="mt-3">
+                <label for="education">Дополнительное обучение: </label>
+                <div class="others-container education-container">
+                  <div class="mt-3">
+                    <label for="education">Год окончания: </label>
+                    <input class="others-year-input" type="text" placeholder="Год окончания" style="width: 10%" />
+                    <label for="othersPlace">Место окончания: </label>
+                    <input class="others-place-input" type="text" placeholder="информация" style="width: 50%" />
+                    <button id="addOthersBtn">Добавить пункт</button>
+                  </div>
+                </div>
+              </div>
+              
+                <div class="mt-3">
+                  <label for="skills">Профессиональные навыки</label>
+                  <input id="skills" type="text" placeholder="Проф. навыки" style="width: 50%" />
+                </div>
+              </div>
+      
+              <div class="mt-5">
+                <button data-form-type="employees" id="submitEmployeesBtn" type="button" class="btn btn-block btn-success btn-lg">
+                  Завершить создание карты работника
+                </button>
+      
+                <div id="errorText" class="text-danger mt-2"></div>
+              </div>
             </div>
-          `;
+          </div>
+        `;
 
       break;
 
@@ -539,6 +532,7 @@ export function getCreateServiceForm() {
 
   `;
 }
+
 export async function updateContentPage() {
   const hash = window.location.hash;
 

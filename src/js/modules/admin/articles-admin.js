@@ -23,7 +23,7 @@ const formatDate = (dateString) => {
   const date = new Date(dateString);
 
   const day = date.getDate().toString().padStart(2, '0');
-  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const month = date.getMonth().toString().padStart(2, '0');
   const year = date.getFullYear();
 
   return `${day}.${month}.${year}`;
@@ -195,6 +195,8 @@ export const displayArticlesPage = async (articleId) => {
                 style="width: 8%"
                 value="${formatDate(articleData.date)}"
                 readonly
+                min="1000-01-01" 
+                max="9999-12-31"  
               />
       
     
@@ -294,7 +296,7 @@ export const displayArticlesPage = async (articleId) => {
           await updateArticleData(articleId, updatedTitle, updatedDate, {
             img,
           });
-          window.location.reload();
+          location.reload();
         });
       }
 

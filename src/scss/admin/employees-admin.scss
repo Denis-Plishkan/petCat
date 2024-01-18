@@ -107,3 +107,11 @@
   margin-left: 5px;
   color: red;
 }
+ul {
+  .skills-list__link {
+    width: 100%;
+    .point-input {
+      width: 100%;
+    }
+  }
+}

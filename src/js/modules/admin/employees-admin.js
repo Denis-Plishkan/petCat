@@ -15,7 +15,7 @@ import {
   updateSpecializationsSection,
 } from './specializations-admin';
 
-// import { displaySkills } from './skills';
+import { displaySkills } from './skills';
 
 const limitTextLength = (element, maxLength) => {
   const text = element.innerText || element.value;
@@ -129,12 +129,46 @@ const submitEmployesBtnHandler = async () => {
   const selectedSpecializations = Array.from(
     specializationsSelect.selectedOptions
   ).map((option) => option.value);
-  const education = document.getElementById('education');
   const skills = document.getElementById('skills');
+
+  const education = {};
+
+  const diplomasYearInputs = document.querySelectorAll('.diploma-year-input');
+  const diplomasPlaceInputs = document.querySelectorAll('.diploma-place-input');
+
+  education.diplomas = [];
+
+  for (let i = 0; i < diplomasYearInputs.length; i++) {
+    const year = diplomasYearInputs[i].value.trim();
+    const place = diplomasPlaceInputs[i].value.trim();
+
+    if (year && place) {
+      education.diplomas.push({
+        year: year,
+        place: place,
+      });
+    }
+  }
+
+  const othersYearInputs = document.querySelectorAll('.others-year-input');
+  const othersPlaceInputs = document.querySelectorAll('.others-place-input');
+
+  education.others = [];
+
+  for (let i = 0; i < othersYearInputs.length; i++) {
+    const year = othersYearInputs[i].value.trim();
+    const place = othersPlaceInputs[i].value.trim();
+
+    if (year && place) {
+      education.others.push({
+        year: year,
+        place: place,
+      });
+    }
+  }
+
   const errorText = document.getElementById('errorText');
-
   errorText.textContent = '';
-
   if (!fullName.value || !position.value || !specializations.value) {
     errorText.textContent =
       'Ошибка: Поля "Полное имя", "Должность" и "Специализации" обязательны для заполнения.';
@@ -142,7 +176,6 @@ const submitEmployesBtnHandler = async () => {
   }
 
   const file = imgForPersonInput.files && imgForPersonInput.files[0];
-
   try {
     let imageUrl = '';
 
@@ -156,8 +189,8 @@ const submitEmployesBtnHandler = async () => {
       full_name: fullName.value,
       position: position.value,
       specializations: selectedSpecializations,
-      education: education.value,
       skills: skills.value,
+      education: education,
       img: {
         default: imageUrl,
         webP: '',
@@ -169,15 +202,38 @@ const submitEmployesBtnHandler = async () => {
     fullName.value = '';
     position.value = '';
     specializations.value = '';
+    // diplomasYearInput.value = '';
+    // diplomasPlaceInput.value = '';
     education.value = '';
     skills.value = '';
     // reservationDateInput.value = '';
-
+    field.querySelector('.diploma-year-input').value = '';
+    field.querySelector('.diploma-place-input').value = '';
+    field.querySelector('.others-year-input').value = '';
+    field.querySelector('.others-place-input').value = '';
     alert('Карта работника успешно создана');
   } catch (error) {
     console.error('Ошибка: ', error.message, error.code);
   }
 };
+
+function previewImage() {
+  const previewImage = document.getElementById('previewImage');
+  const fileInput = document.getElementById('img-top');
+
+  const file = fileInput.files[0];
+
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      previewImage.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  } else {
+    // Сбросите предварительный просмотр, если файл не выбран
+    previewImage.src = ``;
+  }
+}
 
 export const initializeEmployeesForm = async () => {
   const submitEmployesBtn = document.getElementById('submitEmployeesBtn');
@@ -196,6 +252,18 @@ export const initializeEmployeesForm = async () => {
       option.text = specialization;
       specializationsSelect.add(option);
     });
+  }
+
+  const imgTopInput = document.getElementById('img-top');
+  const imgForPageInput = document.getElementById('img-for-page');
+  const previewImageElement = document.getElementById('previewImage');
+
+  if (imgTopInput) {
+    imgTopInput.addEventListener('change', previewImage);
+  }
+
+  if (imgForPageInput && previewImageElement) {
+    imgForPageInput.addEventListener('change', previewImage);
   }
 };
 
@@ -247,62 +315,6 @@ export const displayEmployeesPage = async (id) => {
             <option value="AK" data-select2-id="select2-data-65-dgzl">Alaska</option>
             <option value="HI" data-select2-id="select2-data-66-zdss">Hawaii</option>
           </optgroup>
-          <optgroup label="Pacific Time Zone" data-select2-id="select2-data-67-oy7v">
-            <option value="CA" data-select2-id="select2-data-68-gl4s">California</option>
-            <option value="NV" data-select2-id="select2-data-69-c555">Nevada</option>
-            <option value="OR" data-select2-id="select2-data-70-gn07">Oregon</option>
-            <option value="WA" data-select2-id="select2-data-71-ow3b">Washington</option>
-          </optgroup>
-          <optgroup label="Mountain Time Zone" data-select2-id="select2-data-72-j4vo">
-            <option value="AZ" data-select2-id="select2-data-73-aiin">Arizona</option>
-            <option value="CO" data-select2-id="select2-data-74-z9on">Colorado</option>
-            <option value="ID" data-select2-id="select2-data-75-vr30">Idaho</option>
-            <option value="MT" data-select2-id="select2-data-76-latz">Montana</option>
-            <option value="NE" data-select2-id="select2-data-77-jomo">Nebraska</option>
-            <option value="NM" data-select2-id="select2-data-78-09q8">New Mexico</option>
-            <option value="ND" data-select2-id="select2-data-79-tk5h">North Dakota</option>
-            <option value="UT" data-select2-id="select2-data-80-mmjz">Utah</option>
-            <option value="WY" data-select2-id="select2-data-81-6fxi">Wyoming</option>
-          </optgroup>
-          <optgroup label="Central Time Zone" data-select2-id="select2-data-82-jqmo">
-            <option value="AL" data-select2-id="select2-data-83-aaev">Alabama</option>
-            <option value="AR" data-select2-id="select2-data-84-0o0i">Arkansas</option>
-            <option value="IL" data-select2-id="select2-data-85-62yf">Illinois</option>
-            <option value="IA" data-select2-id="select2-data-86-v8iq">Iowa</option>
-            <option value="KS" data-select2-id="select2-data-87-yj7i">Kansas</option>
-            <option value="KY" data-select2-id="select2-data-88-ovsg">Kentucky</option>
-            <option value="LA" data-select2-id="select2-data-89-j9q0">Louisiana</option>
-            <option value="MN" data-select2-id="select2-data-90-w2yy">Minnesota</option>
-            <option value="MS" data-select2-id="select2-data-91-9ynw">Mississippi</option>
-            <option value="MO" data-select2-id="select2-data-92-xi9v">Missouri</option>
-            <option value="OK" data-select2-id="select2-data-93-8og5">Oklahoma</option>
-            <option value="SD" data-select2-id="select2-data-94-63c9">South Dakota</option>
-            <option value="TX" data-select2-id="select2-data-95-0544">Texas</option>
-            <option value="TN" data-select2-id="select2-data-96-0fqo">Tennessee</option>
-            <option value="WI" data-select2-id="select2-data-97-w81x">Wisconsin</option>
-          </optgroup>
-          <optgroup label="Eastern Time Zone" data-select2-id="select2-data-98-yb0f">
-            <option value="CT" data-select2-id="select2-data-99-0keg">Connecticut</option>
-            <option value="DE" data-select2-id="select2-data-100-c3sw">Delaware</option>
-            <option value="FL" data-select2-id="select2-data-101-42ss">Florida</option>
-            <option value="GA" data-select2-id="select2-data-102-307j">Georgia</option>
-            <option value="IN" data-select2-id="select2-data-103-cca4">Indiana</option>
-            <option value="ME" data-select2-id="select2-data-104-f2qc">Maine</option>
-            <option value="MD" data-select2-id="select2-data-105-u0gj">Maryland</option>
-            <option value="MA" data-select2-id="select2-data-106-eoxa">Massachusetts</option>
-            <option value="MI" data-select2-id="select2-data-107-9796">Michigan</option>
-            <option value="NH" data-select2-id="select2-data-108-qapa">New Hampshire</option>
-            <option value="NJ" data-select2-id="select2-data-109-e3c8">New Jersey</option>
-            <option value="NY" data-select2-id="select2-data-110-fr0q">New York</option>
-            <option value="NC" data-select2-id="select2-data-111-rvmy">North Carolina</option>
-            <option value="OH" data-select2-id="select2-data-112-subh">Ohio</option>
-            <option value="PA" data-select2-id="select2-data-113-jpgh">Pennsylvania</option>
-            <option value="RI" data-select2-id="select2-data-114-wdc6">Rhode Island</option>
-            <option value="SC" data-select2-id="select2-data-115-j8ug">South Carolina</option>
-            <option value="VT" data-select2-id="select2-data-116-ruth">Vermont</option>
-            <option value="VA" data-select2-id="select2-data-117-0f4a">Virginia</option>
-            <option value="WV" data-select2-id="select2-data-118-rdab">West Virginia</option>
-          </optgroup>
         </select><span class="select2 select2-container select2-container--default select2-container--focus select2-container--below" dir="ltr" data-select2-id="select2-data-62-8s0t" style="width: 100%;"><span class="selection"><span class="select2-selection select2-selection--multiple" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="-1" aria-disabled="false"><ul class="select2-selection__rendered" id="select2-3qlw-container"></ul><span class="select2-search select2-search--inline"><textarea class="select2-search__field" type="search" tabindex="0" autocorrect="off" autocapitalize="none" spellcheck="false" role="searchbox" aria-autocomplete="list" autocomplete="off" aria-label="Search" aria-describedby="select2-3qlw-container" placeholder="" style="width: 0.75em;"></textarea></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
           </p>
         </div>
@@ -313,21 +325,23 @@ export const displayEmployeesPage = async (id) => {
             <button id="addSpecializationBtn">Добавить специализацию</button>
           </div>
           <div class="employees__wrapper-subtitle">
-          <h3>${employeesData.skills.title}:</h3>
-          <ul id="skillsList"></ul>
-          </div> 
-            <div  class="ava flex mt-3">
-            <h2 data-v-fee137ad="">
-            Фотография работника:
-            </h2>
-            <div data-v-fee137ad="" class="img">
-            <img data-v-fee137ad="" src="${employeesData.img.default}" alt="">
-            </div>
-            <div data-v-fee137ad="" class="add">
-            <label data-v-fee137ad="" for="img-top">Загрузить новое фото:</label>
-            <input data-v-fee137ad="" class="img-top-input" id="img-top" type="file" accept="image/* ">
-            </div>
-            </div>
+          <div id="skillsList"></div>
+          <button id="addSkillPointBtn">Добавить навык</button>
+          
+          <div class="ava flex mt-3">
+          <h2 data-v-fee137ad="">
+              Фотография работника:
+          </h2>
+          <div data-v-fee137ad="" class="img">
+              <img data-v-fee137ad="" src="${employeesData.img.default}" alt="" id="previewImage">
+          </div>
+          <div data-v-fee137ad="" class="add">
+              <label data-v-fee137ad="" for="img-top">Загрузить новое фото:</label>
+              <input data-v-fee137ad="" class="img-top-input" id="img-top" type="file" accept="image/*">
+
+          </div>
+      </div>
+      
            
             <div data-v-fee137ad="" class="block-btn mt-5"> 
             <button type="button" id="updateEmployeesBtn" class="btn btn-block btn-success ">Сохранить изменения</button>
@@ -340,7 +354,12 @@ export const displayEmployeesPage = async (id) => {
       `;
       // console.log('Навыки сотрудника:', employeesData.skills);
 
-      // displaySkills(employeesData.skills);
+      displaySkills(employeesData.skills);
+      const addSkillBtn = document.getElementById('addSkillBtn');
+      const imgTopInput = document.getElementById('img-top');
+      if (imgTopInput) {
+        imgTopInput.addEventListener('change', previewImage);
+      }
 
       const employeesNameElement = document.getElementById('employeesName');
       const employeesPositionElement =
@@ -356,10 +375,21 @@ export const displayEmployeesPage = async (id) => {
       });
 
       serviceTextElement.addEventListener('input', () => {
-        ///символы для текста (подумать какое значение установить)
         limitTextLength(serviceTextElement, 500);
       });
+      if (addSkillBtn) {
+        addSkillBtn.addEventListener('click', async () => {
+          const skillsListElement = document.getElementById('skillsList');
+          const addSkillPointBtnElement =
+            document.getElementById('addSkillPointBtn');
 
+          displaySkills(
+            { title: '', points: [] },
+            skillsListElement,
+            addSkillPointBtnElement
+          );
+        });
+      }
       const updateEmployeesBtn = document.getElementById('updateEmployeesBtn');
       updateEmployeesBtn.addEventListener('click', async () => {
         const updatedFullName =
@@ -367,28 +397,36 @@ export const displayEmployeesPage = async (id) => {
         const updatedPosition =
           document.getElementById('employeesPosition').innerText;
 
+        const updatedSkillsPoints = [];
+        const pointInputs = document.querySelectorAll('.point-input');
+        pointInputs.forEach((input) => {
+          updatedSkillsPoints.push(input.value);
+        });
+
         const fileInput = document.getElementById('img-top');
         const file = fileInput.files[0];
-        const img = employeesData.img || {};
+        const updatedImg = employeesData.img || {};
 
         if (file) {
           const storageRef = ref(storage, file.name);
           await uploadBytes(storageRef, file);
-          img.default = await getDownloadURL(storageRef);
+          updatedImg.default = await getDownloadURL(storageRef);
         }
+
         const updatedSpecializations = employeesData.specializations;
+
         await updateEmployeesData(
           id,
           updatedFullName,
           updatedPosition,
           updatedSpecializations,
-          {
-            img,
-          }
+          { points: updatedSkillsPoints },
+          { default: updatedImg.default }
         );
-        window.location.reload();
-        await updateEmployeesData(id, employeesData);
+
+        // window.location.reload();
       });
+
       const deleteEmployeesBtn = document.getElementById('deleteEmployeesBtn');
       deleteEmployeesBtn.addEventListener('click', async () => {
         try {
@@ -415,16 +453,14 @@ export const displayEmployeesPage = async (id) => {
 };
 
 // updatedEducation,
-// updatedSkills,
-// updatedImageUrl
-// specializations: updatedSpecializations,
 // education: updatedEducation,
-// skills: updatedSkills,
+
 export const updateEmployeesData = async (
   id,
   updatedFullName,
   updatedPosition,
   updatedSpecializations,
+  updatedSkills,
   updatedImg
 ) => {
   try {
@@ -434,7 +470,13 @@ export const updateEmployeesData = async (
       full_name: updatedFullName,
       position: updatedPosition,
       specializations: updatedSpecializations,
-      img: updatedImg.img,
+
+      skills: {
+        points: updatedSkills.points,
+      },
+      img: {
+        default: updatedImg.default,
+      },
     };
 
     await setDoc(employeeRef, updateData, { merge: true });

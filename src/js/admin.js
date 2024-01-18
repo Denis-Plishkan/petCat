@@ -96,6 +96,7 @@ onAuthStateChanged(auth, async function (user) {
 //     return '?';
 //   }
 // }
+
 document.addEventListener('DOMContentLoaded', async function () {
   // let userCounter = 0;
   updateContent();
@@ -210,6 +211,6 @@ $(document).ready(function () {
 $(document).ready(function () {
   $('.select2').select2();
 });
-$(() => {
-  $('.js-example-basic-multiple').select2();
-});
+// $(() => {
+//   $('.js-example-basic-multiple').select2();
+// });

@@ -1,30 +1,61 @@
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import {
-  db,
-  collection,
-  addDoc,
-  setDoc,
-  storage,
-  getDocs,
-  getDoc,
-  deleteDoc,
-  doc,
-} from '../firebase-config';
+export const displaySkills = (skillsData) => {
+  const skillsListElement = document.getElementById('skillsList');
+  const addSkillPointBtnElement = document.getElementById('addSkillPointBtn');
 
-export const displaySkills = (skills) => {
-  const skillsList = document.getElementById('skillsList');
+  if (skillsListElement && addSkillPointBtnElement) {
+    skillsListElement.innerHTML = '';
+    const titleElement = document.createElement('h3');
+    titleElement.textContent = skillsData.title || '';
+    skillsListElement.appendChild(titleElement);
 
-  if (skillsList) {
-    skillsList.innerHTML = '';
+    const pointsList = document.createElement('ul');
+    pointsList.id = 'pointsList';
+    pointsList.classList.add('skills-list');
 
-    const skillsPointsList = document.createElement('ul');
+    if (skillsData.points && skillsData.points.length > 0) {
+      skillsData.points.forEach((point, index) => {
+        const pointItem = createSkillPointItem(point, index);
+        pointItem.classList.add('skills-list__link');
+        pointsList.appendChild(pointItem);
+      });
+    }
 
-    skills.points.forEach((point) => {
-      const pointItem = document.createElement('li');
-      pointItem.textContent = point;
-      skillsPointsList.appendChild(pointItem);
+    skillsListElement.appendChild(pointsList);
+
+    addSkillPointBtnElement.addEventListener('click', () => {
+      const newSkillPointItem = createSkillPointItem(
+        '',
+        pointsList.children.length
+      );
+      newSkillPointItem.classList.add('skills-list__link');
+      pointsList.appendChild(newSkillPointItem);
     });
-
-    skillsList.appendChild(skillsPointsList);
   }
+};
+
+const createSkillPointItem = (pointValue, index) => {
+  const pointItem = document.createElement('li');
+  pointItem.innerHTML = `
+    <input type="text" class="point-input" placeholder="Введите текст" value="${pointValue}">
+    <button class="delete-point-btn" data-index="${index}">Удалить</button>
+  `;
+
+  const skillPointInput = pointItem.querySelector('.point-input');
+  if (skillPointInput) {
+    skillPointInput.addEventListener('input', () => {
+      const maxLength = 300;
+      if (skillPointInput.value.length > maxLength) {
+        skillPointInput.value = skillPointInput.value.slice(0, maxLength);
+      }
+    });
+  }
+
+  const deletePointBtn = pointItem.querySelector('.delete-point-btn');
+  if (deletePointBtn) {
+    deletePointBtn.addEventListener('click', () => {
+      pointItem.remove();
+    });
+  }
+
+  return pointItem;
 };

@@ -210,7 +210,6 @@ export const displayServicePage = async (id) => {
       });
 
       serviceTextElement.addEventListener('input', () => {
-        ///символы для текста (подумать какое значение установить)
         limitTextLength(serviceTextElement, 500);
       });
 
