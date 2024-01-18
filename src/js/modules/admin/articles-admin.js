@@ -215,7 +215,9 @@ export const displayArticlesPage = async (articleId) => {
                 Изображение для статьи:
               </h2>
               <div class="img">
-                <img src="${articleData.img.default}" alt="">
+                <img src="${
+                  articleData.img.default
+                }" alt="" style="max-width: 100%;">
               </div>
               <div class="add">
                 <label for="img-top">Загрузить новое изображение:</label>

@@ -83,6 +83,12 @@ export async function updateContent() {
       displayServicePage(id);
       break;
     }
+    // case '#/admin/services/${id}': {
+    //   id = hash.split('/').pop().trim();
+    //   console.log('Страница:', id);
+    //   displayServicePage(id);
+    //   break;
+    // }
 
     case '#/admin/services/services-str':
       content = getCreateServiceForm();
@@ -235,12 +241,12 @@ export async function updateContent() {
       
                 <div class="mt-3">
                   <label for="position">Должность</label>
-                  <input id="position" type="text" placeholder="Должность" style="width: 50%" maxlength="300" />
+                  <select id="position" style="width: 300px;"></select>
                 </div>
       
                 <div class="mt-3">
                   <label for="specializations">Специализации</label>
-                  <select id="specializations" multiple style="width: 50%"></select>
+                  <select id="specializations" style="width: 300px;"></select>
                 </div>
       
                 <div class="mt-3">
@@ -376,6 +382,30 @@ export async function updateContent() {
           </div>
         </div> 
         `;
+      break;
+
+    case '#/admin/add/job':
+      content = `
+            <div class="content">
+            <div class="">
+              <h2>Должности </h2>
+            
+            
+            </div>
+          </div> 
+          `;
+      break;
+
+    case '#/admin/add/specializations':
+      content = `
+              <div class="content">
+              <div class="">
+                <h2>Специализации </h2>
+                <div class="mt-5">
+                  </div>                
+              </div>
+            </div> 
+            `;
       break;
 
     default:

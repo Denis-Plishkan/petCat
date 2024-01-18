@@ -99,14 +99,14 @@ onAuthStateChanged(auth, async function (user) {
 
 document.addEventListener('DOMContentLoaded', async function () {
   // let userCounter = 0;
-  updateContent();
-  updateContentPage();
+  await updateContent();
+  await updateContentPage();
 
   // window.addEventListener('load', async function () {
   //   await updateContentPage();
   // });
   window.addEventListener('hashchange', async function () {
-    await updateContentPage();
+    updateContentPage();
   });
 });
 

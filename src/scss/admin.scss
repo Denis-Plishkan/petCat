@@ -1,3 +1,23 @@
 @import 'admin/services-admin';
 @import 'admin/stories-admin';
 @import 'admin/employees-admin';
+/* Стили для Select2 - изменение цвета текста в иконках */
+.select2-selection__choice span {
+  color: black; /* Цвет текста для не выбранной опции */
+}
+
+.select2-container--open
+  .select2-selection__choice[title]:not([aria-selected='true']) {
+  color: white; /* Цвет текста для выбранной опции */
+}
+
+/* Дополнительные стили, если необходимо изменить цвет фона выбранной опции */
+.select2-selection__choice[aria-selected='true'] {
+  background-color: gray; /* Цвет фона для выбранной опции */
+}
+.select2-container--default
+  .select2-selection--multiple
+  .select2-selection__choice__display {
+  padding-left: 7px;
+  padding-right: 5px;
+}

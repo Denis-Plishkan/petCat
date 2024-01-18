@@ -190,7 +190,7 @@ export const displayStoryPage = async (id) => {
             Фотография питомца:
             </h2>
             <div data-v-fee137ad="" class="img">
-            <img data-v-fee137ad="" src="${storyData.img.default}" alt="">
+            <img data-v-fee137ad="" src="${storyData.img.default}" alt="" style="max-width: 100%;">
             </div>
             <div data-v-fee137ad="" class="add">
             <label data-v-fee137ad="" for="img-top">Загрузить новое фото:</label>

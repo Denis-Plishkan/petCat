@@ -174,8 +174,8 @@ export const displayServicePage = async (id) => {
             <h2 data-v-fee137ad="">
             Главная картинка:
             </h2>
-            <div data-v-fee137ad="" class="img">
-            <img data-v-fee137ad="" src="${serviceData.img.default}" alt="">
+            <div data-v-fee137ad="" class="img" >
+            <img data-v-fee137ad="" src="${serviceData.img.default}" alt="" style="max-width: 100%;" >
             </div>
             <div data-v-fee137ad="" class="add">
             <label data-v-fee137ad="" for="img-top">Загрузить новое фото:</label>

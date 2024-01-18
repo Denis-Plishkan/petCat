@@ -169,9 +169,14 @@ const submitEmployesBtnHandler = async () => {
 
   const errorText = document.getElementById('errorText');
   errorText.textContent = '';
-  if (!fullName.value || !position.value || !specializations.value) {
+  if (
+    !fullName.value ||
+    !position.value ||
+    !specializations.value ||
+    !imgForPersonInput.files
+  ) {
     errorText.textContent =
-      'Ошибка: Поля "Полное имя", "Должность" и "Специализации" обязательны для заполнения.';
+      'Ошибка: Поля "Полное имя", "Фотография", "Должность" и "Специализации" обязательны для заполнения.';
     return;
   }
 
@@ -202,15 +207,10 @@ const submitEmployesBtnHandler = async () => {
     fullName.value = '';
     position.value = '';
     specializations.value = '';
-    // diplomasYearInput.value = '';
-    // diplomasPlaceInput.value = '';
     education.value = '';
     skills.value = '';
     // reservationDateInput.value = '';
-    field.querySelector('.diploma-year-input').value = '';
-    field.querySelector('.diploma-place-input').value = '';
-    field.querySelector('.others-year-input').value = '';
-    field.querySelector('.others-place-input').value = '';
+
     alert('Карта работника успешно создана');
   } catch (error) {
     console.error('Ошибка: ', error.message, error.code);
@@ -252,6 +252,10 @@ export const initializeEmployeesForm = async () => {
       option.text = specialization;
       specializationsSelect.add(option);
     });
+
+    $(specializationsSelect).select2({
+      multiple: true,
+    });
   }
 
   const imgTopInput = document.getElementById('img-top');
@@ -287,38 +291,7 @@ export const displayEmployeesPage = async (id) => {
               <h3>Должность:</h3>
               <p contenteditable="true" id="employeesPosition">${employeesData.position}</p>
             </div>
-            <div class="form-group" data-select2-id="48">
-            <label>Специализации:</label>
-            <select class="select2bs4 select2-hidden-accessible" multiple="" data-placeholder="Выбирете специализацию:" style="width: 100%;" data-select2-id="23" tabindex="-1" aria-hidden="true">
-              <option data-select2-id="39">Alabama</option>
-              <option data-select2-id="40">Alaska</option>
-              <option data-select2-id="41">California</option>
-      
-            </select>
-            <span class="select2 select2-container select2-container--bootstrap4 select2-container--below" dir="ltr" data-select2-id="24" style="width: 100%;">
-              <span class="selection">
-                <span class="select2-selection select2-selection--multiple" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="-1" aria-disabled="false">
-                  <ul class="select2-selection__rendered">
-                    <li class="select2-search select2-search--inline">
-                      <input class="select2-search__field" type="search" tabindex="0" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" role="searchbox" aria-autocomplete="list" placeholder="Выбирете специализацию" style="width: 576.5px;">
-                    </li>
-                  </ul>
-                </span>
-              </span>
-              <span class="dropdown-wrapper" aria-hidden="true"></span>
-            </span>
-          </div>
-          <div class="s2-example">
-          <p>
-            <select class="js-example-basic-multiple js-states form-control select2-hidden-accessible" multiple="" data-select2-id="select2-data-61-pgbf" tabindex="-1" aria-hidden="true">
-          <optgroup label="Alaskan/Hawaiian Time Zone" data-select2-id="select2-data-64-jtz1">
-            <option value="AK" data-select2-id="select2-data-65-dgzl">Alaska</option>
-            <option value="HI" data-select2-id="select2-data-66-zdss">Hawaii</option>
-          </optgroup>
-        </select><span class="select2 select2-container select2-container--default select2-container--focus select2-container--below" dir="ltr" data-select2-id="select2-data-62-8s0t" style="width: 100%;"><span class="selection"><span class="select2-selection select2-selection--multiple" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="-1" aria-disabled="false"><ul class="select2-selection__rendered" id="select2-3qlw-container"></ul><span class="select2-search select2-search--inline"><textarea class="select2-search__field" type="search" tabindex="0" autocorrect="off" autocapitalize="none" spellcheck="false" role="searchbox" aria-autocomplete="list" autocomplete="off" aria-label="Search" aria-describedby="select2-3qlw-container" placeholder="" style="width: 0.75em;"></textarea></span></span></span><span class="dropdown-wrapper" aria-hidden="true"></span></span>
-          </p>
-        </div>
-          
+     
             <div class="employees__wrapper-subtitle">
             <h3>Специализации:</h3>
             <div id="specializationsContainer"></div>
@@ -333,7 +306,7 @@ export const displayEmployeesPage = async (id) => {
               Фотография работника:
           </h2>
           <div data-v-fee137ad="" class="img">
-              <img data-v-fee137ad="" src="${employeesData.img.default}" alt="" id="previewImage">
+              <img data-v-fee137ad="" src="${employeesData.img.default}" alt="" id="previewImage" style="max-width: 100%;">
           </div>
           <div data-v-fee137ad="" class="add">
               <label data-v-fee137ad="" for="img-top">Загрузить новое фото:</label>
@@ -355,6 +328,7 @@ export const displayEmployeesPage = async (id) => {
       // console.log('Навыки сотрудника:', employeesData.skills);
 
       displaySkills(employeesData.skills);
+
       const addSkillBtn = document.getElementById('addSkillBtn');
       const imgTopInput = document.getElementById('img-top');
       if (imgTopInput) {
@@ -390,6 +364,18 @@ export const displayEmployeesPage = async (id) => {
           );
         });
       }
+
+      const educationContainer = document.getElementById('educationContainer');
+      const addDiplomaBtn = document.getElementById('addDiplomaBtn');
+      const addOthersBtn = document.getElementById('addOthersBtn');
+      if (educationContainer && addDiplomaBtn && addOthersBtn) {
+        displayEducation(educationContainer, employeesData.education);
+
+        addDiplomaBtn.addEventListener('click', addDiplomaField);
+        addOthersBtn.addEventListener('click', addOthersField);
+      }
+
+      //кнопки
       const updateEmployeesBtn = document.getElementById('updateEmployeesBtn');
       updateEmployeesBtn.addEventListener('click', async () => {
         const updatedFullName =
@@ -415,13 +401,17 @@ export const displayEmployeesPage = async (id) => {
 
         const updatedSpecializations = employeesData.specializations;
 
+        const updatedEducation = getUpdatedEducation();
+        updatedData.education = updatedEducation;
+
         await updateEmployeesData(
           id,
           updatedFullName,
           updatedPosition,
           updatedSpecializations,
           { points: updatedSkillsPoints },
-          { default: updatedImg.default }
+          { default: updatedImg.default },
+          updatedEducation
         );
 
         // window.location.reload();
@@ -444,7 +434,7 @@ export const displayEmployeesPage = async (id) => {
           console.error('Ошибка при удалении данных из Firestore: ', error);
         }
       });
-
+      //
       updateSpecializationsSection(id, employeesData);
     }
   } catch (error) {
