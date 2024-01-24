@@ -38,23 +38,18 @@ const createEducationItem = (educationItem, index, type) => {
   const educationItemElement = document.createElement('li');
   educationItemElement.innerHTML = `
     <div>
-      <span class="education-list__label">Место:</span>
+      <span class="education-list__label">Информация:</span>
       <input type="text" class="place-input" placeholder="Введите место" value="${
         educationItem.place || ''
-      }">
+      }"maxlength="300">
     </div>
     <div>
-      <span class="education-list__label">Год:</span>
+      <span class="education-list__label">Год полученя:</span>
       <input type="text" class="year-input" placeholder="Введите год" value="${
         educationItem.year || ''
-      }">
+      }" maxlength="4" pattern="\d{4}">
     </div>
-    <div>
-      <span class="education-list__label">Описание:</span>
-      <textarea class="description-input" placeholder="Введите описание">${
-        educationItem.description || ''
-      }</textarea>
-    </div>
+  
     <button class="delete-education-btn" data-index="${index}" data-type="${type}">Удалить</button>
   `;
 

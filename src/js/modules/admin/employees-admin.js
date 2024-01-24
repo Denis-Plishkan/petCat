@@ -307,7 +307,7 @@ export const initializeEmployeesForm = async () => {
     imgForPageInput.addEventListener('change', previewImage);
   }
 };
-
+let updatedEducation = null;
 export const displayEmployeesPage = async (id) => {
   try {
     const employeesData = await getEmployeesDetails(id);
@@ -371,6 +371,7 @@ export const displayEmployeesPage = async (id) => {
       // console.log('Навыки сотрудника:', employeesData.skills);
 
       displaySkills(employeesData.skills);
+      displayEducation(employeesData.education);
 
       const addSkillBtn = document.getElementById('addSkillBtn');
 
@@ -452,6 +453,10 @@ export const displayEmployeesPage = async (id) => {
         pointInputs.forEach((input) => {
           updatedSkillsPoints.push(input.value);
         });
+        updatedEducation = {
+          diplomas: collectEducationData('diplomas'),
+          others: collectEducationData('others'),
+        };
 
         const fileInput = document.getElementById('img-top');
         const file = fileInput.files[0];
@@ -469,8 +474,8 @@ export const displayEmployeesPage = async (id) => {
           updatedPosition,
           updatedSpecializations,
           { points: updatedSkillsPoints },
-          { default: updatedImg.default }
-          // updatedEducation
+          { default: updatedImg.default },
+          updatedEducation
         );
 
         window.location.reload();
@@ -499,13 +504,33 @@ export const displayEmployeesPage = async (id) => {
   }
 };
 
+const collectEducationData = (type) => {
+  const educationList = document.getElementById(`${type}List`);
+  const educationItems = educationList ? educationList.children : [];
+
+  const educationData = [];
+
+  for (let i = 0; i < educationItems.length; i++) {
+    const educationItem = educationItems[i];
+    const placeInput = educationItem.querySelector('.place-input');
+    const yearInput = educationItem.querySelector('.year-input');
+
+    educationData.push({
+      place: placeInput ? placeInput.value : '',
+      year: yearInput ? yearInput.value : '',
+    });
+  }
+
+  return educationData;
+};
 export const updateEmployeesData = async (
   id,
   updatedFullName,
   updatedPosition,
   updatedSpecializations,
   updatedSkills,
-  updatedImg
+  updatedImg,
+  updatedEducation
 ) => {
   try {
     const employeeRef = doc(collection(db, 'employees'), id);
@@ -521,6 +546,7 @@ export const updateEmployeesData = async (
       img: {
         default: updatedImg.default,
       },
+      education: updatedEducation,
     };
 
     await setDoc(employeeRef, updateData, { merge: true });
