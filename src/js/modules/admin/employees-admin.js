@@ -17,6 +17,14 @@ import {
 
 import { displaySkills } from './skills';
 
+import { getPositionList } from './position-admin';
+
+import {
+  displayEducation,
+  createEducationItem,
+  addEducationItem,
+} from './education-form';
+
 const limitTextLength = (element, maxLength) => {
   const text = element.innerText || element.value;
   if (text.length > maxLength) {
@@ -49,7 +57,7 @@ const createCardEmploye = (id, fullName, position, data, imageUrl) => {
   cardSpecializations.classList.add('specialists-card__specializations');
 
   if (data.specializations && data.specializations.length > 0) {
-    cardSpecializations.textContent = `Специализации: ${data.specializations.join(
+    cardSpecializations.textContent = `Должность: ${data.specializations.join(
       ', '
     )}`;
   } else {
@@ -167,6 +175,18 @@ const submitEmployesBtnHandler = async () => {
     }
   }
 
+  const educationContainer = document.getElementById('educationContainer');
+  const addDiplomaBtn = document.getElementById('addDiplomaBtn');
+  const addOthersBtn = document.getElementById('addOthersBtn');
+
+  if (educationContainer && addDiplomaBtn && addOthersBtn) {
+    // Clear previous content
+    educationContainer.innerHTML = '';
+
+    // Initialize education fields
+    // initializeEducationFields(educationContainer, addDiplomaBtn, addOthersBtn);
+  }
+
   const errorText = document.getElementById('errorText');
   errorText.textContent = '';
   if (
@@ -256,6 +276,23 @@ export const initializeEmployeesForm = async () => {
     $(specializationsSelect).select2({
       multiple: true,
     });
+
+    const positionSelect = document.getElementById('position');
+
+    if (submitEmployesBtn && positionSelect) {
+      submitEmployesBtn.addEventListener('click', submitEmployesBtnHandler);
+
+      const position = await getPositionList();
+
+      positionSelect.innerHTML = '';
+
+      position.forEach((position) => {
+        const option = document.createElement('option');
+        option.value = position;
+        option.text = position;
+        positionSelect.add(option);
+      });
+    }
   }
 
   const imgTopInput = document.getElementById('img-top');
@@ -289,13 +326,14 @@ export const displayEmployeesPage = async (id) => {
             </h2>
             <div class="employees__wrapper-subtitle">
               <h3>Должность:</h3>
-              <p contenteditable="true" id="employeesPosition">${employeesData.position}</p>
+              <select id="position" style="width: 300px;"></select>
+
             </div>
      
             <div class="employees__wrapper-subtitle">
             <h3>Специализации:</h3>
-            <div id="specializationsContainer"></div>
-            <button id="addSpecializationBtn">Добавить специализацию</button>
+       
+            <select id="specializations" style="width: 300px;"></select>
           </div>
           <div class="employees__wrapper-subtitle">
           <div id="skillsList"></div>
@@ -313,8 +351,13 @@ export const displayEmployeesPage = async (id) => {
               <input data-v-fee137ad="" class="img-top-input" id="img-top" type="file" accept="image/*">
 
           </div>
+
       </div>
-      
+      <div class="employees__wrapper-subtitle" id="educationContainer">
+      <h3>Образование:</h3>
+
+    </div>
+      </div>
            
             <div data-v-fee137ad="" class="block-btn mt-5"> 
             <button type="button" id="updateEmployeesBtn" class="btn btn-block btn-success ">Сохранить изменения</button>
@@ -330,27 +373,52 @@ export const displayEmployeesPage = async (id) => {
       displaySkills(employeesData.skills);
 
       const addSkillBtn = document.getElementById('addSkillBtn');
+
       const imgTopInput = document.getElementById('img-top');
       if (imgTopInput) {
         imgTopInput.addEventListener('change', previewImage);
       }
 
       const employeesNameElement = document.getElementById('employeesName');
-      const employeesPositionElement =
-        document.getElementById('employeesPosition');
-      const serviceTextElement = document.getElementById('employeesPosition');
+
+      const positionSelect = $('#position');
+      const specializationsSelect = $('#specializations');
+
+      positionSelect.val(null).trigger('change');
+      specializationsSelect.val(null).trigger('change');
+      specializationsSelect.select2({
+        multiple: true,
+      });
+
+      const positions = await getPositionList();
+      positions.forEach((position) => {
+        const option = new Option(
+          position,
+          position,
+          position === employeesData.position,
+          position === employeesData.position
+        );
+        positionSelect.append(option).trigger('change');
+      });
+
+      const specializations = await getSpecializationsList();
+      specializations.forEach((specialization) => {
+        const isSelected =
+          employeesData.specializations &&
+          employeesData.specializations.includes(specialization);
+        const option = new Option(
+          specialization,
+          specialization,
+          isSelected,
+          isSelected
+        );
+        specializationsSelect.append(option).trigger('change');
+      });
 
       employeesNameElement.addEventListener('input', () => {
         limitTextLength(employeesNameElement, 70);
       });
 
-      employeesPositionElement.addEventListener('input', () => {
-        limitTextLength(employeesPositionElement, 20);
-      });
-
-      serviceTextElement.addEventListener('input', () => {
-        limitTextLength(serviceTextElement, 500);
-      });
       if (addSkillBtn) {
         addSkillBtn.addEventListener('click', async () => {
           const skillsListElement = document.getElementById('skillsList');
@@ -365,23 +433,19 @@ export const displayEmployeesPage = async (id) => {
         });
       }
 
-      const educationContainer = document.getElementById('educationContainer');
-      const addDiplomaBtn = document.getElementById('addDiplomaBtn');
-      const addOthersBtn = document.getElementById('addOthersBtn');
-      if (educationContainer && addDiplomaBtn && addOthersBtn) {
-        displayEducation(educationContainer, employeesData.education);
-
-        addDiplomaBtn.addEventListener('click', addDiplomaField);
-        addOthersBtn.addEventListener('click', addOthersField);
-      }
-
       //кнопки
       const updateEmployeesBtn = document.getElementById('updateEmployeesBtn');
       updateEmployeesBtn.addEventListener('click', async () => {
         const updatedFullName =
           document.getElementById('employeesName').innerText;
-        const updatedPosition =
-          document.getElementById('employeesPosition').innerText;
+        const updatedPositionSelect = document.getElementById('position');
+        const updatedPosition = updatedPositionSelect.value;
+
+        const updatedSpecializationsSelect =
+          document.getElementById('specializations');
+        const updatedSpecializations = Array.from(
+          updatedSpecializationsSelect.selectedOptions
+        ).map((option) => option.value);
 
         const updatedSkillsPoints = [];
         const pointInputs = document.querySelectorAll('.point-input');
@@ -399,22 +463,17 @@ export const displayEmployeesPage = async (id) => {
           updatedImg.default = await getDownloadURL(storageRef);
         }
 
-        const updatedSpecializations = employeesData.specializations;
-
-        const updatedEducation = getUpdatedEducation();
-        updatedData.education = updatedEducation;
-
         await updateEmployeesData(
           id,
           updatedFullName,
           updatedPosition,
           updatedSpecializations,
           { points: updatedSkillsPoints },
-          { default: updatedImg.default },
-          updatedEducation
+          { default: updatedImg.default }
+          // updatedEducation
         );
 
-        // window.location.reload();
+        window.location.reload();
       });
 
       const deleteEmployeesBtn = document.getElementById('deleteEmployeesBtn');
@@ -434,16 +493,11 @@ export const displayEmployeesPage = async (id) => {
           console.error('Ошибка при удалении данных из Firestore: ', error);
         }
       });
-      //
-      updateSpecializationsSection(id, employeesData);
     }
   } catch (error) {
     console.error('Ошибка при получении данных из Firestore: ', error);
   }
 };
-
-// updatedEducation,
-// education: updatedEducation,
 
 export const updateEmployeesData = async (
   id,
@@ -520,3 +574,97 @@ const showMessage = (message) => {
     }, 3000);
   }
 };
+
+// const displayEducation = (container, educationData) => {
+//   container.innerHTML = '';
+
+//   if (
+//     educationData &&
+//     educationData.diplomas &&
+//     Array.isArray(educationData.diplomas)
+//   ) {
+//     educationData.diplomas.forEach((diploma) => {
+//       addDiplomaField(container, diploma.year, diploma.place);
+//     });
+//   }
+
+//   if (
+//     educationData &&
+//     educationData.others &&
+//     Array.isArray(educationData.others)
+//   ) {
+//     educationData.others.forEach((other) => {
+//       addOthersField(container, other.year, other.place);
+//     });
+//   }
+// };
+
+// const createInput = (type, className, placeholder, value) => {
+//   const input = document.createElement('input');
+//   input.type = type;
+//   input.className = className;
+//   input.placeholder = placeholder;
+//   input.value = value;
+//   return input;
+// };
+
+// const createRemoveButton = (onClick) => {
+//   const button = document.createElement('button');
+//   button.type = 'button';
+//   button.textContent = 'Удалить';
+//   button.addEventListener('click', onClick);
+//   return button;
+// };
+
+// const addDiplomaField = (container, year = '', place = '') => {
+//   const diplomaContainer = document.createElement('div');
+//   diplomaContainer.classList.add('education-field');
+
+//   const yearInput = createInput('text', 'diploma-year-input', 'Год', year);
+//   const placeInput = createInput('text', 'diploma-place-input', 'Место', place);
+
+//   const removeButton = createRemoveButton(() => {
+//     diplomaContainer.remove();
+//   });
+
+//   diplomaContainer.appendChild(yearInput);
+//   diplomaContainer.appendChild(placeInput);
+//   diplomaContainer.appendChild(removeButton);
+
+//   container.appendChild(diplomaContainer);
+// };
+
+// const addOthersField = (container, year = '', place = '') => {
+//   const othersContainer = document.createElement('div');
+//   othersContainer.classList.add('education-field');
+
+//   const yearInput = createInput('text', 'others-year-input', 'Год', year);
+//   const placeInput = createInput('text', 'others-place-input', 'Место', place);
+
+//   const removeButton = createRemoveButton(() => {
+//     othersContainer.remove();
+//   });
+
+//   othersContainer.appendChild(yearInput);
+//   othersContainer.appendChild(placeInput);
+//   othersContainer.appendChild(removeButton);
+
+//   container.appendChild(othersContainer);
+// };
+
+// const initializeEducationFields = (
+//   educationContainer,
+//   addDiplomaBtn,
+//   addOthersBtn,
+//   employeesData // Добавим параметр employeesData
+// ) => {
+//   displayEducation(educationContainer, employeesData.educations);
+
+//   addDiplomaBtn.addEventListener('click', () => {
+//     addDiplomaField(educationContainer);
+//   });
+
+//   addOthersBtn.addEventListener('click', () => {
+//     addOthersField(educationContainer);
+//   });
+// };

@@ -42,6 +42,12 @@ import {
 
 import { initializeContactsForm, displayContactPage } from './contacts-admin';
 
+import {
+  initializePositionForm,
+  getDataFromPosition,
+  displayPositionInHTML,
+} from './position-admin';
+
 // import { usersCount } from './user-counter';
 
 // export async function usersCount() {
@@ -60,7 +66,7 @@ export async function updateContent() {
   let hash = window.location.hash;
   let id;
   let content = '';
-
+  console.log('Current hash:', hash);
   switch (hash) {
     case '#/admin/services':
       content = `
@@ -90,7 +96,7 @@ export async function updateContent() {
     //   break;
     // }
 
-    case '#/admin/services/services-str':
+    case '#/admin/services-str':
       content = getCreateServiceForm();
       break;
 
@@ -193,6 +199,7 @@ export async function updateContent() {
         </div>
       </div> 
       `;
+
       break;
 
     case '#/admin/employees':
@@ -384,27 +391,97 @@ export async function updateContent() {
         `;
       break;
 
-    case '#/admin/add/job':
+    case '#/admin/position':
+      content = `
+      <div class="mt-3">
+      <label for="title">Перечень всех текущих должностей : </label
+      >
+      <div id="position-body"></div>
+      </div>
+            `;
+      getDataFromPosition().then((positionData) => {
+        displayPositionInHTML(positionData);
+      });
+      break;
+
+    case '#/admin/position/position-str':
       content = `
             <div class="content">
             <div class="">
               <h2>Должности </h2>
-            
+              <div class="mt-5">
+              <div class="mt-3">
+                <label for="title">Название должности : </label
+                ><input
+                  id="title"
+                  type="text"
+                  placeholder="Название должности"
+                  style="width: 50%"
+                  maxlength="500"
+             
+                />
+                <button
+                data-form-type="position"
+                id="submitPositionBtn"
+                  type="button"
+                  class="btn btn-block btn-success btn"
+               style="width:30%" >
+                  Добавить должность
+                </button>
+      
+      
+                <div id="errorText" class="text-danger mt-2"></div>
+              </div>
+              <div class="mt-3">
+              <label for="title">Перечень всех текущих должностей : </label
+              >
+              <div id="position-body"></div>
+              </div>
+            </div>
             
             </div>
           </div> 
           `;
+      getDataFromPosition().then((positionData) => {
+        displayPositionInHTML(positionData);
+      });
+
       break;
 
     case '#/admin/add/specializations':
       content = `
-              <div class="content">
-              <div class="">
-                <h2>Специализации </h2>
-                <div class="mt-5">
-                  </div>                
-              </div>
-            </div> 
+      <div class="content">
+      <div class="">
+        <h2>Специализации </h2>
+        <div class="mt-5">
+        <div class="mt-3">
+          <label for="title">Название специализаии : </label
+          ><input
+            id="title"
+            type="text"
+            placeholder="Название специализаии"
+            style="width: 50%"
+            maxlength="500"
+       
+          />
+          <button
+          data-form-type="service"
+          id="submitServiceBtn"
+            type="button"
+            class="btn btn-block btn-success btn"
+         style="width:30%" >
+            Добавить специализацию
+          </button>
+
+          <div id="errorText" class="text-danger mt-2"></div>
+        </div>
+        <div class="mt-3">
+        <label for="title">Перечень всех текущих специализаий : </label
+        >
+        </div>
+      </div>
+      </div>
+    </div> 
             `;
       break;
 
@@ -484,7 +561,9 @@ export async function updateContent() {
       break;
   }
 
+  // console.log('Контент:', content);
   const appElement = document.getElementById('app');
+  // console.log('appElement:', appElement);
   appElement.innerHTML = content;
 }
 
@@ -564,6 +643,7 @@ export function getCreateServiceForm() {
 }
 
 export async function updateContentPage() {
+  console.log('Updating content page...');
   const hash = window.location.hash;
 
   initializeServiceForm();
@@ -571,6 +651,7 @@ export async function updateContentPage() {
   initializeStoryForm();
   initializeContactsForm();
   initializeArticlesForm();
+  initializePositionForm();
 
   if (hash.match(/^#\/admin\/services\/(.+)$/)) {
     const id = hash.split('/').pop().trim();
@@ -596,5 +677,11 @@ export async function updateContentPage() {
     return;
   }
 
-  await updateContent();
+  updateContent();
 }
+
+// if (hash.match(/^#\/admin\/position\/(.+)$/)) {
+//   const id = hash.split('/').pop().trim();
+//   await displayPositionPage(id);
+//   return;
+// }

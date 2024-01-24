@@ -14,6 +14,11 @@ import {
   updateContent,
   updateContentPage,
 } from './modules/admin/content-admin';
+import {
+  initializePositionForm,
+  getDataFromPosition,
+  displayPositionInHTML,
+} from './modules/admin/position-admin';
 
 // async function onAuthStateChange(user) {
 //   if (!user) {
@@ -97,16 +102,42 @@ onAuthStateChanged(auth, async function (user) {
 //   }
 // }
 
-document.addEventListener('DOMContentLoaded', async function () {
-  // let userCounter = 0;
-  await updateContent();
-  await updateContentPage();
+// document.addEventListener('DOMContentLoaded', async function () {
+//   // let userCounter = 0;
+//   await updateContent();
+//   await updateContentPage();
 
-  // window.addEventListener('load', async function () {
-  //   await updateContentPage();
-  // });
+//   // window.addEventListener('load', async function () {
+//   //   await updateContentPage();
+//   // });
+//   window.addEventListener('hashchange', async function () {
+//     await updateContentPage();
+//   });
+// });
+// document.addEventListener('DOMContentLoaded', async function () {
+//   await updateContent();
+//   await updateContentPage();
+
+//   window.addEventListener('load', updateContentPage);
+
+//   window.addEventListener('hashchange', updateContentPage);
+// });
+
+document.addEventListener('DOMContentLoaded', async function () {
+  try {
+    await updateContent();
+    await updateContentPage();
+  } catch (error) {
+    console.error('Error during initial content update:', error);
+  }
+
   window.addEventListener('hashchange', async function () {
-    updateContentPage();
+    console.log('Hash changed!');
+    try {
+      await updateContentPage();
+    } catch (error) {
+      console.error('Error during hash change content update:', error);
+    }
   });
 });
 
@@ -200,14 +231,14 @@ document.addEventListener('DOMContentLoaded', async function () {
 //   handleHashChange(window.location.hash);
 // });
 
-$(document).ready(function () {
-  $('.select2bs4').select2({
-    theme: 'bootstrap4',
-  });
-});
-$(document).ready(function () {
-  $('.js-example-basic-multiple').select2();
-});
+// $(document).ready(function () {
+//   $('.select2bs4').select2({
+//     theme: 'bootstrap4',
+//   });
+// });
+// $(document).ready(function () {
+//   $('.js-example-basic-multiple').select2();
+// });
 $(document).ready(function () {
   $('.select2').select2();
 });

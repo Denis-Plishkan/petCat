@@ -1,6 +1,7 @@
 @import 'admin/services-admin';
 @import 'admin/stories-admin';
 @import 'admin/employees-admin';
+@import 'admin/contacts-admin.scss';
 /* Стили для Select2 - изменение цвета текста в иконках */
 .select2-selection__choice span {
   color: black; /* Цвет текста для не выбранной опции */

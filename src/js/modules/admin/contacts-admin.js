@@ -14,9 +14,39 @@ import {
   doc,
 } from '../firebase-config';
 
+const generateRoutesHtml = (routes) => {
+  if (!routes) return '';
+
+  return Object.keys(routes)
+    .map((routeType) => {
+      const route = routes[routeType];
+
+      return `
+      <div class="mt-3">
+        <div class="route-container" data-type="${routeType}">
+          ${route.text
+            .map(
+              (point, index) => `
+            <div class="route-item">
+              <textarea class="route-textarea" data-index="${index}" data-type="${routeType}">${point}</textarea>
+              <button class="delete-route-btn" data-index="${index}" data-type="${routeType}">Удалить</button>
+            </div>
+          `
+            )
+            .join('')}
+          <button class="add-route-btn" data-type="${routeType}">Добавить</button>
+        </div>
+      </div>
+    `;
+    })
+    .join('');
+};
+
 const submitContactsBtnHandler = async () => {
+  // const phoneNumberInput = document.getElementById('phone_number');
+  // const phoneNumber = result.formattedPhoneNumber;
   const phoneNumberInput = document.getElementById('phone_number');
-  const phoneNumber = phoneNumberInput.value;
+
   const imgForPageInput = document.getElementById('img-for-page');
   const email = document.getElementById('email');
   const address = document.getElementById('address');
@@ -84,7 +114,9 @@ const submitContactsBtnHandler = async () => {
       roadTrolleybus: roadTrolleybus.value,
       roadCar: roadCar.value,
       // phoneNumber: formattedPhoneNumber,
-      phoneNumber: result.formattedPhoneNumber,
+      // phoneNumber: result.formattedPhoneNumber,
+      // phoneNumber: phoneNumber,
+      phoneNumber: phoneNumber.value,
     });
 
     console.log('Документ успешно добавлен с ID: ', docRef.id);
@@ -106,10 +138,16 @@ const submitContactsBtnHandler = async () => {
 
 const formatAndValidatePhoneNumber = (phoneNumberString, countryCode) => {
   try {
-    const phoneNumber = parse(phoneNumberString, countryCode);
+    // Приводим phoneNumberString к строке, если это не строка
+    const phoneNumber =
+      typeof phoneNumberString === 'string'
+        ? phoneNumberString
+        : String(phoneNumberString);
 
-    if (isValidNumber(phoneNumber, countryCode)) {
-      const formattedPhoneNumber = format(phoneNumber, 'International');
+    const phoneNumberData = parse(phoneNumber, countryCode);
+
+    if (isValidNumber(phoneNumberData, countryCode)) {
+      const formattedPhoneNumber = format(phoneNumberData, 'International');
       console.log('Номер:', formattedPhoneNumber);
       return { success: true, formattedPhoneNumber };
     } else {
@@ -131,6 +169,55 @@ const formatAndValidatePhoneNumber = (phoneNumberString, countryCode) => {
 
 export const initializeContactsForm = () => {
   const submitContactsBtn = document.getElementById('submitCotactsBtn');
+  const phoneNumberInput = document.getElementById('phone_number');
+  const emailInput = document.getElementById('email');
+  const countryCode = 'UA';
+
+  if (phoneNumberInput && emailInput) {
+    phoneNumberInput.setAttribute('inputmode', 'numeric');
+    phoneNumberInput.addEventListener('keydown', (event) => {
+      const key = event.key;
+      if (
+        !/[\d\s\(\)\-\+\*]/.test(key) &&
+        key !== 'Backspace' &&
+        key !== 'Delete' &&
+        key !== 'ArrowLeft' &&
+        key !== 'ArrowRight'
+      ) {
+        event.preventDefault();
+      }
+    });
+
+    phoneNumberInput.addEventListener('input', () => {
+      const formattedPhoneNumber = formatAndValidatePhoneNumber(
+        phoneNumberInput.value,
+        countryCode
+      );
+      if (formattedPhoneNumber.success) {
+        phoneNumberInput.value = formattedPhoneNumber.formattedPhoneNumber;
+      } else {
+        console.log('Invalid phone number');
+      }
+    });
+
+    // Используйте JustValidate для валидации поля email
+    const validator = new JustValidate('.content.contacts', {
+      rule: 'customRegexp',
+      value: /^[a-zA-Z0-9.-]+@[^\s@]+\.[\p{L}]{2,}$/u,
+      errorMessage: 'Email is invalid',
+      messages: {
+        email: {
+          required: 'Поле с почтой обязательно для заполнения',
+          email: 'Введите корректный адрес электронной почты',
+        },
+      },
+    });
+
+    // Добавляем обработчик изменений в поле почты для динамической валидации
+    emailInput.addEventListener('input', () => {
+      validator.validateInput(emailInput);
+    });
+  }
 
   if (submitContactsBtn) {
     submitContactsBtn.addEventListener('click', submitContactsBtnHandler);
@@ -142,10 +229,26 @@ export const getDataFromContacts = async () => {
     const querySnapshot = await getDocs(collection(db, 'contacts'));
     const dataArray = [];
 
-    querySnapshot.docs.forEach((doc) => {
+    querySnapshot.forEach((doc) => {
       const data = doc.data();
 
-      dataArray.push(Object.assign({}, data, { id: doc.id }));
+      const contact = {
+        id: doc.id,
+        imageUrl: data.imageUrl || '',
+        email: data.email || '',
+        address: data.address || '',
+        addressMap: data.addressMap || '',
+        workingHours: data.workingHours || '',
+        roadByBus: Array.isArray(data.roadByBus)
+          ? data.roadByBus
+          : [data.roadByBus],
+        roadCar: Array.isArray(data.roadCar) ? data.roadCar : [data.roadCar],
+        roadTrolleybus: Array.isArray(data.roadTrolleybus)
+          ? data.roadTrolleybus
+          : [data.roadTrolleybus],
+      };
+
+      dataArray.push(contact);
     });
     console.log('Данные', dataArray);
 
@@ -168,89 +271,81 @@ export const displayContactPage = async (id) => {
         'UA'
       );
 
-      const content = ` <div class="content">
-      <h2>Редактирование контактов</h2>
-
-      <div class="form-group">
-        <label>Номер телефона:</label>
-        <div class="input-group">
-          <div class="input-group-prepend">
-            <span class="input-group-text"><i class="fas fa-phone"></i></span>
+      const content = `
+        <div class="content contacts">
+          <h2>Редактирование контактов</h2>
+          <div class="form-group">
+            <label>Номер телефона:</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fas fa-phone"></i></span>
+              </div>
+              <input id="phone_number" type="text" class="form-control" value="${
+                contact.phoneNumber
+              }">
+            </div>
           </div>
-          <input id="phone_number" type="text" class="form-control" value="${contact.formattedPhoneNumber}">
+
+          <div class="mt-3">
+            <label for="title">Адрес:</label>
+            <input id="address" type="text" placeholder="Адрес" style="width: 50%" value="${
+              contact.address
+            }" />
+          </div>
+
+          <div class="mt-3">
+            <label for="title">Время работы:</label>
+            <input id="workingHours" type="text" placeholder="Время работы" style="width: 50%" value="${
+              contact.workingHours
+            }" />
+          </div>
+
+          <div class="map__wrapper">
+            <div class="map__wrapper-left">
+              <iframe src="${
+                contact.addressMap
+              }" width="600" height="450" style="border: 0" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+          </div>
+
+          <div class="mt-3">
+            <label for="title">Електронная почта:</label>
+            <input id="email" class="validate-email" type="text" placeholder="Електронная почта" style="width: 50%" value="${
+              contact.email
+            }" />
+            <div id="emailValidationError" class="text-danger mt-2"></div>
+          </div>
+
+          <div class="mt-3">
+            <label for="roadByBus">На Автобусе:</label>
+            <div class="route-container">
+              ${generateRoutesHtml(contact.roadByBus || [])}
+              <button class="add-route-btn" data-type="roadByBus">Добавить</button>
+            </div>
+          </div>
+
+          <!-- Добавьте аналогичные блоки HTML для остальных полей формы -->
+
+          <div class="mt-5">
+            <button data-form-type="employees" id="editCotactsBtn" type="button" class="btn btn-block btn-success btn-lg">
+              Сохранить изменения
+            </button>
+            <div id="errorText" class="text-danger mt-2"></div>
+          </div>
         </div>
-      </div>
-
-      <div class="mt-3">
-        <label for="title">Адрес:</label>
-        <input
-          id="address"
-          type="text"
-          placeholder="Адрес"
-          style="width: 50%"
-          value="${contact.address}"
-        />
-      </div>
-
-      <div class="mt-3">
-        <label for="title">Время работы:</label>
-        <input
-          id="workingHours"
-          type="text"
-          placeholder="Время работы"
-          style="width: 50%"
-          value="${contact.workingHours}"
-        />
-      </div>
-
-     
-
-      <div class="map__wrapper">
-        <div class="map__wrapper-left">
-        <iframe
-        src="${contact.addressMap}"
-        width="600"
-        height="450"
-        style="border: 0"
-        allowfullscreen=""
-        loading="lazy"
-        referrerpolicy="no-referrer-when-downgrade"
-      ></iframe>
-      
-        </div>
-      </div>
-
-      <div class="mt-3">
-        <label for="title">Електронная почта:</label>
-        <input
-          id="email"
-          type="text"
-          placeholder="Електронная почта"
-          style="width: 50%"
-          value="${contact.email}"
-        />
-      </div>
-
-      <div class="mt-5">
-        <button
-          data-form-type="employees"
-          id="editCotactsBtn"
-          type="button"
-          class="btn btn-block btn-success btn-lg"
-        >
-          Сохранить изменения
-        </button>
-        <div id="errorText" class="text-danger mt-2"></div>
-      </div>
-    </div>
-  `;
+      `;
 
       const appElement = document.getElementById('app');
       if (appElement) {
         appElement.innerHTML = content;
 
-        const editCotactsBtn = document.getElementById('editCotactsBtn');
+        const validator = new JustValidate('.content.contacts', {
+          rule: 'customRegexp',
+          value: /^[a-zA-Z0-9.-]+@[^\s@]+\.[\p{L}]{2,}$/u,
+          errorMessage: 'Email is invalid',
+        });
 
+        const editCotactsBtn = document.getElementById('editCotactsBtn');
         editCotactsBtn.addEventListener('click', async () => {
           const updatedPhoneNumber =
             document.getElementById('phone_number').value;
@@ -258,16 +353,22 @@ export const displayContactPage = async (id) => {
           const updateWorkingHours =
             document.getElementById('workingHours').value;
           const updateEmail = document.getElementById('email').value;
+          const updatedRoadByBus = collectRoutes('roadByBus');
+          const updatedRoadCar = collectRoutes('roadCar');
+          const updatedRoadTrolleybus = collectRoutes('roadTrolleybus');
 
-          console.log(contact.id);
           await updateContactData(
             contact.id,
             updatedPhoneNumber,
             updatedAddress,
             updateWorkingHours,
-            updateEmail
+            updateEmail,
+            updatedRoadByBus,
+            updatedRoadCar,
+            updatedRoadTrolleybus
           );
-          window.location.reload();
+
+          // window.location.reload();
         });
       } else {
         console.error('Element with id "app" not found.');
@@ -293,12 +394,51 @@ export const displayContactPage = async (id) => {
   }
 };
 
+const collectRoutes = (routeType) => {
+  const routeItems = document.querySelectorAll(
+    `.route-container[data-type="${routeType}"] .route-item`
+  );
+  const routes = [];
+
+  routeItems.forEach((item) => {
+    const textarea = item.querySelector('.route-textarea');
+
+    routes.push({ text: textarea.value, title: 'Название маршрута' });
+  });
+
+  return routes;
+};
+
+document.addEventListener('click', (event) => {
+  const target = event.target;
+
+  if (target.classList.contains('add-route-btn')) {
+    const routeType = target.dataset.type;
+    const routeContainer = target.parentElement;
+    const routeItem = document.createElement('div');
+    routeItem.classList.add('route-item');
+    routeItem.innerHTML = `
+      <textarea class="route-textarea" data-type="${routeType}"></textarea>
+      <button class="delete-route-btn" data-type="${routeType}">Удалить</button>
+    `;
+    routeContainer.insertBefore(routeItem, target);
+  }
+
+  if (target.classList.contains('delete-route-btn')) {
+    const routeItem = target.parentElement;
+    routeItem.remove();
+  }
+});
+
 export const updateContactData = async (
   id,
   updatedPhoneNumber,
   updatedAddress,
   updateWorkingHours,
-  updateEmail
+  updateEmail,
+  updatedRoadByBus,
+  updatedRoadCar,
+  updatedRoadTrolleybus
 ) => {
   try {
     const contactRef = doc(collection(db, 'contacts'), id);
@@ -308,6 +448,15 @@ export const updateContactData = async (
       address: updatedAddress,
       workingHours: updateWorkingHours,
       email: updateEmail,
+      roadByBus: updatedRoadByBus.map((text) => ({
+        text,
+        title: 'На Автобусе',
+      })),
+      roadCar: updatedRoadCar.map((text) => ({ text, title: 'На автомобиле' })),
+      roadTrolleybus: updatedRoadTrolleybus.map((text) => ({
+        text,
+        title: 'На Троллейбусе',
+      })),
     };
 
     await setDoc(contactRef, updateData, { merge: true });
@@ -328,5 +477,18 @@ const showMessage = (message) => {
     setTimeout(() => {
       messageBox.textContent = '';
     }, 3000);
+  }
+};
+
+const formatPhoneNumber = (phoneNumberString, countryCode) => {
+  try {
+    const phoneNumber = parse(phoneNumberString, countryCode);
+    if (isValidNumber(phoneNumber, countryCode)) {
+      return format(phoneNumber, 'International');
+    }
+    return phoneNumberString; // Возвращаем исходное значение, если номер некорректный
+  } catch (error) {
+    console.error('Ошибка при форматировании номера:', error.message);
+    return phoneNumberString;
   }
 };
