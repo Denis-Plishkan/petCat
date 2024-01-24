@@ -126,3 +126,10 @@ ul {
   .select2-selection__arrow {
   height: 33px;
 }
+.education-list {
+  &__text {
+    padding: 10px 0 10px 0;
+  }
+  &__year {
+  }
+}

@@ -37,21 +37,28 @@ const createEducationList = (type, label, items) => {
 const createEducationItem = (educationItem, index, type) => {
   const educationItemElement = document.createElement('li');
   educationItemElement.innerHTML = `
-    <div>
+    <div class="education-list__text">
       <span class="education-list__label">Информация:</span>
-      <input type="text" class="place-input" placeholder="Введите место" value="${
+      <input type="text" class="place-input" placeholder="Введите место" style="width:100%" value="${
         educationItem.place || ''
       }"maxlength="300">
     </div>
-    <div>
+    <div class="education-list__year">
       <span class="education-list__label">Год полученя:</span>
       <input type="text" class="year-input" placeholder="Введите год" value="${
         educationItem.year || ''
-      }" maxlength="4" pattern="\d{4}">
+      }" maxlength="4" pattern="\d{4}" >
     </div>
   
     <button class="delete-education-btn" data-index="${index}" data-type="${type}">Удалить</button>
   `;
+
+  const deleteButton = educationItemElement.querySelector(
+    '.delete-education-btn'
+  );
+  deleteButton.addEventListener('click', () =>
+    deleteEducationItem(index, type)
+  );
 
   return educationItemElement;
 };
@@ -68,35 +75,13 @@ const addEducationItem = (type) => {
   }
 };
 
-const updateEducationData = (id, updatedEducation) => {
-  try {
-    const employeeRef = doc(collection(db, 'employees'), id);
-    setDoc(employeeRef, { education: updatedEducation }, { merge: true });
-
-    showMessage('Данные об образовании успешно обновлены.');
-
-    console.log('Данные об образовании успешно обновлены.');
-  } catch (error) {
-    console.error('Ошибка при обновлении данных в Firestore: ', error);
-  }
-};
-
-const deleteEducationItem = (id, type, index) => {
-  try {
-    const employeeRef = doc(collection(db, 'employees'), id);
-    const field = type === 'diplomas' ? 'diplomas' : 'others';
-
-    const updateData = {
-      [field]: arrayRemove(index),
-    };
-
-    updateDoc(employeeRef, updateData);
-
-    showMessage('Пункт образования успешно удален.');
-
-    console.log('Пункт образования успешно удален.');
-  } catch (error) {
-    console.error('Ошибка при удалении пункта образования: ', error);
+const deleteEducationItem = (index, type) => {
+  const educationList = document.getElementById(`${type}List`);
+  if (educationList) {
+    const educationItem = educationList.children[index];
+    if (educationItem) {
+      educationList.removeChild(educationItem);
+    }
   }
 };
 
