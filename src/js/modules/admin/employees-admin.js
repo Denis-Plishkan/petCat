@@ -10,20 +10,13 @@ import {
   deleteDoc,
   doc,
 } from '../firebase-config';
-import {
-  getSpecializationsList,
-  updateSpecializationsSection,
-} from './specializations-admin';
+import { getSpecializationsList } from './specializations-admin';
 
 import { displaySkills } from './skills';
 
 import { getPositionList } from './position-admin';
 
-import {
-  displayEducation,
-  createEducationItem,
-  addEducationItem,
-} from './education-form';
+import { displayEducation } from './education-form';
 
 const limitTextLength = (element, maxLength) => {
   const text = element.innerText || element.value;
@@ -137,7 +130,6 @@ const submitEmployesBtnHandler = async () => {
   const selectedSpecializations = Array.from(
     specializationsSelect.selectedOptions
   ).map((option) => option.value);
-  const skills = document.getElementById('skills');
 
   const education = {};
 
@@ -180,11 +172,7 @@ const submitEmployesBtnHandler = async () => {
   const addOthersBtn = document.getElementById('addOthersBtn');
 
   if (educationContainer && addDiplomaBtn && addOthersBtn) {
-    // Clear previous content
     educationContainer.innerHTML = '';
-
-    // Initialize education fields
-    // initializeEducationFields(educationContainer, addDiplomaBtn, addOthersBtn);
   }
 
   const errorText = document.getElementById('errorText');
@@ -200,6 +188,14 @@ const submitEmployesBtnHandler = async () => {
     return;
   }
 
+  const skillsContainer = document.getElementById('skillsContainer');
+  const skillInputs = skillsContainer.querySelectorAll('.point-input');
+  const skillsPoints = Array.from(skillInputs).map((input) => input.value);
+
+  const skills = {
+    points: skillsPoints,
+  };
+
   const file = imgForPersonInput.files && imgForPersonInput.files[0];
   try {
     let imageUrl = '';
@@ -214,7 +210,7 @@ const submitEmployesBtnHandler = async () => {
       full_name: fullName.value,
       position: position.value,
       specializations: selectedSpecializations,
-      skills: skills.value,
+      skills: skills,
       education: education,
       img: {
         default: imageUrl,
@@ -250,10 +246,35 @@ function previewImage() {
     };
     reader.readAsDataURL(file);
   } else {
-    // Сбросите предварительный просмотр, если файл не выбран
     previewImage.src = ``;
   }
 }
+
+const createSkillInput = (value) => {
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.placeholder = 'Проф. навык';
+  input.value = value || '';
+  input.classList.add('point-input');
+
+  const skillContainer = document.createElement('div');
+  skillContainer.classList.add('skill-container');
+  skillContainer.appendChild(input);
+
+  const removeSkillPointBtn = document.createElement('button');
+  removeSkillPointBtn.textContent = 'Удалить навык';
+  removeSkillPointBtn.addEventListener('click', () =>
+    removeSkillPointBtnHandler(skillContainer)
+  );
+  skillContainer.appendChild(removeSkillPointBtn);
+
+  return skillContainer;
+};
+
+const removeSkillPointBtnHandler = (skillContainer) => {
+  const skillsContainer = document.getElementById('skillsContainer');
+  skillsContainer.removeChild(skillContainer);
+};
 
 export const initializeEmployeesForm = async () => {
   const submitEmployesBtn = document.getElementById('submitEmployeesBtn');
@@ -293,6 +314,27 @@ export const initializeEmployeesForm = async () => {
         positionSelect.add(option);
       });
     }
+
+    const addSkillPointBtn = document.getElementById('addSkillPointBtn');
+    if (addSkillPointBtn) {
+      addSkillPointBtn.addEventListener('click', () => {
+        const skillsContainer = document.getElementById('skillsContainer');
+        const input = createSkillInput('');
+        skillsContainer.appendChild(input);
+      });
+    }
+
+    const removeSkillPointBtn = document.getElementById('removeSkillPointBtn');
+    if (removeSkillPointBtn) {
+      removeSkillPointBtn.addEventListener('click', () => {
+        const skillsContainer = document.getElementById('skillsContainer');
+        const skillInputs = skillsContainer.querySelectorAll('.point-input');
+        if (skillInputs.length > 1) {
+          const lastSkillInput = skillInputs[skillInputs.length - 1];
+          skillsContainer.removeChild(lastSkillInput.parentElement);
+        }
+      });
+    }
   }
 
   const imgTopInput = document.getElementById('img-top');
@@ -306,8 +348,39 @@ export const initializeEmployeesForm = async () => {
   if (imgForPageInput && previewImageElement) {
     imgForPageInput.addEventListener('change', previewImage);
   }
+
+  const addDiplomaBtn = document.getElementById('addDiplomaBtn');
+  if (addDiplomaBtn) {
+    addDiplomaBtn.addEventListener('click', () => {
+      const educationContainer = document.getElementById('educationContainer');
+      const diplomaContainer = createDiplomaContainer();
+      educationContainer.appendChild(diplomaContainer);
+    });
+  }
+
+  const addOthersBtn = document.getElementById('addOthersBtn');
+  if (addOthersBtn) {
+    addOthersBtn.addEventListener('click', () => {
+      const educationContainer = document.getElementById('educationContainer');
+      const othersContainer = createOthersContainer();
+      educationContainer.appendChild(othersContainer);
+    });
+  }
+
+  const educationContainer = document.getElementById('educationContainer');
+  if (educationContainer) {
+    educationContainer.addEventListener('click', (event) => {
+      const target = event.target;
+      if (target.classList.contains('delete-education-btn')) {
+        const educationItem = target.closest('.education-list__item');
+        if (educationItem) {
+          educationContainer.removeChild(educationItem);
+        }
+      }
+    });
+  }
 };
-let updatedEducation = null;
+
 export const displayEmployeesPage = async (id) => {
   try {
     const employeesData = await getEmployeesDetails(id);
@@ -336,6 +409,7 @@ export const displayEmployeesPage = async (id) => {
             <select id="specializations" style="width: 300px;"></select>
           </div>
           <div class="employees__wrapper-subtitle">
+          <h3>Профессиональные навыки:</h3>
           <div id="skillsList"></div>
           <button id="addSkillPointBtn">Добавить навык</button>
           
@@ -453,7 +527,7 @@ export const displayEmployeesPage = async (id) => {
         pointInputs.forEach((input) => {
           updatedSkillsPoints.push(input.value);
         });
-        updatedEducation = {
+        const updatedEducation = {
           diplomas: collectEducationData('diplomas'),
           others: collectEducationData('others'),
         };
@@ -523,6 +597,7 @@ const collectEducationData = (type) => {
 
   return educationData;
 };
+
 export const updateEmployeesData = async (
   id,
   updatedFullName,
@@ -600,97 +675,80 @@ const showMessage = (message) => {
     }, 3000);
   }
 };
+// Добавляем обработчик для кнопки "Добавить диплом"
+const addDiplomaBtn = document.getElementById('addDiplomaBtn');
+if (addDiplomaBtn) {
+  addDiplomaBtn.addEventListener('click', () => {
+    const educationContainer = document.getElementById('educationContainer');
+    const diplomaContainer = createDiplomaContainer();
+    educationContainer.appendChild(diplomaContainer);
+  });
+}
 
-// const displayEducation = (container, educationData) => {
-//   container.innerHTML = '';
+// Добавляем обработчик для кнопки "Добавить другое образование"
+const addOthersBtn = document.getElementById('addOthersBtn');
+if (addOthersBtn) {
+  addOthersBtn.addEventListener('click', () => {
+    const educationContainer = document.getElementById('educationContainer');
+    const othersContainer = createOthersContainer();
+    educationContainer.appendChild(othersContainer);
+  });
+}
 
-//   if (
-//     educationData &&
-//     educationData.diplomas &&
-//     Array.isArray(educationData.diplomas)
-//   ) {
-//     educationData.diplomas.forEach((diploma) => {
-//       addDiplomaField(container, diploma.year, diploma.place);
-//     });
-//   }
+// Добавляем обработчик для кнопки "Удалить образование"
+const educationContainer = document.getElementById('educationContainer');
+if (educationContainer) {
+  educationContainer.addEventListener('click', (event) => {
+    const target = event.target;
+    if (target.classList.contains('delete-education-btn')) {
+      const educationItem = target.closest('.education-list__item');
+      if (educationItem) {
+        educationContainer.removeChild(educationItem);
+      }
+    }
+  });
+}
 
-//   if (
-//     educationData &&
-//     educationData.others &&
-//     Array.isArray(educationData.others)
-//   ) {
-//     educationData.others.forEach((other) => {
-//       addOthersField(container, other.year, other.place);
-//     });
-//   }
-// };
+// Функция для создания контейнера диплома
+const createDiplomaContainer = () => {
+  const diplomaContainer = document.createElement('div');
+  diplomaContainer.classList.add(
+    'education-list__item',
+    'diploma-container',
+    'education-container'
+  );
 
-// const createInput = (type, className, placeholder, value) => {
-//   const input = document.createElement('input');
-//   input.type = type;
-//   input.className = className;
-//   input.placeholder = placeholder;
-//   input.value = value;
-//   return input;
-// };
+  diplomaContainer.innerHTML = `
+        <div class="mt-3">
+            <label for="education">Год окончания: </label>
+            <input class="diploma-year-input" type="text" placeholder="Год окончания" style="width: 10%" />
+            <label for="diplomaPlace">Место окончания: </label>
+            <input class="diploma-place-input" type="text" placeholder="информация" style="width: 50%" />
+            <button class="delete-education-btn">Удалить</button>
+        </div>
+    `;
 
-// const createRemoveButton = (onClick) => {
-//   const button = document.createElement('button');
-//   button.type = 'button';
-//   button.textContent = 'Удалить';
-//   button.addEventListener('click', onClick);
-//   return button;
-// };
+  return diplomaContainer;
+};
 
-// const addDiplomaField = (container, year = '', place = '') => {
-//   const diplomaContainer = document.createElement('div');
-//   diplomaContainer.classList.add('education-field');
+// Функция для создания контейнера другого образования
+const createOthersContainer = () => {
+  const othersContainer = document.createElement('div');
+  othersContainer.classList.add(
+    'education-list__item',
+    'others-container',
+    'education-container'
+  );
 
-//   const yearInput = createInput('text', 'diploma-year-input', 'Год', year);
-//   const placeInput = createInput('text', 'diploma-place-input', 'Место', place);
+  othersContainer.innerHTML = `
+        <div class="mt-3">
+            <label for="education">Год окончания: </label>
+            <input class="others-year-input" type="text" placeholder="Год окончания" style="width: 10%" />
+            <label for="othersPlace">Место окончания: </label>
+            <input class="others-place-input" type="text" placeholder="информация" style="width: 50%" />
+            <button class="delete-education-btn">Удалить</button>
+        </div>
+    `;
 
-//   const removeButton = createRemoveButton(() => {
-//     diplomaContainer.remove();
-//   });
-
-//   diplomaContainer.appendChild(yearInput);
-//   diplomaContainer.appendChild(placeInput);
-//   diplomaContainer.appendChild(removeButton);
-
-//   container.appendChild(diplomaContainer);
-// };
-
-// const addOthersField = (container, year = '', place = '') => {
-//   const othersContainer = document.createElement('div');
-//   othersContainer.classList.add('education-field');
-
-//   const yearInput = createInput('text', 'others-year-input', 'Год', year);
-//   const placeInput = createInput('text', 'others-place-input', 'Место', place);
-
-//   const removeButton = createRemoveButton(() => {
-//     othersContainer.remove();
-//   });
-
-//   othersContainer.appendChild(yearInput);
-//   othersContainer.appendChild(placeInput);
-//   othersContainer.appendChild(removeButton);
-
-//   container.appendChild(othersContainer);
-// };
-
-// const initializeEducationFields = (
-//   educationContainer,
-//   addDiplomaBtn,
-//   addOthersBtn,
-//   employeesData // Добавим параметр employeesData
-// ) => {
-//   displayEducation(educationContainer, employeesData.educations);
-
-//   addDiplomaBtn.addEventListener('click', () => {
-//     addDiplomaField(educationContainer);
-//   });
-
-//   addOthersBtn.addEventListener('click', () => {
-//     addOthersField(educationContainer);
-//   });
-// };
+  return othersContainer;
+};

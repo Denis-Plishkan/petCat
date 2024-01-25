@@ -66,7 +66,6 @@ export async function updateContent() {
   let hash = window.location.hash;
   let id;
   let content = '';
-  console.log('Current hash:', hash);
   switch (hash) {
     case '#/admin/services':
       content = `
@@ -282,12 +281,14 @@ export async function updateContent() {
                 </div>
               </div>
               
-                <div class="mt-3">
-                  <label for="skills">Профессиональные навыки</label>
-                  <input id="skills" type="text" placeholder="Проф. навыки" style="width: 50%" />
-                </div>
+              <div class="mt-3">
+              <label for="skills">Профессиональные навыки</label>
+              <div id="skillsContainer">
+                <input id="skills" type="text" placeholder="Проф. навык" style="width: 50%;  margin-bottom: 10px;" />
+                <button id="addSkillPointBtn">Добавить навык</button>
+               
               </div>
-      
+              </div>
               <div class="mt-5">
                 <button data-form-type="employees" id="submitEmployeesBtn" type="button" class="btn btn-block btn-success btn-lg">
                   Завершить создание карты работника
@@ -448,7 +449,7 @@ export async function updateContent() {
 
       break;
 
-    case '#/admin/add/specializations':
+    case '#/admin/specializations':
       content = `
       <div class="content">
       <div class="">
@@ -643,7 +644,6 @@ export function getCreateServiceForm() {
 }
 
 export async function updateContentPage() {
-  console.log('Updating content page...');
   const hash = window.location.hash;
 
   initializeServiceForm();

@@ -14,37 +14,75 @@ import {
   doc,
 } from '../firebase-config';
 
-const generateRoutesHtml = (routes) => {
-  if (!routes) return '';
-
-  return Object.keys(routes)
-    .map((routeType) => {
-      const route = routes[routeType];
-
-      return `
+const generateRoutesHtml = (contact) => {
+  const generateRouteBlock = (route) => {
+    return `
       <div class="mt-3">
-        <div class="route-container" data-type="${routeType}">
-          ${route.text
-            .map(
-              (point, index) => `
-            <div class="route-item">
-              <textarea class="route-textarea" data-index="${index}" data-type="${routeType}">${point}</textarea>
-              <button class="delete-route-btn" data-index="${index}" data-type="${routeType}">Удалить</button>
-            </div>
-          `
-            )
-            .join('')}
-          <button class="add-route-btn" data-type="${routeType}">Добавить</button>
-        </div>
+        <h3>${route.title}:</h3>
+        <p>${route.text ? route.text : 'Информация отсутствует'}</p>
       </div>
     `;
-    })
-    .join('');
+  };
+
+  // Создаем блоки для каждого маршрута
+  const roadByBusHtml = generateRouteBlock({
+    title: 'Маршрут на автобусе',
+    text: contact.roadByBus,
+  });
+
+  const roadByCarHtml = generateRouteBlock({
+    title: 'Маршрут на автомобиле',
+    text: contact.roadByCar,
+  });
+
+  const roadByTrolleybusHtml = generateRouteBlock({
+    title: 'Маршрут на троллейбусе',
+    text: contact.roadByTrolleybus,
+  });
+
+  // Объединяем все блоки
+  return roadByBusHtml + roadByCarHtml + roadByTrolleybusHtml;
 };
 
+// function initMap() {
+//   // Ваш код для инициализации карты
+//   // Например:
+//   const map = new google.maps.Map(document.getElementById('map'), {
+//     center: { lat: -34.397, lng: 150.644 },
+//     zoom: 8,
+//   });
+// }
+
+// let map;
+// let markers = [];
+// const updateMapWithLocation = (location) => {
+//   const geocoder = new google.maps.Geocoder();
+
+//   geocoder.geocode({ address: location }, (results, status) => {
+//     if (status === 'OK') {
+//       const newLocation = results[0].geometry.location;
+
+//       map.setCenter(newLocation);
+
+//       markers.forEach((marker) => marker.setMap(null));
+//       markers = [];
+
+//       const marker = new google.maps.Marker({
+//         map: map,
+//         position: newLocation,
+//         title: location,
+//       });
+//       markers.push(marker);
+//     } else {
+//       console.error('Ошибка геокодирования:', status);
+//     }
+//   });
+// };
+
 const submitContactsBtnHandler = async () => {
-  // const phoneNumberInput = document.getElementById('phone_number');
-  // const phoneNumber = result.formattedPhoneNumber;
+  // const updatedLocation = document.getElementById('address').value;
+  // updateMapWithLocation(updatedLocation);
+
   const phoneNumberInput = document.getElementById('phone_number');
 
   const imgForPageInput = document.getElementById('img-for-page');
@@ -53,47 +91,36 @@ const submitContactsBtnHandler = async () => {
   const addressMap = document.getElementById('address_map');
   const workingHours = document.getElementById('working_hours');
   const roadByBus = document.getElementById('road_by_bus');
-  const roadTrolleybus = document.getElementById('road_trolleybus');
-  const roadCar = document.getElementById('road_car');
+  const roadByTrolleybus = document.getElementById('road_trolleybus');
+  const roadByCar = document.getElementById('road_car');
   const errorText = document.getElementById('errorText');
 
   errorText.textContent = '';
   ////////первая реализация
-  // const isValidUkrainianNumber = isValidNumber(phoneNumber, 'UA');
+  const isValidUkrainianNumber = isValidNumber(phoneNumber, 'UA');
 
-  // if (!isValidUkrainianNumber) {
-  //   errorText.textContent = 'Введите корректный номер телефона';
-  //   return;
-  // }
+  if (!isValidUkrainianNumber) {
+    errorText.textContent = 'Введите корректный номер телефона';
+    return;
+  }
 
-  // const parsedPhoneNumber = parse(phoneNumber, 'UA');
+  const parsedPhoneNumber = parse(phoneNumber, 'UA');
 
-  // // const formattedPhoneNumber = format(parsedPhoneNumber, 'International')
-  // //   .replace(/^(\+38)(\d{2})(\d{3})(\d{2})(\d{2})/, '$1 $2 $3 $4 $5')
-  // //   .replace(/ /g, '');
+  const formattedPhoneNumber = format(
+    parsedPhoneNumber,
+    'International'
+  ).replace(/^\+(\d{2})(\d{3})(\d{2})(\d{2})$/, '+$1 ($2) $3-$4');
 
-  // // const formattedPhoneNumber = format(
-  // //   parsedPhoneNumber,
-  // //   'International_plaintext'
-  // // )
-  // //   .replace(/^(\+380)/, '+38')
-  // //   .replace(/^(\+38)(\d{2})(\d{3})(\d{2})(\d{2})$/, '$1 ($2) $3-$4-$5')
-  // //   .replace(/ /g, '');
-  // const formattedPhoneNumber = format(
-  //   parsedPhoneNumber,
-  //   'International'
-  // ).replace(/^\+(\d{2})(\d{3})(\d{2})(\d{2})$/, '+$1 ($2) $3-$4');
-
-  // console.log('Номер:', formattedPhoneNumber);
+  console.log('Номер:', formattedPhoneNumber);
   try {
-    const countryCode = 'UA';
+    // const countryCode = 'UA';
 
-    const result = formatAndValidatePhoneNumber(phoneNumber, countryCode);
+    // const result = formatAndValidatePhoneNumber(phoneNumber, countryCode);
 
-    if (!result.success) {
-      errorText.textContent = result.errorMessage;
-      return;
-    }
+    // if (!result.success) {
+    //   errorText.textContent = result.errorMessage;
+    //   return;
+    // }
 
     let imageUrl = '';
     const file = imgForPageInput.files[0];
@@ -111,12 +138,12 @@ const submitContactsBtnHandler = async () => {
       addressMap: addressMap.value,
       workingHours: workingHours.value,
       roadByBus: roadByBus.value,
-      roadTrolleybus: roadTrolleybus.value,
-      roadCar: roadCar.value,
-      // phoneNumber: formattedPhoneNumber,
+      roadByTrolleybus: roadByTrolleybus.value,
+      roadByCar: roadByCar.value,
+      phoneNumber: formattedPhoneNumber,
       // phoneNumber: result.formattedPhoneNumber,
       // phoneNumber: phoneNumber,
-      phoneNumber: phoneNumber.value,
+      // phoneNumber: phoneNumber.value,
     });
 
     console.log('Документ успешно добавлен с ID: ', docRef.id);
@@ -128,8 +155,8 @@ const submitContactsBtnHandler = async () => {
     addressMap.value = '';
     workingHours.value = '';
     roadByBus.value = '';
-    roadTrolleybus.value = '';
-    roadCar.value = '';
+    roadByTrolleybus.value = '';
+    roadByCar.value = '';
   } catch (error) {
     console.error('Ошибка: ', error.message, error.code);
     errorText.textContent = error.message;
@@ -218,6 +245,11 @@ export const initializeContactsForm = () => {
       validator.validateInput(emailInput);
     });
   }
+  // initMap();
+  // map = new google.maps.Map(document.getElementById('your-map-element-id'), {
+  //   center: { lat: 0, lng: 0 }, // начальные координаты
+  //   zoom: 8, // начальный уровень масштабирования
+  // });
 
   if (submitContactsBtn) {
     submitContactsBtn.addEventListener('click', submitContactsBtnHandler);
@@ -239,13 +271,9 @@ export const getDataFromContacts = async () => {
         address: data.address || '',
         addressMap: data.addressMap || '',
         workingHours: data.workingHours || '',
-        roadByBus: Array.isArray(data.roadByBus)
-          ? data.roadByBus
-          : [data.roadByBus],
-        roadCar: Array.isArray(data.roadCar) ? data.roadCar : [data.roadCar],
-        roadTrolleybus: Array.isArray(data.roadTrolleybus)
-          ? data.roadTrolleybus
-          : [data.roadTrolleybus],
+        roadByBus: data.roadByBus,
+        roadByCar: data.roadByCar,
+        roadByTrolleybus: data.roadByTrolleybus,
       };
 
       dataArray.push(contact);
@@ -266,10 +294,7 @@ export const displayContactPage = async (id) => {
     if (contactsData && contactsData.length > 0) {
       const contact = contactsData[0];
 
-      const formattedPhoneNumber = formatAndValidatePhoneNumber(
-        contact.phoneNumber,
-        'UA'
-      );
+      const routesHtml = generateRoutesHtml(contact);
 
       const content = `
         <div class="content contacts">
@@ -317,14 +342,47 @@ export const displayContactPage = async (id) => {
           </div>
 
           <div class="mt-3">
-            <label for="roadByBus">На Автобусе:</label>
-            <div class="route-container">
-              ${generateRoutesHtml(contact.roadByBus || [])}
-              <button class="add-route-btn" data-type="roadByBus">Добавить</button>
-            </div>
-          </div>
+          <label for="routeByCarText">Маршрут на автобусе:</label>
+          <textarea
+          id="routeByBusText"
+          class="editable-text"
+          placeholder="Маршрут на автобусе"
+          style="width: 100%; height: 250px"
+          maxlength="1000">${
+            contact.roadByBus ? contact.roadByBus.text : ''
+          }</textarea>
+       
+          <div id="routeByBusValidationError" class="text-danger mt-2"></div>
+        </div>
+        
+        <div class="mt-3">
+          <label for="routeByCarText">Маршрут на автомобиле:</label>
+          <textarea
+   id="routeByCarText"
+   class="editable-text"
+   placeholder="Маршрут на автомобиле"
+   style="width: 100%; height: 250px"
+   maxlength="1000">${
+     contact.roadByCar ? contact.roadByCar.text : ''
+   }</textarea>
 
-          <!-- Добавьте аналогичные блоки HTML для остальных полей формы -->
+       
+          <div id="routeByCarValidationError" class="text-danger mt-2"></div>
+        </div>
+
+        <div class="mt-3">
+          <label for="routeByTrolleybusText">Маршрут на троллейбусе:</label>
+          <textarea
+          id="routeByTrolleybusText"
+          class="editable-text"
+          placeholder="Маршрут на троллейбусе"
+          style="width: 100%; height: 250px"
+          maxlength="1000">${
+            contact.roadByTrolleybus ? contact.roadByTrolleybus.text : ''
+          }</textarea>
+       
+          <div id="routeByTrolleybusValidationError" class="text-danger mt-2"></div>
+        </div>
 
           <div class="mt-5">
             <button data-form-type="employees" id="editCotactsBtn" type="button" class="btn btn-block btn-success btn-lg">
@@ -336,6 +394,7 @@ export const displayContactPage = async (id) => {
       `;
 
       const appElement = document.getElementById('app');
+
       if (appElement) {
         appElement.innerHTML = content;
 
@@ -345,7 +404,6 @@ export const displayContactPage = async (id) => {
           errorMessage: 'Email is invalid',
         });
 
-        const editCotactsBtn = document.getElementById('editCotactsBtn');
         editCotactsBtn.addEventListener('click', async () => {
           const updatedPhoneNumber =
             document.getElementById('phone_number').value;
@@ -353,9 +411,23 @@ export const displayContactPage = async (id) => {
           const updateWorkingHours =
             document.getElementById('workingHours').value;
           const updateEmail = document.getElementById('email').value;
-          const updatedRoadByBus = collectRoutes('roadByBus');
-          const updatedRoadCar = collectRoutes('roadCar');
-          const updatedRoadTrolleybus = collectRoutes('roadTrolleybus');
+
+          const routeByBusTextElement =
+            document.getElementById('routeByBusText');
+          const updatedRoadByBus = { text: routeByBusTextElement.value || '' };
+
+          const routeByCarTextElement =
+            document.getElementById('routeByCarText');
+          const updatedRoadByCar = {
+            text: routeByCarTextElement.value || '',
+          };
+
+          const routeByTrolleybusTextElement = document.getElementById(
+            'routeByTrolleybusText'
+          );
+          const updatedRoadByTrolleybus = {
+            text: routeByTrolleybusTextElement.value || '',
+          };
 
           await updateContactData(
             contact.id,
@@ -364,11 +436,11 @@ export const displayContactPage = async (id) => {
             updateWorkingHours,
             updateEmail,
             updatedRoadByBus,
-            updatedRoadCar,
-            updatedRoadTrolleybus
+            updatedRoadByCar,
+            updatedRoadByTrolleybus
           );
 
-          // window.location.reload();
+          window.location.reload();
         });
       } else {
         console.error('Element with id "app" not found.');
@@ -394,42 +466,6 @@ export const displayContactPage = async (id) => {
   }
 };
 
-const collectRoutes = (routeType) => {
-  const routeItems = document.querySelectorAll(
-    `.route-container[data-type="${routeType}"] .route-item`
-  );
-  const routes = [];
-
-  routeItems.forEach((item) => {
-    const textarea = item.querySelector('.route-textarea');
-
-    routes.push({ text: textarea.value, title: 'Название маршрута' });
-  });
-
-  return routes;
-};
-
-document.addEventListener('click', (event) => {
-  const target = event.target;
-
-  if (target.classList.contains('add-route-btn')) {
-    const routeType = target.dataset.type;
-    const routeContainer = target.parentElement;
-    const routeItem = document.createElement('div');
-    routeItem.classList.add('route-item');
-    routeItem.innerHTML = `
-      <textarea class="route-textarea" data-type="${routeType}"></textarea>
-      <button class="delete-route-btn" data-type="${routeType}">Удалить</button>
-    `;
-    routeContainer.insertBefore(routeItem, target);
-  }
-
-  if (target.classList.contains('delete-route-btn')) {
-    const routeItem = target.parentElement;
-    routeItem.remove();
-  }
-});
-
 export const updateContactData = async (
   id,
   updatedPhoneNumber,
@@ -437,8 +473,8 @@ export const updateContactData = async (
   updateWorkingHours,
   updateEmail,
   updatedRoadByBus,
-  updatedRoadCar,
-  updatedRoadTrolleybus
+  updatedRoadByCar,
+  updatedRoadByTrolleybus
 ) => {
   try {
     const contactRef = doc(collection(db, 'contacts'), id);
@@ -448,15 +484,9 @@ export const updateContactData = async (
       address: updatedAddress,
       workingHours: updateWorkingHours,
       email: updateEmail,
-      roadByBus: updatedRoadByBus.map((text) => ({
-        text,
-        title: 'На Автобусе',
-      })),
-      roadCar: updatedRoadCar.map((text) => ({ text, title: 'На автомобиле' })),
-      roadTrolleybus: updatedRoadTrolleybus.map((text) => ({
-        text,
-        title: 'На Троллейбусе',
-      })),
+      roadByBus: { text: updatedRoadByBus.text },
+      roadByCar: { text: updatedRoadByCar.text },
+      roadByTrolleybus: { text: updatedRoadByTrolleybus.text },
     };
 
     await setDoc(contactRef, updateData, { merge: true });
